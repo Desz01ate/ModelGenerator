@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Enum\**" />
+    <Compile Remove="Services\**" />
+    <EmbeddedResource Remove="Enum\**" />
+    <EmbeddedResource Remove="Services\**" />
+    <None Remove="Enum\**" />
+    <None Remove="Services\**" />
+    <Page Remove="Enum\**" />
+    <Page Remove="Services\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ModelGenerator.Core\ModelGenerator.Core.csproj" />
+  </ItemGroup>
+
+</Project>
