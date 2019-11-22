@@ -1,6 +1,8 @@
 ﻿using ModelGenerator.Core.Services.DesignPattern.Interfaces;
 using ModelGenerator.Core.Services.Generator;
+using ModelGenerator.Core.Services.Generator.Interfaces;
 using ModelGenerator.Core.Services.Generator.Model;
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
@@ -8,16 +10,21 @@ using System.Linq;
 using System.Text;
 using Utilities.Interfaces;
 
-namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSingleton
+namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
 {
-    public class CSharpNonSingletonStrategy<TDatabase> : IGeneratorStrategy<TDatabase> where TDatabase : DbConnection, new()
+    public class CSharpStrategy : IGeneratorStrategy
     {
-        public CSharpNonSingletonStrategy(string connectionString, string directory, string @namespace)
+        public CSharpStrategy(string connectionString, string directory, string @namespace)
         {
             ConnectionString = connectionString;
             Directory = directory;
             Namespace = @namespace;
-            Generator = new CSharpGenerator<TDatabase>(connectionString, ModelDirectory, $"{@namespace}.Models");
+            //Generator = new CSharpGenerator<TDatabase>(connectionString, ModelDirectory, $"{@namespace}.Models");
+            //if (func != null) Generator.SetCleanser(func);
+        }
+        public void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new()
+        {
+            this.Generator = new CSharpGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, $"{Namespace}.Models", parserFunction);
         }
         public string Directory { get; }
 
@@ -29,7 +36,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSing
 
         public string RepositoryDirectory => Path.Combine(Directory, "Repositories");
 
-        public AbstractModelGenerator<TDatabase> Generator { get; }
+        public IModelGenerator Generator { get; private set; }
         private string TableNameCleanser(string tableName)
         {
             return tableName.Replace("-", "");
@@ -52,6 +59,9 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSing
             sb.AppendLine();
             sb.AppendLine($@"namespace {Namespace}.Repositories");
             sb.AppendLine("{");
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine($"    /// Data contractor for {tableName}");
+            sb.AppendLine("    /// </summary>");
             sb.AppendLine($"    public class {repositoryName} : Repository<{tableName},SqlConnection,SqlParameter>");
             sb.AppendLine("    {");
             sb.AppendLine($"       public {repositoryName}(IDatabaseConnectorExtension<SqlConnection,SqlParameter> connector) : base(connector)");
@@ -68,21 +78,23 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSing
             var sb = new StringBuilder();
             sb.AppendLine("using System;");
             sb.AppendLine("using System.Data.SqlClient;");
+            sb.AppendLine("using System.Transactions;");
             sb.AppendLine("using Utilities.SQL;");
             sb.AppendLine("using System.Data.Common;");
             sb.AppendLine("using Utilities.Interfaces;");
+            sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine($"using System.Data;");
             sb.AppendLine($"using {Namespace}.Repositories;");
             sb.AppendLine();
             sb.AppendLine($@"namespace {Namespace}");
             sb.AppendLine("{");
             sb.AppendLine($"    public sealed class Service : IUnitOfWork");
             sb.AppendLine("    {");
+            sb.AppendLine("        private readonly static Lazy<Service> _lazyInstant = new Lazy<Service>(()=> new Service(),true);");
+            sb.AppendLine("        public readonly static Service Context = _lazyInstant.Value;");
             sb.AppendLine("        public readonly IDatabaseConnectorExtension<SqlConnection,SqlParameter> Connector;");
-            sb.AppendLine("        public Service(IDatabaseConnectorExtension<SqlConnection,SqlParameter> connector)");
-            sb.AppendLine("        {");
-            sb.AppendLine($"                Connector = connector;");
-            sb.AppendLine("        }");
-            sb.AppendLine("        public Service()");
+            sb.AppendLine("        public readonly TransactionScope transactionScope;");
+            sb.AppendLine("        Service()");
             sb.AppendLine("        {");
             sb.AppendLine($"                Connector = new DatabaseConnector<SqlConnection,SqlParameter>(\"***YOUR DATABASE CREDENTIAL***\");");
             sb.AppendLine("        }");
@@ -91,6 +103,9 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSing
                 var tableName = TableNameCleanser(table);
                 var repositoryName = $"{tableName}Repository";
                 sb.AppendLine($"        private {repositoryName} _{tableName} {{ get; set; }}");
+                sb.AppendLine("         /// <summary>");
+                sb.AppendLine($"        /// Data repository for {tableName} table");
+                sb.AppendLine("         /// </summary>");
                 sb.AppendLine($"        public {repositoryName} {tableName}");
                 sb.AppendLine($"        {{");
                 sb.AppendLine($"            get");
@@ -116,7 +131,8 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSing
             }
             sb.AppendLine($"            public void Dispose()");
             sb.AppendLine("            {");
-            sb.AppendLine($"                Connector.Dispose();");
+            sb.AppendLine("                 transactionScope?.Dispose();");
+            sb.AppendLine($"                Connector?.Dispose();");
             sb.AppendLine("            }");
             sb.AppendLine("#region Stored Procedure");
             foreach (var sp in Generator.StoredProcedures)

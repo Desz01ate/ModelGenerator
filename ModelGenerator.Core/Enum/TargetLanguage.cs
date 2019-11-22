@@ -1,5 +1,6 @@
-﻿using ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Generator;
-using ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSingleton;
+﻿using ModelGenerator.Core.Services.DesignPattern.Interfaces;
+using ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Generator;
+using ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy;
 using ModelGenerator.Core.Services.Generator;
 using MySql.Data.MySqlClient;
 using Npgsql;
@@ -175,67 +176,34 @@ namespace ModelGenerator.Core.Enum
         }
         public static void PerformStrategyGenerate(TargetLanguage targetLanguage, TargetDatabaseConnector targetDatabaseConnector, string connectionString, string directory, string @namespace)
         {
+            IGeneratorStrategy strategy = default;
+            var generator = new UnitOfWorkGenerator();
             switch (targetLanguage)
             {
                 case TargetLanguage.CSharp:
-                    switch (targetDatabaseConnector)
-                    {
-                        case TargetDatabaseConnector.SQLServer:
-                            var strategy1 = new CSharpSingletonStrategy<SqlConnection>(connectionString, directory, @namespace, (x) => $"[{x}]");
-                            var generator1 = new UnitOfWorkGenerator<SqlConnection>();
-                            generator1.UseStrategy(strategy1);
-                            generator1.Generate();
-                            break;
-                        case TargetDatabaseConnector.Oracle:
-                            var strategy2 = new CSharpSingletonStrategy<OracleConnection>(connectionString, directory, @namespace);
-                            var generator2 = new UnitOfWorkGenerator<OracleConnection>();
-                            generator2.UseStrategy(strategy2);
-                            generator2.Generate();
-                            break;
-                        case TargetDatabaseConnector.MySQL:
-                            var strategy3 = new CSharpSingletonStrategy<MySqlConnection>(connectionString, directory, @namespace);
-                            var generator3 = new UnitOfWorkGenerator<MySqlConnection>();
-                            generator3.UseStrategy(strategy3);
-                            generator3.Generate();
-                            break;
-                        case TargetDatabaseConnector.PostgreSQL:
-                            var strategy4 = new CSharpSingletonStrategy<NpgsqlConnection>(connectionString, directory, @namespace);
-                            var generator4 = new UnitOfWorkGenerator<NpgsqlConnection>();
-                            generator4.UseStrategy(strategy4);
-                            generator4.Generate();
-                            break;
-                    }
+                    strategy = new CSharpStrategy(connectionString, directory, @namespace);
                     break;
                 case TargetLanguage.VisualBasic:
-                    switch (targetDatabaseConnector)
-                    {
-                        case TargetDatabaseConnector.SQLServer:
-                            var strategy1 = new VisualBasicSingletonStrategy<SqlConnection>(connectionString, directory, @namespace, (x) => $"[{x}]");
-                            var generator1 = new UnitOfWorkGenerator<SqlConnection>();
-                            generator1.UseStrategy(strategy1);
-                            generator1.Generate();
-                            break;
-                        case TargetDatabaseConnector.Oracle:
-                            var strategy2 = new VisualBasicSingletonStrategy<OracleConnection>(connectionString, directory, @namespace);
-                            var generator2 = new UnitOfWorkGenerator<OracleConnection>();
-                            generator2.UseStrategy(strategy2);
-                            generator2.Generate();
-                            break;
-                        case TargetDatabaseConnector.MySQL:
-                            var strategy3 = new VisualBasicSingletonStrategy<MySqlConnection>(connectionString, directory, @namespace);
-                            var generator3 = new UnitOfWorkGenerator<MySqlConnection>();
-                            generator3.UseStrategy(strategy3);
-                            generator3.Generate();
-                            break;
-                        case TargetDatabaseConnector.PostgreSQL:
-                            var strategy4 = new VisualBasicSingletonStrategy<NpgsqlConnection>(connectionString, directory, @namespace);
-                            var generator4 = new UnitOfWorkGenerator<NpgsqlConnection>();
-                            generator4.UseStrategy(strategy4);
-                            generator4.Generate();
-                            break;
-                    }
+                    strategy = new VisualBasicStrategy(connectionString, directory, @namespace);
                     break;
             }
+            switch (targetDatabaseConnector)
+            {
+                case TargetDatabaseConnector.SQLServer:
+                    strategy.SetGenerator<SqlConnection>((x) => $"[{x}]");
+                    break;
+                case TargetDatabaseConnector.Oracle:
+                    strategy.SetGenerator<OracleConnection>((x) => $"[{x}]");
+                    break;
+                case TargetDatabaseConnector.MySQL:
+                    strategy.SetGenerator<MySqlConnection>((x) => $"[{x}]");
+                    break;
+                case TargetDatabaseConnector.PostgreSQL:
+                    strategy.SetGenerator<NpgsqlConnection>((x) => $"[{x}]");
+                    break;
+            }
+            generator.UseStrategy(strategy);
+            generator.Generate();
         }
     }
 }

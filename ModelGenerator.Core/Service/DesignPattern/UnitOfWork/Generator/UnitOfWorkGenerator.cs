@@ -4,10 +4,18 @@ using System.Data.Common;
 
 namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Generator
 {
-    public class UnitOfWorkGenerator<TDatabase> where TDatabase : DbConnection, new()
+    public class UnitOfWorkGenerator
     {
-        IGeneratorStrategy<TDatabase> _strategy;
-        public void UseStrategy(IGeneratorStrategy<TDatabase> strategy)
+        IGeneratorStrategy _strategy;
+        public UnitOfWorkGenerator()
+        {
+
+        }
+        public UnitOfWorkGenerator(IGeneratorStrategy strategy)
+        {
+            UseStrategy(strategy);
+        }
+        public void UseStrategy(IGeneratorStrategy strategy)
         {
             _strategy = strategy;
         }
@@ -16,6 +24,8 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Generator
             if (_strategy == null) throw new NullReferenceException("Strategy must not be null.");
             System.IO.Directory.CreateDirectory(_strategy.ModelDirectory);
             System.IO.Directory.CreateDirectory(_strategy.RepositoryDirectory);
+            System.IO.Directory.CreateDirectory(System.IO.Path.Combine(_strategy.ModelDirectory, "Partials"));
+            System.IO.Directory.CreateDirectory(System.IO.Path.Combine(_strategy.RepositoryDirectory, "Partials"));
             GenerateModel();
             GenerateRepositories();
             GenerateService();

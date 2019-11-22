@@ -33,7 +33,7 @@ namespace ModelGenerator.Core.Services.Generator
             }
             sb.AppendLine("//You can get Utilities package via nuget : Install-Package Deszolate.Utilities.Lite");
             sb.AppendLine($"//[Utilities.Attributes.SQL.Table(\"{TableNameCleanser(table.Name)}\")]");
-            sb.AppendLine($@"public class {table.Name.Replace("-", "")}");
+            sb.AppendLine($@"public partial class {table.Name.Replace("-", "")}");
             sb.AppendLine("{");
             foreach (var column in table.Columns)
             {

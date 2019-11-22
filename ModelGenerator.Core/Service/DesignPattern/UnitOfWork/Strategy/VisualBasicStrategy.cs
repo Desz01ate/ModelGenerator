@@ -1,22 +1,27 @@
 ﻿using ModelGenerator.Core.Services.DesignPattern.Interfaces;
 using ModelGenerator.Core.Services.Generator;
+using ModelGenerator.Core.Services.Generator.Interfaces;
 using ModelGenerator.Core.Services.Generator.Model;
+using System;
 using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text;
 using Utilities.Interfaces;
 
-namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSingleton
+namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
 {
-    public class VisualBasicNonSingletonStrategy<TDatabase> : IGeneratorStrategy<TDatabase> where TDatabase : DbConnection, new()
+    public class VisualBasicStrategy : IGeneratorStrategy
     {
-        public VisualBasicNonSingletonStrategy(string connectionString, string directory, string @namespace)
+        public VisualBasicStrategy(string connectionString, string directory, string @namespace)
         {
             ConnectionString = connectionString;
             Directory = directory;
             Namespace = @namespace;
-            Generator = new VisualBasicGenerator<TDatabase>(connectionString, ModelDirectory, $"{@namespace}");
+        }
+        public void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new()
+        {
+            this.Generator = new VisualBasicGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, Namespace, parserFunction);
         }
         public string Directory { get; }
 
@@ -28,7 +33,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSing
 
         public string RepositoryDirectory => Path.Combine(Directory, "Repositories");
 
-        public AbstractModelGenerator<TDatabase> Generator { get; }
+        public IModelGenerator Generator { get; private set; }
         private string TableNameCleanser(string tableName)
         {
             return tableName.Replace("-", "");
@@ -74,11 +79,10 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy.NonSing
             sb.AppendLine($@"Namespace {Namespace}");
             sb.AppendLine($"    Public NotInheritable Class Service");
             sb.AppendLine($"                                Implements IUnitOfWork");
+            sb.AppendLine("        Private ReadOnly Shared _lazyInstant As Lazy(Of Service) = new Lazy(Of Service)(Function() new Service())");
+            sb.AppendLine("        Public ReadOnly Shared Context As Service  = _lazyInstant.Value");
             sb.AppendLine("        Private _connection As IDatabaseConnectorExtension(Of SqlConnection,SqlParameter)");
-            sb.AppendLine("        Public Sub New(connector As IDatabaseConnectorExtension(Of SqlConnection,SqlParameter))");
-            sb.AppendLine($"                _connection = connector");
-            sb.AppendLine("        End Sub");
-            sb.AppendLine("        Public Sub New()");
+            sb.AppendLine("        Private Sub New()");
             sb.AppendLine($"                _connection = new DatabaseConnector(Of SqlConnection,SqlParameter)(\"***YOUR DATABASE CREDENTIAL***\")");
             sb.AppendLine("        End Sub");
             foreach (var table in Generator.Tables)
