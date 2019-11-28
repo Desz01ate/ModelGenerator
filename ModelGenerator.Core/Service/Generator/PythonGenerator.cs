@@ -10,11 +10,10 @@ namespace ModelGenerator.Core.Services.Generator
     public class PythonGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
         where TDatabase : DbConnection, new()
     {
-        public PythonGenerator(string connectionString, string directory, string @namespace, Func<string, string> func = null) : base(connectionString, directory, @namespace)
+        public PythonGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
-            if (func != null) this.SetCleanser(func);
-        }
 
+        }
         protected override string DataTypeMapper(string column)
         {
             throw new System.NotImplementedException();

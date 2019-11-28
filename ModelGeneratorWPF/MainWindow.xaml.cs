@@ -123,10 +123,10 @@ namespace ModelGeneratorWPF
                 switch (generatorType)
                 {
                     case TargetGeneratorType.Model:
-                        LangaugesData.PerformModelGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
+                        LanguagesData.PerformModelGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                         break;
                     case TargetGeneratorType.UnitOfWork:
-                        LangaugesData.PerformStrategyGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
+                        LanguagesData.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                         break;
                 }
                 Process.Start("explorer.exe", outputDir);

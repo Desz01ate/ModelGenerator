@@ -13,81 +13,110 @@ namespace ModelGenerator.Core.Services.Generator
     public abstract class AbstractModelGenerator<TDatabase> : IModelGenerator
         where TDatabase : DbConnection, new()
     {
-        public string ConnectionString { get; protected set; }
+        public string ConnectionString { get; private set; }
 
-        public string Directory { get; protected set; }
+        public string Directory { get; private set; }
+        public string PartialDirectory { get; private set; }
 
-        public string Namespace { get; protected set; }
+        public string Namespace { get; private set; }
 
-        public List<string> Tables { get; } = new List<string>();
+        public List<Table> Tables { get; } = new List<Table>();
         public List<StoredProcedureSchema> StoredProcedures { get; private set; }
         public Func<string, string> TableNameCleanser { get; private set; } = (x) => x;
-
-        public AbstractModelGenerator(string connectionString, string directory, string @namespace)
+        public AbstractModelGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null)
         {
+            if (Cleaner != null)
+            {
+                TableNameCleanser = Cleaner;
+            }
             ConnectionString = connectionString;
             Directory = directory;
             Namespace = @namespace;
             System.IO.Directory.CreateDirectory(directory);
-            var connection = new TDatabase()
+            Initialization();
+        }
+        public AbstractModelGenerator(string connectionString, string directory, string partialDirectory, string @namespace, Func<string, string> Cleaner = null)
+        {
+            if (Cleaner != null)
             {
-                ConnectionString = connectionString
-            };
-            connection.Open();
-            var tables = connection.GetSchema("Tables");
-
-            foreach (DataRow row in tables.Rows)
-            {
-                var database = row[0].ToString();
-                var schema = row[1].ToString();
-                var name = row[2].ToString();
-                var type = row[3].ToString();
-
-                Tables.Add(name);
+                TableNameCleanser = Cleaner;
             }
-            tables.Dispose();
-
-
-            var restrictions = new string[] { null, null, null, "PROCEDURE" };
-            try
+            ConnectionString = connectionString;
+            Directory = directory;
+            PartialDirectory = partialDirectory;
+            Namespace = @namespace;
+            System.IO.Directory.CreateDirectory(directory);
+            System.IO.Directory.CreateDirectory(partialDirectory);
+            Initialization();
+        }
+        private void Initialization()
+        {
+            using (var connection = new TDatabase()
             {
-                var procedures = connection.GetSchema("Procedures", restrictions);
-                StoredProcedures = connection.GetStoredProcedures().ToList();
-                foreach (var sp in StoredProcedures)
+                ConnectionString = ConnectionString
+            })
+            {
+                connection.Open();
+                using (var tables = connection.GetSchema("Tables"))
                 {
-                    foreach (var param in sp.Parameters)
+                    foreach (DataRow row in tables.Rows)
                     {
-                        param.DATA_TYPE = DataTypeMapper(param.DATA_TYPE);
+                        var database = row[0].ToString();
+                        var schema = row[1].ToString();
+                        var tableName = row[2].ToString();
+                        var type = row[3].ToString();
+
+                        var columns = connection.GetTableSchema(TableNameCleanser(tableName));
+                        string primaryKey = null;
+                        using (var indexes = connection.GetSchema("IndexColumns", new string[] { null, null, tableName }))
+                        {
+                            if (indexes != null)
+                            {
+                                foreach (DataRow rowInfo in indexes.Rows)
+                                {
+                                    primaryKey = rowInfo["column_name"].ToString();
+                                }
+                            }
+                        }
+                        var table = new Table()
+                        {
+                            Name = tableName,
+                            Columns = columns,
+                            PrimaryKey = primaryKey
+                        };
+                        Tables.Add(table);
                     }
                 }
-                procedures.Dispose();
-            }
-            catch
-            {
 
+                try
+                {
+                    var restrictions = new string[] { null, null, null, "PROCEDURE" };
+                    using (var procedures = connection.GetSchema("Procedures", restrictions))
+                    {
+                        StoredProcedures = connection.GetStoredProcedures().ToList();
+                        foreach (var sp in StoredProcedures)
+                        {
+                            foreach (var param in sp.Parameters)
+                            {
+                                param.DATA_TYPE = DataTypeMapper(param.DATA_TYPE);
+                            }
+                        }
+                    }
+                }
+                catch
+                {
+
+                }
             }
-            //StoredProcedures = procedures.ToEnumerable(x => Data.RowBuilderStrict<StoredProcedureSchema>(x)).ToList();
-            //foreach (var sp in StoredProcedures)
-            //{
-            //    using var spParams = connection.GetSchema("ProcedureParameters", new[] { null, null, sp.SPECIFIC_NAME, null });
-            //    var param = spParams.ToEnumerable<StoredProcedureParameter>().ToArray();
-            //    foreach (var p in param)
-            //    {
-            //        p.DATA_TYPE = DataTypeMapper(p.DATA_TYPE);
-            //    }
-            //    sp.Parameters = param;
-            //}
-            connection.Dispose();
         }
-        public void SetCleanser(Func<string, string> func)
-        {
-            this.TableNameCleanser = func;
-        }
-        public void GenerateAllTable()
+        public void Generate()
         {
             foreach (var table in Tables)
             {
-                GenerateFromSpecificTable(table);
+                if (!string.IsNullOrWhiteSpace(this.Directory))
+                    GenerateCodeFile(table);
+                if (!string.IsNullOrWhiteSpace(this.PartialDirectory))
+                    GeneratePartialCodeFile(table);
             }
         }
         protected string ColumnNameCleanser(string value)
@@ -95,44 +124,11 @@ namespace ModelGenerator.Core.Services.Generator
             var v = new Regex("[-\\s]").Replace(value, "");
             return v;
         }
-        protected void GenerateFromSpecificTable(string tableName)
-        {
-            GenerateFromSpecificTable(tableName, GenerateCodeFile);
-        }
-
-        public void GenerateFromSpecificTable(string tableName, Action<Table> parser)
-        {
-            if (string.IsNullOrWhiteSpace(tableName)) throw new ArgumentNullException("tableName must not be null");
-            if (!Tables.Contains(tableName)) throw new KeyNotFoundException("Table name not found.");
-            using (var connection = new TDatabase()
-            {
-                ConnectionString = ConnectionString
-            })
-            {
-                connection.Open();
-                var columns = connection.GetTableSchema(TableNameCleanser(tableName));
-                string primaryKey = null;
-                using (var indexes = connection.GetSchema("IndexColumns", new string[] { null, null, tableName }))
-                {
-                    if (indexes != null)
-                    {
-                        foreach (DataRow rowInfo in indexes.Rows)
-                        {
-                            primaryKey = rowInfo["column_name"].ToString();
-                        }
-                    }
-                }
-                var table = new Table()
-                {
-                    Name = tableName,
-                    Columns = columns,
-                    PrimaryKey = primaryKey
-                };
-                connection.Close();
-                parser(table);
-            }
-        }
         protected abstract void GenerateCodeFile(Table table);
+        protected virtual void GeneratePartialCodeFile(Table table)
+        {
+
+        }
         protected abstract string GetNullableDataType(TableSchema column);
         protected abstract string DataTypeMapper(string column);
     }

@@ -11,7 +11,7 @@ using Utilities.Interfaces;
 
 namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
 {
-    public class VisualBasicStrategy : IGeneratorStrategy
+    public class VisualBasicStrategy : IServiceGenerator
     {
         public VisualBasicStrategy(string connectionString, string directory, string @namespace)
         {
@@ -21,7 +21,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
         }
         public void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new()
         {
-            this.Generator = new VisualBasicGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, Namespace, parserFunction);
+            this.ModelGenerator = new VisualBasicGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, Namespace, parserFunction);
         }
         public string Directory { get; }
 
@@ -32,8 +32,9 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
         public string ModelDirectory => Path.Combine(Directory, "Models");
 
         public string RepositoryDirectory => Path.Combine(Directory, "Repositories");
+        public string RepositoryComponentsDirectory => Path.Combine(RepositoryDirectory, "Components");
 
-        public IModelGenerator Generator { get; private set; }
+        public IModelGenerator ModelGenerator { get; private set; }
         private string TableNameCleanser(string tableName)
         {
             return tableName.Replace("-", "");
@@ -41,7 +42,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
 
         public void GenerateModel()
         {
-            Generator.GenerateAllTable();
+            ModelGenerator.Generate();
         }
 
         public void GenerateRepository(Table table)
@@ -65,29 +66,32 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             var outputFile = Path.Combine(RepositoryDirectory, $"{repositoryName}.vb");
             System.IO.File.WriteAllText(outputFile, sb.ToString(), Encoding.UTF8);
         }
+        public void GeneratePartialRepository(Table table)
+        {
 
+        }
         public void GenerateService()
         {
             var sb = new StringBuilder();
             sb.AppendLine("Imports System");
             sb.AppendLine("Imports System.Data.SqlClient");
             sb.AppendLine("Imports Utilities.SQL");
-            sb.AppendLine("Imports System.Data.Common");
             sb.AppendLine("Imports Utilities.Interfaces");
+            sb.AppendLine("Imports System.Data.Common");
             sb.AppendLine($"Imports {Namespace}.Repositories");
             sb.AppendLine();
             sb.AppendLine($@"Namespace {Namespace}");
             sb.AppendLine($"    Public NotInheritable Class Service");
-            sb.AppendLine($"                                Implements IUnitOfWork");
-            sb.AppendLine("        Private ReadOnly Shared _lazyInstant As Lazy(Of Service) = new Lazy(Of Service)(Function() new Service())");
-            sb.AppendLine("        Public ReadOnly Shared Context As Service  = _lazyInstant.Value");
+            sb.AppendLine($"                                Implements IDisposable");
+            //sb.AppendLine("        Private ReadOnly Shared _lazyInstant As Lazy(Of Service) = new Lazy(Of Service)(Function() new Service())");
+            //sb.AppendLine("        Public ReadOnly Shared Context As Service  = _lazyInstant.Value");
             sb.AppendLine("        Private _connection As IDatabaseConnectorExtension(Of SqlConnection,SqlParameter)");
-            sb.AppendLine("        Private Sub New()");
-            sb.AppendLine($"                _connection = new DatabaseConnector(Of SqlConnection,SqlParameter)(\"***YOUR DATABASE CREDENTIAL***\")");
+            sb.AppendLine("        Public Sub New(connectionString As String)");
+            sb.AppendLine($"                _connection = new DatabaseConnector(Of SqlConnection,SqlParameter)(connectionString)");
             sb.AppendLine("        End Sub");
-            foreach (var table in Generator.Tables)
+            foreach (var table in ModelGenerator.Tables)
             {
-                var tableName = TableNameCleanser(table);
+                var tableName = TableNameCleanser(table.Name);
                 var repositoryName = $"{tableName}Repository";
                 sb.AppendLine($"        Private  _{tableName} As {repositoryName}");
                 sb.AppendLine($"        Public ReadOnly Property {tableName}() As {repositoryName}");
@@ -98,20 +102,6 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
                 sb.AppendLine($"                return _{tableName}");
                 sb.AppendLine($"            End Get");
                 sb.AppendLine($"        End Property");
-            }
-            var unitOfWorkMethods = typeof(IUnitOfWork).GetMethods();
-            foreach (var method in unitOfWorkMethods)
-            {
-                var parameters = string.Join(",", method.GetParameters().Select(parameter =>
-                {
-                    return $"{parameter.Name} As {parameter.ParameterType.Name}";
-                }));
-                var returnType = method.ReturnType == typeof(void) ? "" : $"As {method.ReturnType.Name}";
-                var functionType = method.ReturnType == typeof(void) ? "Sub" : "Function";
-                var methodName = method.Name;
-                sb.AppendLine($"            Public {functionType} {methodName}({parameters}) {returnType} Implements IUnitOfWork.{methodName}");
-                sb.AppendLine($"                       throw new NotImplementedException()");
-                sb.AppendLine($"            End {functionType}");
             }
             sb.AppendLine($"            Public Sub Dispose() Implements IDisposable.Dispose");
             sb.AppendLine($"                _connection.Dispose()");

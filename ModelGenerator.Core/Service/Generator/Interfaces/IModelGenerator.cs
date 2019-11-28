@@ -9,10 +9,10 @@ namespace ModelGenerator.Core.Services.Generator.Interfaces
     {
         string ConnectionString { get; }
         string Directory { get; }
+        string PartialDirectory { get; }
         string Namespace { get; }
-        List<string> Tables { get; }
+        List<Table> Tables { get; }
         List<StoredProcedureSchema> StoredProcedures { get; }
-        void GenerateAllTable();
-        void GenerateFromSpecificTable(string tableName, Action<Table> parser);
+        void Generate();
     }
 }

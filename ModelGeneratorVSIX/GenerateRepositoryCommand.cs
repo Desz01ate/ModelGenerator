@@ -4,6 +4,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ModelGenerator.Core.Enum;
+using ModelGenerator.Helpers;
 using System;
 using System.ComponentModel.Design;
 using System.IO;
@@ -45,18 +46,7 @@ namespace ModelGenerator
 
             var menuCommandID = new CommandID(CommandSet, CommandId);
             var menuItem = new MenuCommand(this.Execute, menuCommandID);
-            var menuCommandID2 = new CommandID(CommandSet2, CommandId2);
-            var menuItem2 = new MenuCommand(this.Execute2, menuCommandID2);
             commandService.AddCommand(menuItem);
-            commandService.AddCommand(menuItem2);
-        }
-
-        private void Execute2(object sender, EventArgs e)
-        {
-            ExecutionMethod((l, c, d, p) =>
-            {
-                LangaugesData.PerformModelGenerate(l, TargetDatabaseConnector.SQLServer, c, d, p);
-            });
         }
 
         /// <summary>
@@ -102,90 +92,49 @@ namespace ModelGenerator
         /// <param name="e">Event args.</param>
         private void Execute(object sender, EventArgs e)
         {
-            ExecutionMethod((l, c, d, p) =>
-            {
-                LangaugesData.PerformStrategyGenerate(l, TargetDatabaseConnector.SQLServer, c, d, p);
-            });
-        }
-        private void ExecutionMethod(Action<TargetLanguage, string, string, string> action)
-        {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var selectedProject = GetSelectedProject();
-            TargetLanguage targetLanguage = TargetLanguage.CSharp;
-            string lang = null;
-            try
+            var form = new GeneratorForm();
+            form.OnSubmitGenerate += (s, _) =>
             {
-                lang = selectedProject.CodeModel.Language;
-            }
-            catch
-            {
-
-            }
-            switch (lang)
-            {
-                case EnvDTE.CodeModelLanguageConstants.vsCMLanguageVB:
-                    targetLanguage = TargetLanguage.VisualBasic;
-                    break;
-                case EnvDTE.CodeModelLanguageConstants.vsCMLanguageCSharp:
-                    targetLanguage = TargetLanguage.CSharp;
-                    break;
-                default:
-                    VsShellUtilities.ShowMessageBox(
-                        this.package,
-                        "Unsupported project, make sure that the project is either C# or Visual Basic.",
-                        "ModelGenerator",
-                        OLEMSGICON.OLEMSGICON_INFO,
-                        OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                    return;
-            }
-            var connectionString = Microsoft.VisualBasic.Interaction.InputBox($"Connection string to Microsoft SQL Server\nYou may required to install Deszolate.Utilities.Lite v{Utilities.Metadata.Version} to use the generated service.");
-
-            var dte2 = Package.GetGlobalService(typeof(DTE)) as DTE2;
-            var directory = Path.GetDirectoryName(selectedProject.FullName);
+                GenerateService(form.GeneratorType, form.TargetLanguage, form.TargetDatabaseConnector, form.ConnectionString, form.AutomaticReload);
+                form.Dispose();
+            };
+            form.Show();
+        }
+        private void GenerateService(TargetGeneratorType generatorType, TargetLanguage language, TargetDatabaseConnector databaseConnector, string connectionString, bool reloadProject)
+        {
             if (string.IsNullOrWhiteSpace(connectionString))
             {
                 VsShellUtilities.ShowMessageBox(
                     this.package,
-                    "Action request cancel by user.",
+                    "Connection string must not be null.",
                     "ModelGenerator",
                     OLEMSGICON.OLEMSGICON_INFO,
                     OLEMSGBUTTON.OLEMSGBUTTON_OK,
                     OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
                 return;
             }
-            var solutionName = Path.GetFileNameWithoutExtension(dte2.Solution.FullName);
-            var projectName = selectedProject.Name;
-            var defaultNamespace = selectedProject.Properties.Item("DefaultNamespace").Value.ToString();
+            var dte2 = Package.GetGlobalService(typeof(DTE)) as DTE2;
+            var directory = DevenvHelper.ProjectDirectory;
+            var solutionName = dte2.GetSolutionName();
+            var projectName = DevenvHelper.ProjectName;
+            var defaultNamespace = DevenvHelper.ProjectDefaultNamespace;
+
             dte2.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer).Activate();
             dte2.ToolWindows.SolutionExplorer.GetItem($@"{solutionName}\{projectName}").Select(vsUISelectionType.vsUISelectionTypeSelect);
-            //dte2.ExecuteCommand("Project.UnloadProject");
-            //LangaugesData.PerformStrategyGenerate(TargetLanguage.CSharp, TargetDatabaseConnector.SQLServer, connectionString, directory, projectName);
-            action(targetLanguage, connectionString, directory, defaultNamespace);
-            //dte2.ExecuteCommand("Project.ReloadProject");
-        }
-        private Project GetSelectedProject()
-        {
-            var monitorSelection = Package.GetGlobalService(typeof(SVsShellMonitorSelection)) as IVsMonitorSelection;
+            if (reloadProject) dte2.ExecuteCommand("Project.UnloadProject");
 
-            monitorSelection.GetCurrentSelection(out IntPtr hierarchyPointer,
-                                                 out uint projectItemId,
-                                                 out IVsMultiItemSelect multiItemSelect,
-                                                 out IntPtr selectionContainerPointer);
-
-            IVsHierarchy selectedHierarchy = Marshal.GetTypedObjectForIUnknown(
-                                                 hierarchyPointer,
-                                                 typeof(IVsHierarchy)) as IVsHierarchy;
-            object selectedObject = null;
-            if (selectedHierarchy != null)
+            switch (generatorType)
             {
-                ErrorHandler.ThrowOnFailure(selectedHierarchy.GetProperty(
-                                                  projectItemId,
-                                                  (int)__VSHPROPID.VSHPROPID_ExtObject,
-                                                  out selectedObject));
+                case TargetGeneratorType.Model:
+                    LanguagesData.PerformModelGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Models"), defaultNamespace);
+                    break;
+                case TargetGeneratorType.UnitOfWork:
+                    LanguagesData.PerformRepositoryGenerate(language, databaseConnector, connectionString, directory, defaultNamespace);
+                    break;
             }
-            Project selectedProject = selectedObject as Project;
-            return selectedProject;
+
+            if (reloadProject) dte2.ExecuteCommand("Project.ReloadProject");
         }
     }
 }

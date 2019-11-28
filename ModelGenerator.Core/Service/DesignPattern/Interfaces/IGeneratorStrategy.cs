@@ -6,16 +6,18 @@ using System.Data.Common;
 
 namespace ModelGenerator.Core.Services.DesignPattern.Interfaces
 {
-    public interface IGeneratorStrategy
+    public interface IServiceGenerator
     {
         string Directory { get; }
         string Namespace { get; }
         string ConnectionString { get; }
         string ModelDirectory { get; }
         string RepositoryDirectory { get; }
-        IModelGenerator Generator { get; }
+        string RepositoryComponentsDirectory { get; }
+        IModelGenerator ModelGenerator { get; }
         void GenerateModel();
         void GenerateRepository(Table table);
+        void GeneratePartialRepository(Table table);
         void GenerateService();
         void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new();
     }

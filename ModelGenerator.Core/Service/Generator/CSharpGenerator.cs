@@ -10,11 +10,12 @@ namespace ModelGenerator.Core.Services.Generator
     public class CSharpGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
         where TDatabase : DbConnection, new()
     {
-        public CSharpGenerator(string connectionString, string directory, string @namespace, Func<string, string> func = null) : base(connectionString, directory, @namespace)
+        public CSharpGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
-            if (func != null) this.SetCleanser(func);
         }
-
+        public CSharpGenerator(string connectionString, string directory, string partialDirectory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, partialDirectory, @namespace, Cleaner)
+        {
+        }
         protected override string GetNullableDataType(TableSchema column)
         {
             var typecs = DataTypeMapper(column.DataTypeName);
@@ -51,6 +52,29 @@ namespace ModelGenerator.Core.Services.Generator
             }
             var filePath = Path.Combine(Directory, $@"{table.Name}.cs");
             System.IO.File.WriteAllText(filePath, sb.ToString());
+        }
+        protected override void GeneratePartialCodeFile(Table table)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("using System;");
+            sb.AppendLine();
+            if (!string.IsNullOrWhiteSpace(Namespace))
+            {
+                sb.AppendLine($@"namespace {Namespace}");
+                sb.AppendLine("{");
+            }
+            sb.AppendLine("//You can get Utilities package via nuget : Install-Package Deszolate.Utilities.Lite");
+            sb.AppendLine($"//[Utilities.Attributes.SQL.Table(\"{TableNameCleanser(table.Name)}\")]");
+            sb.AppendLine($@"public partial class {table.Name.Replace("-", "")}");
+            sb.AppendLine("{");
+            sb.AppendLine("}");
+            if (!string.IsNullOrWhiteSpace(Namespace))
+            {
+                sb.AppendLine("}");
+            }
+            var filePath = Path.Combine(PartialDirectory, $@"{table.Name}.cs");
+            if (!File.Exists(filePath))
+                System.IO.File.WriteAllText(filePath, sb.ToString());
         }
         protected override string DataTypeMapper(string columnType)
         {

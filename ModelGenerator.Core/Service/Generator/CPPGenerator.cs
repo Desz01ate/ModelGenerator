@@ -10,11 +10,10 @@ namespace ModelGenerator.Core.Services.Generator
     public class CPPGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
         where TDatabase : DbConnection, new()
     {
-        public CPPGenerator(string connectionString, string directory, string @namespace, Func<string, string> func = null) : base(connectionString, directory, @namespace)
+        public CPPGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
-            if (func != null) this.SetCleanser(func);
-        }
 
+        }
         protected override string GetNullableDataType(TableSchema column)
         {
             var typecpp = DataTypeMapper(column.DataTypeName);

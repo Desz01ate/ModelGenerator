@@ -1,12 +1,46 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;netstandard2.1;</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Service\DesignPattern\UnitOfWork\Components\**" />
+    <EmbeddedResource Remove="Service\DesignPattern\UnitOfWork\Components\**" />
+    <None Remove="Service\DesignPattern\UnitOfWork\Components\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="TextTemplates\SadRepo.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="TextTemplates\SadRepo.tt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Deszolate.Utilities" Version="0.2.1.2" />
+    <PackageReference Include="System.CodeDom" Version="4.7.0-preview3.19551.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="TextTemplates\RepositoryTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RepositoryTemplate.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="TextTemplates\RepositoryTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RepositoryTemplate.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

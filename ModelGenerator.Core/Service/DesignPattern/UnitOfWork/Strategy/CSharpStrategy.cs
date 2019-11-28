@@ -12,19 +12,20 @@ using Utilities.Interfaces;
 
 namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
 {
-    public class CSharpStrategy : IGeneratorStrategy
+    public class CSharpStrategy : IServiceGenerator
     {
         public CSharpStrategy(string connectionString, string directory, string @namespace)
         {
             ConnectionString = connectionString;
             Directory = directory;
             Namespace = @namespace;
+            System.IO.Directory.CreateDirectory(PartialRepositoryDirectory);
             //Generator = new CSharpGenerator<TDatabase>(connectionString, ModelDirectory, $"{@namespace}.Models");
             //if (func != null) Generator.SetCleanser(func);
         }
         public void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new()
         {
-            this.Generator = new CSharpGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, $"{Namespace}.Models", parserFunction);
+            this.ModelGenerator = new CSharpGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, this.PartialModelDirectory, $"{Namespace}.Models", parserFunction);
         }
         public string Directory { get; }
 
@@ -33,10 +34,12 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
         public string ConnectionString { get; }
 
         public string ModelDirectory => Path.Combine(Directory, "Models");
-
+        public string PartialModelDirectory => Path.Combine(ModelDirectory, "Partials");
         public string RepositoryDirectory => Path.Combine(Directory, "Repositories");
+        public string PartialRepositoryDirectory => Path.Combine(RepositoryDirectory, "Partials");
+        public string RepositoryComponentsDirectory => Path.Combine(RepositoryDirectory, "Components");
 
-        public IModelGenerator Generator { get; private set; }
+        public IModelGenerator ModelGenerator { get; private set; }
         private string TableNameCleanser(string tableName)
         {
             return tableName.Replace("-", "");
@@ -44,7 +47,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
 
         public void GenerateModel()
         {
-            Generator.GenerateAllTable();
+            ModelGenerator.Generate();
         }
 
         public void GenerateRepository(Table table)
@@ -54,7 +57,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             var sb = new StringBuilder();
             sb.AppendLine($"using System.Data.SqlClient;");
             sb.AppendLine($"using Utilities.Interfaces;");
-            sb.AppendLine($"using Utilities.DesignPattern.UnitOfWork.Components;");
+            sb.AppendLine($"using {Namespace}.Repositories.Components;");
             sb.AppendLine($"using {Namespace}.Models;");
             sb.AppendLine();
             sb.AppendLine($@"namespace {Namespace}.Repositories");
@@ -62,7 +65,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             sb.AppendLine("    /// <summary>");
             sb.AppendLine($"    /// Data contractor for {tableName}");
             sb.AppendLine("    /// </summary>");
-            sb.AppendLine($"    public class {repositoryName} : Repository<{tableName},SqlConnection,SqlParameter>");
+            sb.AppendLine($"    public partial class {repositoryName} : Repository<{tableName},SqlConnection,SqlParameter>");
             sb.AppendLine("    {");
             sb.AppendLine($"       public {repositoryName}(IDatabaseConnectorExtension<SqlConnection,SqlParameter> connector) : base(connector)");
             sb.AppendLine($"       {{");
@@ -72,7 +75,29 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             var outputFile = Path.Combine(RepositoryDirectory, $"{repositoryName}.cs");
             System.IO.File.WriteAllText(outputFile, sb.ToString(), Encoding.UTF8);
         }
-
+        public void GeneratePartialRepository(Table table)
+        {
+            var tableName = TableNameCleanser(table.Name);
+            var repositoryName = $"{tableName}Repository";
+            var sb = new StringBuilder();
+            sb.AppendLine($"using System.Data.SqlClient;");
+            sb.AppendLine($"using Utilities.Interfaces;");
+            sb.AppendLine($"using {Namespace}.Repositories.Components;");
+            sb.AppendLine($"using {Namespace}.Models;");
+            sb.AppendLine();
+            sb.AppendLine($@"namespace {Namespace}.Repositories");
+            sb.AppendLine("{");
+            sb.AppendLine("    /// <summary>");
+            sb.AppendLine($"    /// Data contractor for {tableName}");
+            sb.AppendLine("    /// </summary>");
+            sb.AppendLine($"    public partial class {repositoryName} : Repository<{tableName},SqlConnection,SqlParameter>");
+            sb.AppendLine("    {");
+            sb.AppendLine("    }");
+            sb.AppendLine("}");
+            var outputFile = Path.Combine(PartialRepositoryDirectory, $"{repositoryName}.cs");
+            if (!File.Exists(outputFile))
+                System.IO.File.WriteAllText(outputFile, sb.ToString(), Encoding.UTF8);
+        }
         public void GenerateService()
         {
             var sb = new StringBuilder();
@@ -80,27 +105,26 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             sb.AppendLine("using System.Data.SqlClient;");
             sb.AppendLine("using System.Transactions;");
             sb.AppendLine("using Utilities.SQL;");
-            sb.AppendLine("using System.Data.Common;");
             sb.AppendLine("using Utilities.Interfaces;");
+            sb.AppendLine("using System.Data.Common;");
             sb.AppendLine("using System.Collections.Generic;");
             sb.AppendLine($"using System.Data;");
             sb.AppendLine($"using {Namespace}.Repositories;");
             sb.AppendLine();
             sb.AppendLine($@"namespace {Namespace}");
             sb.AppendLine("{");
-            sb.AppendLine($"    public sealed class Service : IUnitOfWork");
+            sb.AppendLine($"    public sealed class Service : IDisposable");
             sb.AppendLine("    {");
-            sb.AppendLine("        private readonly static Lazy<Service> _lazyInstant = new Lazy<Service>(()=> new Service(),true);");
-            sb.AppendLine("        public readonly static Service Context = _lazyInstant.Value;");
+            //sb.AppendLine("        private readonly static Lazy<Service> _lazyInstant = new Lazy<Service>(()=> new Service(),true);");
+            //sb.AppendLine("        public readonly static Service Context = _lazyInstant.Value;");
             sb.AppendLine("        public readonly IDatabaseConnectorExtension<SqlConnection,SqlParameter> Connector;");
-            sb.AppendLine("        public readonly TransactionScope transactionScope;");
-            sb.AppendLine("        Service()");
+            sb.AppendLine("        public Service(string connectionString)");
             sb.AppendLine("        {");
-            sb.AppendLine($"                Connector = new DatabaseConnector<SqlConnection,SqlParameter>(\"***YOUR DATABASE CREDENTIAL***\");");
+            sb.AppendLine($"                Connector = new DatabaseConnector<SqlConnection,SqlParameter>(connectionString);");
             sb.AppendLine("        }");
-            foreach (var table in Generator.Tables)
+            foreach (var table in ModelGenerator.Tables)
             {
-                var tableName = TableNameCleanser(table);
+                var tableName = TableNameCleanser(table.Name);
                 var repositoryName = $"{tableName}Repository";
                 sb.AppendLine($"        private {repositoryName} _{tableName} {{ get; set; }}");
                 sb.AppendLine("         /// <summary>");
@@ -118,24 +142,12 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
                 sb.AppendLine($"            }}");
                 sb.AppendLine($"        }}");
             }
-            var unitOfWorkMethods = typeof(IUnitOfWork).GetMethods();
-            foreach (var method in unitOfWorkMethods)
-            {
-                var parameters = string.Join(",", method.GetParameters().Select(parameter =>
-                {
-                    return $"{parameter.ParameterType.Name} {parameter.Name}";
-                }));
-                var returnType = method.ReturnType == typeof(void) ? "void" : method.ReturnType.Name;
-                var methodName = method.Name;
-                sb.AppendLine($"            public {returnType} {methodName}({parameters}) => throw new NotImplementedException();");
-            }
             sb.AppendLine($"            public void Dispose()");
             sb.AppendLine("            {");
-            sb.AppendLine("                 transactionScope?.Dispose();");
             sb.AppendLine($"                Connector?.Dispose();");
             sb.AppendLine("            }");
             sb.AppendLine("#region Stored Procedure");
-            foreach (var sp in Generator.StoredProcedures)
+            foreach (var sp in ModelGenerator.StoredProcedures)
             {
                 if (sp.SPECIFIC_NAME.StartsWith("sp") && sp.SPECIFIC_NAME.Contains("diagram"))
                 {

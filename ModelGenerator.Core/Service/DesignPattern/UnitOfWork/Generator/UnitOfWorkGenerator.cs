@@ -1,4 +1,5 @@
 ﻿using ModelGenerator.Core.Services.DesignPattern.Interfaces;
+using ModelGenerator.Core.TextTemplates;
 using System;
 using System.Data.Common;
 
@@ -6,39 +7,51 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Generator
 {
     public class UnitOfWorkGenerator
     {
-        IGeneratorStrategy _strategy;
+        IServiceGenerator _strategy;
         public UnitOfWorkGenerator()
         {
 
         }
-        public UnitOfWorkGenerator(IGeneratorStrategy strategy)
+        public UnitOfWorkGenerator(IServiceGenerator strategy)
         {
             UseStrategy(strategy);
         }
-        public void UseStrategy(IGeneratorStrategy strategy)
+        public void UseStrategy(IServiceGenerator strategy)
         {
             _strategy = strategy;
         }
         public void Generate()
         {
             if (_strategy == null) throw new NullReferenceException("Strategy must not be null.");
+            System.IO.Directory.CreateDirectory(_strategy.RepositoryComponentsDirectory);
             System.IO.Directory.CreateDirectory(_strategy.ModelDirectory);
             System.IO.Directory.CreateDirectory(_strategy.RepositoryDirectory);
-            System.IO.Directory.CreateDirectory(System.IO.Path.Combine(_strategy.ModelDirectory, "Partials"));
-            System.IO.Directory.CreateDirectory(System.IO.Path.Combine(_strategy.RepositoryDirectory, "Partials"));
+            GenerateRepositoryDependencies();
             GenerateModel();
             GenerateRepositories();
             GenerateService();
         }
+
+        private void GenerateRepositoryDependencies()
+        {
+            var repositoryFile = System.IO.Path.Combine(_strategy.RepositoryComponentsDirectory, "Repository.cs");
+            var repositoryTemplate = new RepositoryTemplate();
+            repositoryTemplate.Namespace = _strategy.Namespace;
+            var content = repositoryTemplate.TransformText();
+            System.IO.File.WriteAllText(repositoryFile, content);
+
+        }
+
         private void GenerateModel()
         {
             _strategy.GenerateModel();
         }
         private void GenerateRepositories()
         {
-            foreach (var table in _strategy.Generator.Tables)
+            foreach (var table in _strategy.ModelGenerator.Tables)
             {
-                _strategy.Generator.GenerateFromSpecificTable(table, _strategy.GenerateRepository);
+                _strategy.GenerateRepository(table);
+                _strategy.GeneratePartialRepository(table);
             }
         }
         private void GenerateService()

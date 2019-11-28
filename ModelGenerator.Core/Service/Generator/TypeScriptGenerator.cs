@@ -10,9 +10,8 @@ namespace ModelGenerator.Core.Services.Generator
     public class TypeScriptGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
         where TDatabase : DbConnection, new()
     {
-        public TypeScriptGenerator(string connectionString, string directory, string @namespace, Func<string, string> func = null) : base(connectionString, directory, @namespace)
+        public TypeScriptGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
-            if (func != null) this.SetCleanser(func);
         }
 
         protected override string GetNullableDataType(TableSchema column)
@@ -41,19 +40,36 @@ namespace ModelGenerator.Core.Services.Generator
             }
             var ppcString = propertyCode.ToString();
 
-
+            if (!string.IsNullOrWhiteSpace(Namespace))
+            {
+                classSb.AppendLine($@"namespace {Namespace}");
+                classSb.AppendLine("{");
+            }
             classSb.AppendLine($@"class {table.Name.Replace("-", "")}");
             classSb.AppendLine("{");
             classSb.Append(ppcString);
             classSb.AppendLine("}");
-            classSb.AppendLine();
+            if (!string.IsNullOrWhiteSpace(Namespace))
+            {
+                classSb.AppendLine("}");
+            }
             var filePath = Path.Combine(classesDir, $@"{table.Name}.ts");
             System.IO.File.WriteAllText(filePath, classSb.ToString());
 
-            interfaceSb.AppendLine($@"interface I{table.Name.Replace("-", "")}");
+
+            if (!string.IsNullOrWhiteSpace(Namespace))
+            {
+                interfaceSb.AppendLine($@"namespace {Namespace}");
+                interfaceSb.AppendLine("{");
+            }
+            interfaceSb.AppendLine($@"export interface I{table.Name.Replace("-", "")}");
             interfaceSb.AppendLine("{");
             interfaceSb.Append(ppcString);
             interfaceSb.AppendLine("}");
+            if (!string.IsNullOrWhiteSpace(Namespace))
+            {
+                interfaceSb.AppendLine("}");
+            }
             var filePathInterface = Path.Combine(interfaceDir, $@"I{table.Name}.ts");
             System.IO.File.WriteAllText(filePathInterface, interfaceSb.ToString());
         }
