@@ -7,8 +7,9 @@ using Utilities.Classes;
 
 namespace ModelGenerator.Core.Services.Generator
 {
-    public class VisualBasicGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
+    public class VisualBasicGenerator<TDatabase, TParameter> : AbstractModelGenerator<TDatabase, TParameter>
         where TDatabase : DbConnection, new()
+        where TParameter : DbParameter, new()
     {
         public VisualBasicGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
@@ -33,7 +34,7 @@ namespace ModelGenerator.Core.Services.Generator
             }
             sb.AppendLine("'You can get Utilities package via nuget : Install-Package Deszolate.Utilities.Lite");
             sb.AppendLine($"'<Utilities.Attributes.SQL.Table(\"[{table.Name}]\")>");
-            sb.AppendLine($@"Public Class {table.Name.Replace("-", "")}");
+            sb.AppendLine($@"Public Class {this.RemoveSpecialChars(table.Name)}");
             foreach (var column in table.Columns)
             {
                 sb.AppendLine();

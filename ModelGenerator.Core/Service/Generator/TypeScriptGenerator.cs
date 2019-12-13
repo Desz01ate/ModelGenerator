@@ -7,8 +7,9 @@ using Utilities.Classes;
 
 namespace ModelGenerator.Core.Services.Generator
 {
-    public class TypeScriptGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
+    public class TypeScriptGenerator<TDatabase, TParameter> : AbstractModelGenerator<TDatabase, TParameter>
         where TDatabase : DbConnection, new()
+        where TParameter : DbParameter, new()
     {
         public TypeScriptGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
@@ -45,7 +46,7 @@ namespace ModelGenerator.Core.Services.Generator
                 classSb.AppendLine($@"namespace {Namespace}");
                 classSb.AppendLine("{");
             }
-            classSb.AppendLine($@"class {table.Name.Replace("-", "")}");
+            classSb.AppendLine($@"class {this.RemoveSpecialChars(table.Name)}");
             classSb.AppendLine("{");
             classSb.Append(ppcString);
             classSb.AppendLine("}");
@@ -62,7 +63,7 @@ namespace ModelGenerator.Core.Services.Generator
                 interfaceSb.AppendLine($@"namespace {Namespace}");
                 interfaceSb.AppendLine("{");
             }
-            interfaceSb.AppendLine($@"export interface I{table.Name.Replace("-", "")}");
+            interfaceSb.AppendLine($@"export interface I{this.RemoveSpecialChars(table.Name)}");
             interfaceSb.AppendLine("{");
             interfaceSb.Append(ppcString);
             interfaceSb.AppendLine("}");

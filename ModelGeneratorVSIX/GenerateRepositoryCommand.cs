@@ -1,6 +1,5 @@
 ﻿using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ModelGenerator.Core.Enum;
@@ -8,7 +7,7 @@ using ModelGenerator.Helpers;
 using System;
 using System.ComponentModel.Design;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
 
 namespace ModelGenerator
@@ -94,47 +93,75 @@ namespace ModelGenerator
         {
             ThreadHelper.ThrowIfNotOnUIThread();
             var form = new GeneratorForm();
-            form.OnSubmitGenerate += (s, _) =>
+            form.OnSubmitGenerate += delegate
             {
-                GenerateService(form.GeneratorType, form.TargetLanguage, form.TargetDatabaseConnector, form.ConnectionString, form.AutomaticReload);
+                var genType = form.GeneratorType;
+                var targetLang = form.TargetLanguage;
+                var targetDb = form.TargetDatabaseConnector;
+                var dbCon = form.ConnectionString;
+                var autoReload = form.AutomaticReload;
+
                 form.Dispose();
+                if (!NugetHelper.NugetHelper.IsNugetPackageInstalled(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite"))
+                {
+                    var acceptLibraryInstaller = MessageBox.Show(
+                            $"{DevenvHelper.ProjectName} currently not install 'Deszolate.Utilities.Lite'. This library is required in order to make the generated code works, do you want to install now?",
+                            "ModelGenerator",
+                            MessageBoxButtons.YesNo,
+                            MessageBoxIcon.Warning
+                        );
+                    if (acceptLibraryInstaller == DialogResult.Yes)
+                    {
+                        NugetHelper.NugetHelper.InstallNugetPackage(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite");
+                    }
+                }
+                var thread = new System.Threading.Thread(
+                new System.Threading.ThreadStart(() => this.GenerateService(genType, targetLang, targetDb, dbCon, autoReload)));
+                thread.Start();
+                var messageResult = MessageBox.Show("Generator now working on background thread, your files will soon generated.", "ModelGenerator", MessageBoxButtons.OK, MessageBoxIcon.Information);
             };
             form.Show();
         }
         private void GenerateService(TargetGeneratorType generatorType, TargetLanguage language, TargetDatabaseConnector databaseConnector, string connectionString, bool reloadProject)
         {
-            if (string.IsNullOrWhiteSpace(connectionString))
+            try
             {
-                VsShellUtilities.ShowMessageBox(
-                    this.package,
-                    "Connection string must not be null.",
-                    "ModelGenerator",
-                    OLEMSGICON.OLEMSGICON_INFO,
-                    OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                    OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-                return;
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    VsShellUtilities.ShowMessageBox(
+                        this.package,
+                        "Connection string must not be null.",
+                        "ModelGenerator",
+                        OLEMSGICON.OLEMSGICON_INFO,
+                        OLEMSGBUTTON.OLEMSGBUTTON_OK,
+                        OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+                    return;
+                }
+                var dte2 = Package.GetGlobalService(typeof(DTE)) as DTE2;
+
+                var directory = DevenvHelper.ProjectDirectory;
+                var solutionName = dte2.GetSolutionName();
+                var projectName = DevenvHelper.ProjectName;
+                var defaultNamespace = DevenvHelper.ProjectDefaultNamespace;
+
+                dte2.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer).Activate();
+                dte2.ToolWindows.SolutionExplorer.GetItem($@"{solutionName}\{projectName}").Select(vsUISelectionType.vsUISelectionTypeSelect);
+                if (reloadProject) dte2.ExecuteCommand("Project.UnloadProject");
+                switch (generatorType)
+                {
+                    case TargetGeneratorType.Model:
+                        LanguagesData.PerformModelGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Models"), defaultNamespace);
+                        break;
+                    case TargetGeneratorType.UnitOfWork:
+                        LanguagesData.PerformRepositoryGenerate(language, databaseConnector, connectionString, directory, defaultNamespace);
+                        break;
+                }
+                if (reloadProject) dte2.ExecuteCommand("Project.ReloadProject");
             }
-            var dte2 = Package.GetGlobalService(typeof(DTE)) as DTE2;
-            var directory = DevenvHelper.ProjectDirectory;
-            var solutionName = dte2.GetSolutionName();
-            var projectName = DevenvHelper.ProjectName;
-            var defaultNamespace = DevenvHelper.ProjectDefaultNamespace;
-
-            dte2.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer).Activate();
-            dte2.ToolWindows.SolutionExplorer.GetItem($@"{solutionName}\{projectName}").Select(vsUISelectionType.vsUISelectionTypeSelect);
-            if (reloadProject) dte2.ExecuteCommand("Project.UnloadProject");
-
-            switch (generatorType)
+            catch (Exception ex)
             {
-                case TargetGeneratorType.Model:
-                    LanguagesData.PerformModelGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Models"), defaultNamespace);
-                    break;
-                case TargetGeneratorType.UnitOfWork:
-                    LanguagesData.PerformRepositoryGenerate(language, databaseConnector, connectionString, directory, defaultNamespace);
-                    break;
+                MessageBox.Show(ex.ToString());
             }
-
-            if (reloadProject) dte2.ExecuteCommand("Project.ReloadProject");
         }
     }
 }

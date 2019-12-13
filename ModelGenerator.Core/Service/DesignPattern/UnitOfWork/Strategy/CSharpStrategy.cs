@@ -8,6 +8,7 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Utilities.Interfaces;
 
 namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
@@ -23,9 +24,11 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             //Generator = new CSharpGenerator<TDatabase>(connectionString, ModelDirectory, $"{@namespace}.Models");
             //if (func != null) Generator.SetCleanser(func);
         }
-        public void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new()
+        public void SetGenerator<TDatabase, TParameter>(Func<string, string> parserFunction = null)
+            where TDatabase : DbConnection, new()
+            where TParameter : DbParameter, new()
         {
-            this.ModelGenerator = new CSharpGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, this.PartialModelDirectory, $"{Namespace}.Models", parserFunction);
+            this.ModelGenerator = new CSharpGenerator<TDatabase, TParameter>(this.ConnectionString, this.ModelDirectory, this.PartialModelDirectory, $"{Namespace}.Models", parserFunction);
         }
         public string Directory { get; }
 
@@ -42,7 +45,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
         public IModelGenerator ModelGenerator { get; private set; }
         private string TableNameCleanser(string tableName)
         {
-            return tableName.Replace("-", "");
+            return Regex.Replace(tableName, @"(\s|\$|-)", "");
         }
 
         public void GenerateModel()
@@ -55,7 +58,6 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             var tableName = TableNameCleanser(table.Name);
             var repositoryName = $"{tableName}Repository";
             var sb = new StringBuilder();
-            sb.AppendLine($"using System.Data.SqlClient;");
             sb.AppendLine($"using Utilities.Interfaces;");
             sb.AppendLine($"using {Namespace}.Repositories.Components;");
             sb.AppendLine($"using {Namespace}.Models;");
@@ -65,9 +67,9 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             sb.AppendLine("    /// <summary>");
             sb.AppendLine($"    /// Data contractor for {tableName}");
             sb.AppendLine("    /// </summary>");
-            sb.AppendLine($"    public partial class {repositoryName} : Repository<{tableName},SqlConnection,SqlParameter>");
+            sb.AppendLine($"    public partial class {repositoryName} : Repository<{tableName},{ModelGenerator.DatabaseType},{ModelGenerator.ParameterType}>");
             sb.AppendLine("    {");
-            sb.AppendLine($"       public {repositoryName}(IDatabaseConnectorExtension<SqlConnection,SqlParameter> connector) : base(connector)");
+            sb.AppendLine($"       public {repositoryName}(IDatabaseConnectorExtension<{ModelGenerator.DatabaseType},{ModelGenerator.ParameterType}> connector) : base(connector)");
             sb.AppendLine($"       {{");
             sb.AppendLine($"       }}");
             sb.AppendLine("    }");
@@ -80,7 +82,6 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             var tableName = TableNameCleanser(table.Name);
             var repositoryName = $"{tableName}Repository";
             var sb = new StringBuilder();
-            sb.AppendLine($"using System.Data.SqlClient;");
             sb.AppendLine($"using Utilities.Interfaces;");
             sb.AppendLine($"using {Namespace}.Repositories.Components;");
             sb.AppendLine($"using {Namespace}.Models;");
@@ -90,7 +91,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             sb.AppendLine("    /// <summary>");
             sb.AppendLine($"    /// Data contractor for {tableName}");
             sb.AppendLine("    /// </summary>");
-            sb.AppendLine($"    public partial class {repositoryName} : Repository<{tableName},SqlConnection,SqlParameter>");
+            sb.AppendLine($"    public partial class {repositoryName}");
             sb.AppendLine("    {");
             sb.AppendLine("    }");
             sb.AppendLine("}");
@@ -102,7 +103,6 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
         {
             var sb = new StringBuilder();
             sb.AppendLine("using System;");
-            sb.AppendLine("using System.Data.SqlClient;");
             sb.AppendLine("using System.Transactions;");
             sb.AppendLine("using Utilities.SQL;");
             sb.AppendLine("using Utilities.Interfaces;");
@@ -117,10 +117,10 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             sb.AppendLine("    {");
             //sb.AppendLine("        private readonly static Lazy<Service> _lazyInstant = new Lazy<Service>(()=> new Service(),true);");
             //sb.AppendLine("        public readonly static Service Context = _lazyInstant.Value;");
-            sb.AppendLine("        public readonly IDatabaseConnectorExtension<SqlConnection,SqlParameter> Connector;");
+            sb.AppendLine($"        public readonly IDatabaseConnectorExtension<{ModelGenerator.DatabaseType},{ModelGenerator.ParameterType}> Connector;");
             sb.AppendLine("        public Service(string connectionString)");
             sb.AppendLine("        {");
-            sb.AppendLine($"                Connector = new DatabaseConnector<SqlConnection,SqlParameter>(connectionString);");
+            sb.AppendLine($"                Connector = new DatabaseConnector<{ModelGenerator.DatabaseType},{ModelGenerator.ParameterType}>(connectionString);");
             sb.AppendLine("        }");
             foreach (var table in ModelGenerator.Tables)
             {
@@ -159,13 +159,13 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
                 foreach (var param in sp.Parameters)
                 {
                     paramArgs.Add($"{param.DATA_TYPE} {param.PARAMETER_NAME}");
-                    paramFunc.Add($"                     parameters.Add(new SqlParameter(\"{param.PARAMETER_NAME}\",{param.PARAMETER_NAME}));");
+                    paramFunc.Add($"                     parameters.Add(new {ModelGenerator.ParameterType}(\"{param.PARAMETER_NAME}\",{param.PARAMETER_NAME}));");
                 }
                 sb.Append(string.Join(",", paramArgs));
                 sb.AppendLine(")");
                 sb.AppendLine("            {");
                 sb.AppendLine($"                     var command = \"{sp.SPECIFIC_NAME}\";");
-                sb.AppendLine($"                     var parameters = new List<SqlParameter>();");
+                sb.AppendLine($"                     var parameters = new List<{ModelGenerator.ParameterType}>();");
                 foreach (var p in paramFunc)
                 {
                     sb.AppendLine(p);

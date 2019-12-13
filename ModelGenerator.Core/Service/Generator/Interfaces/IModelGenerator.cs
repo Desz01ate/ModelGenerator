@@ -7,6 +7,8 @@ namespace ModelGenerator.Core.Services.Generator.Interfaces
 {
     public interface IModelGenerator
     {
+        string DatabaseType { get; }
+        string ParameterType { get; }
         string ConnectionString { get; }
         string Directory { get; }
         string PartialDirectory { get; }

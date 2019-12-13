@@ -7,6 +7,7 @@ using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Utilities.Interfaces;
 
 namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
@@ -19,9 +20,11 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             Directory = directory;
             Namespace = @namespace;
         }
-        public void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new()
+        public void SetGenerator<TDatabase, TParameter>(Func<string, string> parserFunction = null)
+    where TDatabase : DbConnection, new()
+    where TParameter : DbParameter, new()
         {
-            this.ModelGenerator = new VisualBasicGenerator<TDatabase>(this.ConnectionString, this.ModelDirectory, Namespace, parserFunction);
+            this.ModelGenerator = new VisualBasicGenerator<TDatabase, TParameter>(this.ConnectionString, this.ModelDirectory, Namespace, parserFunction);
         }
         public string Directory { get; }
 
@@ -37,7 +40,7 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
         public IModelGenerator ModelGenerator { get; private set; }
         private string TableNameCleanser(string tableName)
         {
-            return tableName.Replace("-", "");
+            return Regex.Replace(tableName, @"(\s|\$|-)", "");
         }
 
         public void GenerateModel()

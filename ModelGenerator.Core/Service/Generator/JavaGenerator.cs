@@ -7,8 +7,9 @@ using Utilities.Classes;
 
 namespace ModelGenerator.Core.Services.Generator
 {
-    public class JavaGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
+    public class JavaGenerator<TDatabase, TParameter> : AbstractModelGenerator<TDatabase, TParameter>
         where TDatabase : DbConnection, new()
+        where TParameter : DbParameter, new()
     {
         public JavaGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {

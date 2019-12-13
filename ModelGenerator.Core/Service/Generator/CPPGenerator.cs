@@ -7,8 +7,9 @@ using Utilities.Classes;
 
 namespace ModelGenerator.Core.Services.Generator
 {
-    public class CPPGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
+    public class CPPGenerator<TDatabase, TParameter> : AbstractModelGenerator<TDatabase, TParameter>
         where TDatabase : DbConnection, new()
+        where TParameter : DbParameter, new()
     {
         public CPPGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
@@ -28,7 +29,7 @@ namespace ModelGenerator.Core.Services.Generator
                 sb.AppendLine($@"namespace {Namespace}");
                 sb.AppendLine("{");
             }
-            sb.AppendLine($@"class {table.Name.Replace("-", "")}");
+            sb.AppendLine($@"class {this.RemoveSpecialChars(table.Name)}");
             sb.AppendLine("{");
             sb.AppendLine("    public:");
             foreach (var column in table.Columns)

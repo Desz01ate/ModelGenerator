@@ -7,8 +7,9 @@ using Utilities.Classes;
 
 namespace ModelGenerator.Core.Services.Generator
 {
-    public class CSharpGenerator<TDatabase> : AbstractModelGenerator<TDatabase>
+    public class CSharpGenerator<TDatabase, TParameter> : AbstractModelGenerator<TDatabase, TParameter>
         where TDatabase : DbConnection, new()
+        where TParameter : DbParameter, new()
     {
         public CSharpGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null) : base(connectionString, directory, @namespace, Cleaner)
         {
@@ -34,7 +35,7 @@ namespace ModelGenerator.Core.Services.Generator
             }
             sb.AppendLine("//You can get Utilities package via nuget : Install-Package Deszolate.Utilities.Lite");
             sb.AppendLine($"//[Utilities.Attributes.SQL.Table(\"{TableNameCleanser(table.Name)}\")]");
-            sb.AppendLine($@"public partial class {table.Name.Replace("-", "")}");
+            sb.AppendLine($@"public partial class {this.RemoveSpecialChars(table.Name)}");
             sb.AppendLine("{");
             foreach (var column in table.Columns)
             {
@@ -65,7 +66,7 @@ namespace ModelGenerator.Core.Services.Generator
             }
             sb.AppendLine("//You can get Utilities package via nuget : Install-Package Deszolate.Utilities.Lite");
             sb.AppendLine($"//[Utilities.Attributes.SQL.Table(\"{TableNameCleanser(table.Name)}\")]");
-            sb.AppendLine($@"public partial class {table.Name.Replace("-", "")}");
+            sb.AppendLine($@"public partial class {this.RemoveSpecialChars(table.Name)}");
             sb.AppendLine("{");
             sb.AppendLine("}");
             if (!string.IsNullOrWhiteSpace(Namespace))
@@ -78,6 +79,7 @@ namespace ModelGenerator.Core.Services.Generator
         }
         protected override string DataTypeMapper(string columnType)
         {
+            columnType = columnType.ToLower();
             switch (columnType)
             {
                 case "bit":
@@ -88,6 +90,7 @@ namespace ModelGenerator.Core.Services.Generator
                 case "smallint":
                     return "short";
                 case "int":
+                case "integer":
                     return "int";
                 case "bigint":
                     return "long";
@@ -99,6 +102,7 @@ namespace ModelGenerator.Core.Services.Generator
                 case "decimal":
                 case "money":
                 case "smallmoney":
+                case "numeric":
                     return "decimal";
 
                 case "time":
@@ -130,15 +134,17 @@ namespace ModelGenerator.Core.Services.Generator
                     return "Guid";
 
                 case "variant":
-                case "Udt":
+                //case "Udt":
+                case "udt":
+                case "blob": //for sqlite
                     return "object";
 
-                case "Structured":
+                //case "Structured":
+                case "structured":
                     return "DataTable";
 
                 case "geography":
                     return "geography";
-
                 default:
                     // Fallback to be manually handled by user
                     return columnType;

@@ -8,6 +8,7 @@ using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 using System.ComponentModel;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 
 namespace ModelGenerator.Core.Enum
 {
@@ -41,16 +42,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new CSharpGenerator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new CSharpGenerator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new CSharpGenerator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new CSharpGenerator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new CSharpGenerator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new CSharpGenerator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new CSharpGenerator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new CSharpGenerator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new CSharpGenerator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -58,16 +62,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new VisualBasicGenerator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new VisualBasicGenerator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new VisualBasicGenerator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new VisualBasicGenerator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new VisualBasicGenerator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new VisualBasicGenerator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new VisualBasicGenerator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new VisualBasicGenerator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new VisualBasicGenerator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -75,16 +82,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new TypeScriptGenerator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new TypeScriptGenerator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new TypeScriptGenerator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new TypeScriptGenerator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new TypeScriptGenerator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new TypeScriptGenerator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new TypeScriptGenerator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new TypeScriptGenerator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new TypeScriptGenerator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -92,16 +102,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new PHPGenerator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new PHPGenerator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new PHPGenerator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new PHPGenerator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new PHPGenerator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new PHPGenerator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new PHPGenerator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new PHPGenerator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new PHPGenerator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -109,16 +122,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new PythonGenerator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new PythonGenerator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new PythonGenerator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new PythonGenerator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new PythonGenerator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new PythonGenerator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new PythonGenerator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new PythonGenerator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new PythonGenerator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -126,16 +142,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new Python37Generator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new Python37Generator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new Python37Generator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new Python37Generator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new Python37Generator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new Python37Generator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new Python37Generator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new Python37Generator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new Python37Generator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -143,16 +162,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new JavaGenerator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new JavaGenerator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new JavaGenerator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new JavaGenerator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new JavaGenerator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new JavaGenerator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new JavaGenerator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new JavaGenerator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new JavaGenerator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -160,16 +182,19 @@ namespace ModelGenerator.Core.Enum
                     switch (targetDatabaseConnector)
                     {
                         case TargetDatabaseConnector.SQLServer:
-                            generator = new CPPGenerator<SqlConnection>(connectionString, directory, @namespace, x => $"[{x}]");
+                            generator = new CPPGenerator<SqlConnection, SqlParameter>(connectionString, directory, @namespace, x => $"[{x}]");
                             break;
                         case TargetDatabaseConnector.Oracle:
-                            generator = new CPPGenerator<OracleConnection>(connectionString, directory, @namespace);
+                            generator = new CPPGenerator<OracleConnection, OracleParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.MySQL:
-                            generator = new CPPGenerator<MySqlConnection>(connectionString, directory, @namespace);
+                            generator = new CPPGenerator<MySqlConnection, MySqlParameter>(connectionString, directory, @namespace);
                             break;
                         case TargetDatabaseConnector.PostgreSQL:
-                            generator = new CPPGenerator<NpgsqlConnection>(connectionString, directory, @namespace);
+                            generator = new CPPGenerator<NpgsqlConnection, NpgsqlParameter>(connectionString, directory, @namespace);
+                            break;
+                        case TargetDatabaseConnector.SQLite:
+                            generator = new CPPGenerator<SQLiteConnection, SQLiteParameter>(connectionString, directory, @namespace);
                             break;
                     }
                     break;
@@ -192,16 +217,19 @@ namespace ModelGenerator.Core.Enum
             switch (targetDatabaseConnector)
             {
                 case TargetDatabaseConnector.SQLServer:
-                    strategy.SetGenerator<SqlConnection>((x) => $"[{x}]");
+                    strategy.SetGenerator<SqlConnection, SqlParameter>((x) => $"[{x}]");
                     break;
                 case TargetDatabaseConnector.Oracle:
-                    strategy.SetGenerator<OracleConnection>();
+                    strategy.SetGenerator<OracleConnection, OracleParameter>();
                     break;
                 case TargetDatabaseConnector.MySQL:
-                    strategy.SetGenerator<MySqlConnection>();
+                    strategy.SetGenerator<MySqlConnection, MySqlParameter>();
                     break;
                 case TargetDatabaseConnector.PostgreSQL:
-                    strategy.SetGenerator<NpgsqlConnection>();
+                    strategy.SetGenerator<NpgsqlConnection, NpgsqlParameter>();
+                    break;
+                case TargetDatabaseConnector.SQLite:
+                    strategy.SetGenerator<SQLiteConnection, SQLiteParameter>();
                     break;
             }
             generator.UseStrategy(strategy);

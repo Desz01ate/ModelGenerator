@@ -19,6 +19,8 @@ namespace ModelGenerator.Core.Services.DesignPattern.Interfaces
         void GenerateRepository(Table table);
         void GeneratePartialRepository(Table table);
         void GenerateService();
-        void SetGenerator<TDatabase>(Func<string, string> parserFunction = null) where TDatabase : DbConnection, new();
+        void SetGenerator<TDatabase, TParameter>(Func<string, string> parserFunction = null)
+            where TDatabase : DbConnection, new()
+            where TParameter : DbParameter, new();
     }
 }

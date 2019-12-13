@@ -114,6 +114,9 @@ namespace ModelGenerator
                 case TargetDatabaseConnector.PostgreSQL:
                     txt_ConnectionString.Text = "Server=myServerAddress;Port=5432;Database=myDataBase;User Id=myUsername;Password = myPassword;";
                     break;
+                case TargetDatabaseConnector.SQLite:
+                    txt_ConnectionString.Text = @"Data Source=C:/path/to/yourdb.db;Version=3;";
+                    break;
             }
         }
     }

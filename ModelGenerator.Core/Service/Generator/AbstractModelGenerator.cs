@@ -10,18 +10,20 @@ using Utilities.Classes;
 using Utilities.SQL.Extension;
 namespace ModelGenerator.Core.Services.Generator
 {
-    public abstract class AbstractModelGenerator<TDatabase> : IModelGenerator
+    public abstract class AbstractModelGenerator<TDatabase, TParameter> : IModelGenerator
         where TDatabase : DbConnection, new()
+        where TParameter : DbParameter, new()
     {
         public string ConnectionString { get; private set; }
-
+        public string DatabaseType { get; private set; }
+        public string ParameterType { get; private set; }
         public string Directory { get; private set; }
         public string PartialDirectory { get; private set; }
 
         public string Namespace { get; private set; }
 
         public List<Table> Tables { get; } = new List<Table>();
-        public List<StoredProcedureSchema> StoredProcedures { get; private set; }
+        public List<StoredProcedureSchema> StoredProcedures { get; private set; } = new List<StoredProcedureSchema>();
         public Func<string, string> TableNameCleanser { get; private set; } = (x) => x;
         public AbstractModelGenerator(string connectionString, string directory, string @namespace, Func<string, string> Cleaner = null)
         {
@@ -34,6 +36,10 @@ namespace ModelGenerator.Core.Services.Generator
             Namespace = @namespace;
             System.IO.Directory.CreateDirectory(directory);
             Initialization();
+        }
+        protected string RemoveSpecialChars(string input)
+        {
+            return Regex.Replace(input, @"(\s|\$|-)", "");
         }
         public AbstractModelGenerator(string connectionString, string directory, string partialDirectory, string @namespace, Func<string, string> Cleaner = null)
         {
@@ -51,6 +57,8 @@ namespace ModelGenerator.Core.Services.Generator
         }
         private void Initialization()
         {
+            DatabaseType = typeof(TDatabase).FullName;
+            ParameterType = typeof(TParameter).FullName;
             using (var connection = new TDatabase()
             {
                 ConnectionString = ConnectionString

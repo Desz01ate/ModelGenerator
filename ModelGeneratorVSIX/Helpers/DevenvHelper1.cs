@@ -17,6 +17,7 @@ namespace ModelGenerator.Helpers
     {
         public static Project SelectedProject { get; private set; }
         public static string ProjectDirectory => Path.GetDirectoryName(SelectedProject?.FullName);
+        public static string LocalPackagesDirectory => Path.Combine(ProjectDirectory, "TempPackages");
         public static string ProjectName => SelectedProject?.Name;
         public static string ProjectDefaultNamespace => SelectedProject?.Properties?.Item("DefaultNamespace")?.Value?.ToString();
         static DevenvHelper()
