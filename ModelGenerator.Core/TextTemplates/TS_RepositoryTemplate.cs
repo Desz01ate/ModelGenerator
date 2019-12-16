@@ -18,9 +18,9 @@ namespace ModelGenerator.Core.TextTemplates
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\TYCHE\Source\Repos\ModelGenerator.Core\ModelGenerator.Core\TextTemplates\RepositoryTemplate.tt"
+    #line 1 "C:\Users\TYCHE\Source\Repos\ModelGenerator.Core\ModelGenerator.Core\TextTemplates\TS_RepositoryTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class RepositoryTemplate : RepositoryTemplateBase
+    public partial class TS_RepositoryTemplate : TS_RepositoryTemplateBase
     {
 #line hidden
         /// <summary>
@@ -28,110 +28,50 @@ namespace ModelGenerator.Core.TextTemplates
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\nusing System;\r\nusing System.Collections;\r\nusing System.Collections.Generic;\r\nus" +
-                    "ing System.Data.Common;\r\nusing System.Linq.Expressions;\r\nusing System.Threading." +
-                    "Tasks;\r\nusing System.Transactions;\r\nusing Utilities.Interfaces;\r\n\r\nnamespace ");
-            
-            #line 16 "C:\Users\TYCHE\Source\Repos\ModelGenerator.Core\ModelGenerator.Core\TextTemplates\RepositoryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
-            
-            #line default
-            #line hidden
-            this.Write(".Repositories.Components\r\n{\r\n    /// <summary>\r\n    /// Repository class designed" +
-                    " for IDatabaseConnectorExtension.\r\n    /// </summary>\r\n    /// <typeparam name=\"" +
-                    "T\"></typeparam>\r\n    /// <typeparam name=\"TDatabase\"></typeparam>\r\n    /// <type" +
-                    "param name=\"TParameter\"></typeparam>\r\n    public partial class Repository<T, TDa" +
-                    "tabase, TParameter> : IEnumerable<T>\r\n        where T : class, new()\r\n        wh" +
-                    "ere TDatabase : DbConnection, new()\r\n        where TParameter : DbParameter, new" +
-                    "()\r\n    {\r\n        /// <summary>\r\n        /// Instance of database connector.\r\n " +
-                    "       /// </summary>\r\n        protected readonly IDatabaseConnectorExtension<TD" +
-                    "atabase, TParameter> Connector;\r\n        /// <summary>\r\n        /// Constructor." +
-                    "\r\n        /// </summary>\r\n        /// <param name=\"databaseConnector\">Instance o" +
-                    "f DatabaseConnector.</param>\r\n        public Repository(IDatabaseConnectorExtens" +
-                    "ion<TDatabase, TParameter> databaseConnector)\r\n        {\r\n            Connector " +
-                    "= databaseConnector;\r\n        }\r\n\r\n        /// <summary>\r\n        /// Delete dat" +
-                    "a from repository.\r\n        /// </summary>\r\n        /// <param name=\"data\">Gener" +
-                    "ic object.</param>\r\n        public virtual void Delete(T data)\r\n        {\r\n     " +
-                    "       Connector.Delete(data);\r\n        }\r\n\r\n        /// <summary>\r\n        /// " +
-                    "Delete data from repository.\r\n        /// </summary>\r\n        /// <param name=\"k" +
-                    "ey\">Primary key of target object.</param>\r\n        public virtual void Delete(ob" +
-                    "ject key)\r\n        {\r\n            Connector.Delete<T>(key);\r\n        }\r\n\r\n      " +
-                    "  /// <summary>\r\n        /// Delete data from repository in an asynchronous mann" +
-                    "er.\r\n        /// </summary>\r\n        /// <param name=\"data\">Generic object.</par" +
-                    "am>\r\n        public virtual async Task DeleteAsync(T data)\r\n        {\r\n         " +
-                    "   await Connector.DeleteAsync(data).ConfigureAwait(false);\r\n        }\r\n\r\n      " +
-                    "  /// <summary>\r\n        /// Delete data from repository in an asynchronous mann" +
-                    "er.\r\n        /// </summary>\r\n        /// <param name=\"key\">Primary key of target" +
-                    " object.</param>\r\n        public virtual async Task DeleteAsync(object key)\r\n   " +
-                    "     {\r\n            await Connector.DeleteAsync<T>(key).ConfigureAwait(false);\r\n" +
-                    "        }\r\n\r\n        /// <summary>\r\n        /// Insert data into repository.\r\n  " +
-                    "      /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n  " +
-                    "      public virtual void Insert(T data)\r\n        {\r\n            Connector.Inser" +
-                    "t(data);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Insert data into repos" +
-                    "itory in an asynchronous manner.\r\n        /// </summary>\r\n        /// <param nam" +
-                    "e=\"data\">Generic object.</param>\r\n        public virtual async Task InsertMultip" +
-                    "leAsync(IEnumerable<T> data)\r\n        {\r\n            await Connector.InsertMulti" +
-                    "pleAsync(data).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n     " +
-                    "   /// Insert data into repository.\r\n        /// </summary>\r\n        /// <param " +
-                    "name=\"data\">Generic object.</param>\r\n        public virtual void InsertMultiple(" +
-                    "IEnumerable<T> data)\r\n        {\r\n            Connector.InsertMultiple(data);\r\n  " +
-                    "      }\r\n\r\n        /// <summary>\r\n        /// Insert data into repository in an " +
-                    "asynchronous manner.\r\n        /// </summary>\r\n        /// <param name=\"data\">Gen" +
-                    "eric object.</param>\r\n        public virtual async Task InsertAsync(T data)\r\n   " +
-                    "     {\r\n            await Connector.InsertAsync(data).ConfigureAwait(false);\r\n  " +
-                    "      }\r\n\r\n        /// <summary>\r\n        /// Get all data from repository.\r\n   " +
-                    "     /// </summary>\r\n        /// <returns></returns>\r\n        public virtual IEn" +
-                    "umerable<T> Query()\r\n        {\r\n            return Connector.Query<T>();\r\n      " +
-                    "  }\r\n\r\n        /// <summary>\r\n        /// Get data by specific condition from re" +
-                    "pository.\r\n        /// </summary>\r\n        /// <param name=\"predicate\">Predicate" +
-                    " condition.</param>\r\n        /// <returns></returns>\r\n        public virtual IEn" +
-                    "umerable<T> Query(Expression<Func<T, bool>> predicate)\r\n        {\r\n            r" +
-                    "eturn Connector.Query<T>(predicate);\r\n        }\r\n\r\n        /// <summary>\r\n      " +
-                    "  /// Get data from repository.\r\n        /// </summary>\r\n        /// <param name" +
-                    "=\"key\">Primary key of target object.</param>\r\n        /// <returns></returns>\r\n " +
-                    "       public virtual T Query(object key)\r\n        {\r\n            return Connect" +
-                    "or.Query<T>(key);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Get all data " +
-                    "from repository in an asynchronous manner.\r\n        /// </summary>\r\n        /// " +
-                    "<returns></returns>\r\n        public virtual async Task<IEnumerable<T>> QueryAsyn" +
-                    "c()\r\n        {\r\n            return await Connector.QueryAsync<T>().ConfigureAwai" +
-                    "t(false);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Get data by specific " +
-                    "condition from repository in an asynchronous manner.\r\n        /// </summary>\r\n  " +
-                    "      /// <param name=\"predicate\">Predicate condition.</param>\r\n        /// <ret" +
-                    "urns></returns>\r\n        public virtual async Task<IEnumerable<T>> QueryAsync(Ex" +
-                    "pression<Func<T, bool>> predicate)\r\n        {\r\n            return await Connecto" +
-                    "r.QueryAsync<T>(predicate).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <sum" +
-                    "mary>\r\n        /// Get data from repository.\r\n        /// </summary>\r\n        //" +
-                    "/ <param name=\"key\">Primary key of target object.</param>\r\n        /// <returns>" +
-                    "</returns>\r\n        public virtual async Task<T> QueryAsync(object key)\r\n       " +
-                    " {\r\n            return await Connector.QueryAsync<T>(key).ConfigureAwait(false);" +
-                    "\r\n        }\r\n\r\n        /// <summary>\r\n        /// Update data in repository.\r\n  " +
-                    "      /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n  " +
-                    "      public virtual void Update(T data)\r\n        {\r\n            Connector.Updat" +
-                    "e(data);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Update data in reposit" +
-                    "ory in an asynchronous manner.\r\n        /// </summary>\r\n        /// <param name=" +
-                    "\"data\">Generic object.</param>\r\n        public virtual async Task UpdateAsync(T " +
-                    "data)\r\n        {\r\n            await Connector.UpdateAsync(data).ConfigureAwait(f" +
-                    "alse);\r\n        }\r\n        /// <summary>\r\n        /// Returns rows count from re" +
-                    "pository.\r\n        /// </summary>\r\n        /// <returns></returns>\r\n        publ" +
-                    "ic int Count()\r\n        {\r\n            return this.Connector.Count<T>();\r\n      " +
-                    "  }\r\n        /// <summary>\r\n        /// Filters a sequence of values based on a " +
-                    "predicate.\r\n        /// </summary>\r\n        /// <param name=\"predicate\"></param>" +
-                    "\r\n        /// <returns></returns>\r\n        public IEnumerable<T> Where(Expressio" +
-                    "n<Func<T, bool>> predicate)\r\n        {\r\n            return Query(predicate);\r\n  " +
-                    "      }\r\n        /// <summary>\r\n        /// Returns a specified number of contig" +
-                    "uous elements from the start of a sequence.\r\n        /// </summary>\r\n        ///" +
-                    " <param name=\"count\"></param>\r\n        /// <returns></returns>\r\n        public I" +
-                    "Enumerable<T> Take(int count)\r\n        {\r\n            return Connector.Query<T>(" +
-                    "top: count);\r\n        }\r\n        /// <summary>\r\n        /// Get enumerator of da" +
-                    "ta repository.\r\n        /// </summary>\r\n        /// <returns></returns>\r\n       " +
-                    " public IEnumerator<T> GetEnumerator()\r\n        {\r\n            foreach (var data" +
-                    " in Query())\r\n            {\r\n                yield return data;\r\n            }\r\n" +
-                    "        }\r\n\r\n        IEnumerator IEnumerable.GetEnumerator()\r\n        {\r\n       " +
-                    "     return GetEnumerator();\r\n        }\r\n    }\r\n}\r\n\r\n");
+            this.Write(@"
+export default interface IGenericRepository<T> {
+    Query(): T[];
+    Insert(data: T): void;
+    Update(data: T): void;
+    Delete(data: T): void;
+    QueryAsync(): Promise<T[]>;
+    InsertAsync(data: T): Promise<void>;
+    UpdateAsync(data: T): Promise<void>;
+    DeleteAsync(data: T): Promise<void>;
+}
+
+export abstract class Repository<T> implements IGenericRepository<T>{
+    Query(): T[] {
+        throw new Error(""Method not implemented."");
+    }
+    Insert(data: T): void {
+        throw new Error(""Method not implemented."");
+    }
+    Update(data: T): void {
+        throw new Error(""Method not implemented."");
+    }
+    Delete(data: T): void {
+        throw new Error(""Method not implemented."");
+    }
+    async QueryAsync(): Promise<T[]> {
+        throw new Error(""Method not implemented."");
+    }
+    async InsertAsync(data: T): Promise<void> {
+        throw new Error(""Method not implemented."");
+    }
+    async UpdateAsync(data: T): Promise<void> {
+        throw new Error(""Method not implemented."");
+    }
+    async DeleteAsync(data: T): Promise<void> {
+        throw new Error(""Method not implemented."");
+    }
+}
+
+");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 234 "C:\Users\TYCHE\Source\Repos\ModelGenerator.Core\ModelGenerator.Core\TextTemplates\RepositoryTemplate.tt"
+        #line 45 "C:\Users\TYCHE\Source\Repos\ModelGenerator.Core\ModelGenerator.Core\TextTemplates\TS_RepositoryTemplate.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 
@@ -147,7 +87,7 @@ namespace ModelGenerator.Core.TextTemplates
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class RepositoryTemplateBase
+    public class TS_RepositoryTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

@@ -66,7 +66,7 @@ namespace ModelGeneratorWPF
                         break;
                     case 1: //unit of work generator
                         generatorType = TargetGeneratorType.UnitOfWork;
-                        foreach (var langauge in supportedLanguages.Where(x => x.Name == "CSharp" || x.Name == "VisualBasic"))
+                        foreach (var langauge in supportedLanguages.Where(x => x.Name == "CSharp" || x.Name == "VisualBasic" || x.Name == "TypeScript"))
                         {
                             if (!(langauge.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
                             {

@@ -26,12 +26,6 @@ namespace ModelGenerator.Core.Services.Generator
         }
         protected override void GenerateCodeFile(Table table)
         {
-            var classesDir = Path.Combine(Directory, "TS_Classes");
-            System.IO.Directory.CreateDirectory(classesDir);
-            var interfaceDir = Path.Combine(Directory, "TS_Interfaces");
-            System.IO.Directory.CreateDirectory(interfaceDir);
-
-            var classSb = new StringBuilder();
             var interfaceSb = new StringBuilder();
             var propertyCode = new StringBuilder();
             foreach (var column in table.Columns)
@@ -40,23 +34,6 @@ namespace ModelGenerator.Core.Services.Generator
                 propertyCode.AppendLine($"    {col} : {GetNullableDataType(column)};");
             }
             var ppcString = propertyCode.ToString();
-
-            if (!string.IsNullOrWhiteSpace(Namespace))
-            {
-                classSb.AppendLine($@"namespace {Namespace}");
-                classSb.AppendLine("{");
-            }
-            classSb.AppendLine($@"class {this.RemoveSpecialChars(table.Name)}");
-            classSb.AppendLine("{");
-            classSb.Append(ppcString);
-            classSb.AppendLine("}");
-            if (!string.IsNullOrWhiteSpace(Namespace))
-            {
-                classSb.AppendLine("}");
-            }
-            var filePath = Path.Combine(classesDir, $@"{table.Name}.ts");
-            System.IO.File.WriteAllText(filePath, classSb.ToString());
-
 
             if (!string.IsNullOrWhiteSpace(Namespace))
             {
@@ -71,9 +48,60 @@ namespace ModelGenerator.Core.Services.Generator
             {
                 interfaceSb.AppendLine("}");
             }
-            var filePathInterface = Path.Combine(interfaceDir, $@"I{table.Name}.ts");
+            var filePathInterface = Path.Combine(Directory, $@"I{table.Name}.ts");
             System.IO.File.WriteAllText(filePathInterface, interfaceSb.ToString());
         }
+
+        //protected override void GenerateCodeFile(Table table)
+        //{
+        //    var classesDir = Path.Combine(Directory, "TS_Classes");
+        //    System.IO.Directory.CreateDirectory(classesDir);
+        //    var interfaceDir = Path.Combine(Directory, "TS_Interfaces");
+        //    System.IO.Directory.CreateDirectory(interfaceDir);
+
+        //    var classSb = new StringBuilder();
+        //    var interfaceSb = new StringBuilder();
+        //    var propertyCode = new StringBuilder();
+        //    foreach (var column in table.Columns)
+        //    {
+        //        var col = ColumnNameCleanser(column.ColumnName);
+        //        propertyCode.AppendLine($"    {col} : {GetNullableDataType(column)};");
+        //    }
+        //    var ppcString = propertyCode.ToString();
+
+        //    if (!string.IsNullOrWhiteSpace(Namespace))
+        //    {
+        //        classSb.AppendLine($@"namespace {Namespace}");
+        //        classSb.AppendLine("{");
+        //    }
+        //    classSb.AppendLine($@"class {this.RemoveSpecialChars(table.Name)}");
+        //    classSb.AppendLine("{");
+        //    classSb.Append(ppcString);
+        //    classSb.AppendLine("}");
+        //    if (!string.IsNullOrWhiteSpace(Namespace))
+        //    {
+        //        classSb.AppendLine("}");
+        //    }
+        //    var filePath = Path.Combine(classesDir, $@"{table.Name}.ts");
+        //    System.IO.File.WriteAllText(filePath, classSb.ToString());
+
+
+        //    if (!string.IsNullOrWhiteSpace(Namespace))
+        //    {
+        //        interfaceSb.AppendLine($@"namespace {Namespace}");
+        //        interfaceSb.AppendLine("{");
+        //    }
+        //    interfaceSb.AppendLine($@"export interface I{this.RemoveSpecialChars(table.Name)}");
+        //    interfaceSb.AppendLine("{");
+        //    interfaceSb.Append(ppcString);
+        //    interfaceSb.AppendLine("}");
+        //    if (!string.IsNullOrWhiteSpace(Namespace))
+        //    {
+        //        interfaceSb.AppendLine("}");
+        //    }
+        //    var filePathInterface = Path.Combine(interfaceDir, $@"I{table.Name}.ts");
+        //    System.IO.File.WriteAllText(filePathInterface, interfaceSb.ToString());
+        //}
         protected override string DataTypeMapper(string columnType)
         {
             switch (columnType)

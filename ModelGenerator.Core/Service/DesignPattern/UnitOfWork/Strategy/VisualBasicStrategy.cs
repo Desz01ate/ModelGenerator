@@ -114,5 +114,10 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             var outputPath = Path.Combine(Directory, "Service.vb");
             System.IO.File.WriteAllText(outputPath, sb.ToString(), Encoding.UTF8);
         }
+
+        public void GenerateRepositoryDependencies()
+        {
+            //throw new NotImplementedException();
+        }
     }
 }

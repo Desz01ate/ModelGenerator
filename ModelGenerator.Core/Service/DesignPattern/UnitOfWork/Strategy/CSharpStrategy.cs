@@ -2,6 +2,7 @@
 using ModelGenerator.Core.Services.Generator;
 using ModelGenerator.Core.Services.Generator.Interfaces;
 using ModelGenerator.Core.Services.Generator.Model;
+using ModelGenerator.Core.TextTemplates;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -179,6 +180,15 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy
             sb.AppendLine("}");
             var outputPath = Path.Combine(Directory, "Service.cs");
             System.IO.File.WriteAllText(outputPath, sb.ToString(), Encoding.UTF8);
+        }
+
+        public void GenerateRepositoryDependencies()
+        {
+            var repositoryFile = System.IO.Path.Combine(this.RepositoryComponentsDirectory, "Repository.cs");
+            var repositoryTemplate = new RepositoryTemplate();
+            repositoryTemplate.Namespace = this.Namespace;
+            var content = repositoryTemplate.TransformText();
+            System.IO.File.WriteAllText(repositoryFile, content);
         }
     }
 }

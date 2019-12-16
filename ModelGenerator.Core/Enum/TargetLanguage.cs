@@ -1,4 +1,5 @@
-﻿using ModelGenerator.Core.Services.DesignPattern.Interfaces;
+﻿using ModelGenerator.Core.Service.DesignPattern.UnitOfWork.Strategy;
+using ModelGenerator.Core.Services.DesignPattern.Interfaces;
 using ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Generator;
 using ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Strategy;
 using ModelGenerator.Core.Services.Generator;
@@ -212,6 +213,9 @@ namespace ModelGenerator.Core.Enum
                     break;
                 case TargetLanguage.VisualBasic:
                     strategy = new VisualBasicStrategy(connectionString, directory, @namespace);
+                    break;
+                case TargetLanguage.TypeScript:
+                    strategy = new TypeScriptStrategy(connectionString, directory, @namespace);
                     break;
             }
             switch (targetDatabaseConnector)

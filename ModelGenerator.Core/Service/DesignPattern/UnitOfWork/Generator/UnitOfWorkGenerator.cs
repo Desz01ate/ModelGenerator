@@ -34,11 +34,12 @@ namespace ModelGenerator.Core.Services.DesignPattern.UnitOfWork.Generator
 
         private void GenerateRepositoryDependencies()
         {
-            var repositoryFile = System.IO.Path.Combine(_strategy.RepositoryComponentsDirectory, "Repository.cs");
-            var repositoryTemplate = new RepositoryTemplate();
-            repositoryTemplate.Namespace = _strategy.Namespace;
-            var content = repositoryTemplate.TransformText();
-            System.IO.File.WriteAllText(repositoryFile, content);
+            _strategy.GenerateRepositoryDependencies();
+            //var repositoryFile = System.IO.Path.Combine(_strategy.RepositoryComponentsDirectory, "Repository.cs");
+            //var repositoryTemplate = new RepositoryTemplate();
+            //repositoryTemplate.Namespace = _strategy.Namespace;
+            //var content = repositoryTemplate.TransformText();
+            //System.IO.File.WriteAllText(repositoryFile, content);
 
         }
 

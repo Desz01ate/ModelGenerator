@@ -29,17 +29,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="TextTemplates\RepositoryTemplate.cs">
+    <Compile Update="TextTemplates\RepositoryTemplate - Copy.cs">
+      <DependentUpon>RepositoryTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>RepositoryTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="TextTemplates\TS_RepositoryTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TS_RepositoryTemplate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TextTemplates\TS_RepositoryTemplate.tt">
+      <LastGenOutput>TS_RepositoryTemplate.cs</LastGenOutput>
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+    </None>
     <None Update="TextTemplates\RepositoryTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>RepositoryTemplate.cs</LastGenOutput>
+      <LastGenOutput>TS_RepositoryTemplate.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

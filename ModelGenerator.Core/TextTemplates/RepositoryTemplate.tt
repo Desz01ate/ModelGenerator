@@ -88,18 +88,18 @@ namespace <#= Namespace #>.Repositories.Components
         /// Insert data into repository in an asynchronous manner.
         /// </summary>
         /// <param name="data">Generic object.</param>
-        public virtual async Task InsertMultipleAsync(IEnumerable<T> data)
+        public virtual async Task InsertManyAsync(IEnumerable<T> data)
         {
-            await Connector.InsertMultipleAsync(data).ConfigureAwait(false);
+            await Connector.InsertManyAsync(data).ConfigureAwait(false);
         }
 
         /// <summary>
         /// Insert data into repository.
         /// </summary>
         /// <param name="data">Generic object.</param>
-        public virtual void InsertMultiple(IEnumerable<T> data)
+        public virtual void InsertMany(IEnumerable<T> data)
         {
-            Connector.InsertMultiple(data);
+            Connector.InsertMany(data);
         }
 
         /// <summary>

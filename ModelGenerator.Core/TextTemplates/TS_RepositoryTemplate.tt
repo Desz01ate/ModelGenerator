@@ -1,0 +1,47 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+
+export default interface IGenericRepository<T> {
+    Query(): T[];
+    Insert(data: T): void;
+    Update(data: T): void;
+    Delete(data: T): void;
+    QueryAsync(): Promise<T[]>;
+    InsertAsync(data: T): Promise<void>;
+    UpdateAsync(data: T): Promise<void>;
+    DeleteAsync(data: T): Promise<void>;
+}
+
+export abstract class Repository<T> implements IGenericRepository<T>{
+    Query(): T[] {
+        throw new Error("Method not implemented.");
+    }
+    Insert(data: T): void {
+        throw new Error("Method not implemented.");
+    }
+    Update(data: T): void {
+        throw new Error("Method not implemented.");
+    }
+    Delete(data: T): void {
+        throw new Error("Method not implemented.");
+    }
+    async QueryAsync(): Promise<T[]> {
+        throw new Error("Method not implemented.");
+    }
+    async InsertAsync(data: T): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    async UpdateAsync(data: T): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    async DeleteAsync(data: T): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+}
+
+<#+
+	public string Namespace {get; set;} = "YourNamespace";
+#>
