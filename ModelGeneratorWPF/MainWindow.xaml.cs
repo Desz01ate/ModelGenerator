@@ -1,6 +1,9 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
+using ModelGenerator.Core.AttributeHelper;
 using ModelGenerator.Core.Enum;
+using ModelGenerator.Core.Factory;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -26,17 +29,10 @@ namespace ModelGeneratorWPF
             #region initializer
             cb_GeneratorMode.SelectedIndex = 1;
             cb_GeneratorMode.SelectedIndex = 0;
-            var supportedDatabase = typeof(TargetDatabaseConnector).GetMembers(BindingFlags.Static | BindingFlags.Public);
+            var supportedDatabase = ModelGenerator.Core.Helpers.EnumHelper.Expand<TargetDatabaseConnector>();
             foreach (var database in supportedDatabase)
             {
-                if (!(database.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
-                {
-                    cb_TargetDatabase.Items.Add(database.Name);
-                }
-                else
-                {
-                    cb_TargetDatabase.Items.Add(description.Description);
-                }
+                cb_TargetDatabase.Items.Add(database.Name);
             }
             #endregion
         }
@@ -47,37 +43,20 @@ namespace ModelGeneratorWPF
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                var supportedLanguages = typeof(TargetLanguage).GetMembers(BindingFlags.Static | BindingFlags.Public);
+                IEnumerable<(int Index, string Name, bool IsModelGenerator)> supportedLanguages = ModelGenerator.Core.Helpers.EnumHelper.Expand<TargetLanguage>();
                 switch (selectedIndex)
                 {
                     case 0: //model generator
                         generatorType = TargetGeneratorType.Model;
-                        foreach (var langauge in supportedLanguages)
-                        {
-                            if (!(langauge.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
-                            {
-                                cb_TargetLang.Items.Add(langauge.Name);
-                            }
-                            else
-                            {
-                                cb_TargetLang.Items.Add(description.Description);
-                            }
-                        }
                         break;
                     case 1: //unit of work generator
                         generatorType = TargetGeneratorType.UnitOfWork;
-                        foreach (var langauge in supportedLanguages.Where(x => x.Name == "CSharp" || x.Name == "VisualBasic" || x.Name == "TypeScript"))
-                        {
-                            if (!(langauge.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
-                            {
-                                cb_TargetLang.Items.Add(langauge.Name);
-                            }
-                            else
-                            {
-                                cb_TargetLang.Items.Add(description.Description);
-                            }
-                        }
+                        supportedLanguages = supportedLanguages.Where(x => x.IsModelGenerator);
                         break;
+                }
+                foreach (var language in supportedLanguages)
+                {
+                    cb_TargetLang.Items.Add(language.Name);
                 }
                 cb_TargetLang.SelectedIndex = 0;
             }
@@ -123,10 +102,10 @@ namespace ModelGeneratorWPF
                 switch (generatorType)
                 {
                     case TargetGeneratorType.Model:
-                        LanguagesData.PerformModelGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
+                        GeneratorFactory.PerformModelGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                         break;
                     case TargetGeneratorType.UnitOfWork:
-                        LanguagesData.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
+                        GeneratorFactory.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                         break;
                 }
                 Process.Start("explorer.exe", outputDir);

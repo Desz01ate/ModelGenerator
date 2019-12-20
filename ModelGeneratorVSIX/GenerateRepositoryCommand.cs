@@ -3,6 +3,7 @@ using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using ModelGenerator.Core.Enum;
+using ModelGenerator.Core.Factory;
 using ModelGenerator.Helpers;
 using System;
 using System.ComponentModel.Design;
@@ -146,17 +147,18 @@ namespace ModelGenerator
 
                 dte2.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer).Activate();
                 dte2.ToolWindows.SolutionExplorer.GetItem($@"{solutionName}\{projectName}").Select(vsUISelectionType.vsUISelectionTypeSelect);
-                if (reloadProject) dte2.ExecuteCommand("Project.UnloadProject");
+                //if (reloadProject) dte2.ExecuteCommand("Project.UnloadProject");
                 switch (generatorType)
                 {
                     case TargetGeneratorType.Model:
-                        LanguagesData.PerformModelGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Models"), defaultNamespace);
+                        GeneratorFactory.PerformModelGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Models"), defaultNamespace);
                         break;
                     case TargetGeneratorType.UnitOfWork:
-                        LanguagesData.PerformRepositoryGenerate(language, databaseConnector, connectionString, directory, defaultNamespace);
+                        GeneratorFactory.PerformRepositoryGenerate(language, databaseConnector, connectionString, directory, defaultNamespace);
                         break;
                 }
-                if (reloadProject) dte2.ExecuteCommand("Project.ReloadProject");
+                //if (reloadProject) dte2.ExecuteCommand("Project.ReloadProject");
+                MessageBox.Show($"Successfully generate services file for {projectName}");
             }
             catch (Exception ex)
             {

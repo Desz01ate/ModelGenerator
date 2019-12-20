@@ -1,4 +1,5 @@
-﻿using ModelGenerator.Core.Enum;
+﻿using ModelGenerator.Core.AttributeHelper;
+using ModelGenerator.Core.Enum;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -75,7 +76,7 @@ namespace ModelGenerator
                         break;
                     case 1: //unit of work generator
                         GeneratorType = TargetGeneratorType.UnitOfWork;
-                        foreach (var langauge in supportedLanguages.Where(x => x.Name == "CSharp" || x.Name == "VisualBasic"))
+                        foreach (var langauge in supportedLanguages.Where(AttributeValidator.IsModelGeneratorEnabled))
                         {
                             if (!(langauge.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
                             {
