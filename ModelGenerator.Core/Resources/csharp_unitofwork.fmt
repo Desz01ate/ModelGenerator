@@ -1,0 +1,51 @@
+@typedef:.\Resources\csharpdef.json
+@ext:Service.cs
+@nullable:@type?
+@once
+
+using System;
+using System.Data;
+using System.Data.Common;
+using System.Transaction;
+using System.Collections.Generic;
+using Utilities.SQL;
+using Utilities.Interfaces;
+@namespace:using @namespace_name.Repositories;
+
+@namespace:namespace @namespace_name {
+
+public sealed class Service : IDisposable
+{
+    private readonly IDatabaseConnectorExtension<@database_type,@database_parameter_type> Connector;
+    public Service(string connectionString){
+        Connector = new DatabaseConnector<@database_type,@database_parameter_type>(connectionString);
+    }
+    @repeat-tab:private @class_nameRepository _@class_name { get; set; }
+    @repeat-tab:public @class_nameRepository @class_name
+    @repeat-tab:{
+    @repeat-tab:    get
+    @repeat-tab:    {
+    @repeat-tab:        if(_@class_name == null)
+    @repeat-tab:        {
+    @repeat-tab:            _@class_name = new @class_nameRepository(Connector);
+    @repeat-tab:        }
+    @repeat-tab:        return _@class_name;
+    @repeat-tab:    }
+    @repeat-tab:}
+    #region Stored Procedures
+    @repeat-sp:public dynamic @sp_name(@sp_args)
+    @repeat-sp:{
+    @repeat-sp:      var command = "@sp_name";
+    @repeat-sp:      var parameters = new List<@database_parameter_type>();
+    @repeat-sp:      parameters.Add(new @database_parameter_type("@sp_params_name",@sp_params_name));
+    @repeat-sp:      var result = Connector.ExecuteReader(command,parameters,commandType : System.Data.CommandType.StoredProcedure);
+    @repeat-sp:      return result;
+    @repeat-sp:}
+    #endregion
+    public void Dispose()
+    {
+        Connector?.Dispose();
+    }
+}
+
+@#namespace:}

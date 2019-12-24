@@ -1,0 +1,7 @@
+@typedef:.\Resources\godef.json
+@ext:.go
+
+type  @class_name struct
+{
+    @properties:@property_name @property_type 
+}

@@ -1,0 +1,6 @@
+@typedef:.\Resources\pythondef.json
+@ext:.py
+
+class @class_name:
+    def __init__(self):
+        @properties:self.@property_name = None

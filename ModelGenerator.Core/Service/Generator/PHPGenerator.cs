@@ -34,7 +34,7 @@ namespace ModelGenerator.Core.Services.Generator
                 sb.AppendLine($"        return $this->{col};");
                 sb.AppendLine($"    }}");
                 sb.AppendLine($"    function set{col}($value){{");
-                sb.AppendLine($"        $this->0h{col} = $value;");
+                sb.AppendLine($"        $this->{col} = $value;");
                 sb.AppendLine($"    }}");
             }
             sb.AppendLine("}");

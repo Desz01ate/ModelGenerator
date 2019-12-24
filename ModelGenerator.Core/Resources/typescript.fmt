@@ -1,0 +1,12 @@
+@typedef:.\Resources\typescriptdef.json
+@ext:.ts
+@nullable:@type | null | undefined
+
+@namespace:namespace @namespace_name {
+
+export interface @class_name
+{
+    @properties:@property_name : @property_type
+}
+
+@#namespace:}

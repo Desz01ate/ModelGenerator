@@ -1,0 +1,70 @@
+[
+  {
+    "Keys": ["bit"],
+    "Value": "bool"
+  },
+  {
+    "Keys": ["tinyint"],
+    "Value": "byte"
+  },
+  {
+    "Keys": ["smallint"],
+    "Value": "short"
+  },
+  {
+    "Keys": ["int"],
+    "Value": "int"
+  },
+  {
+    "Keys": ["bigint"],
+    "Value": "long"
+  },
+  {
+    "Keys": ["real"],
+    "Value": "float"
+  },
+  {
+    "Keys": ["float"],
+    "Value": "double"
+  },
+  {
+    "Keys": ["decimal", "money", "smallmoney"],
+    "Value": "decimal"
+  },
+  {
+    "Keys": ["time"],
+    "Value": "TimeSpan"
+  },
+  {
+    "Keys": ["date", "datetime", "datetime2", "smalldatetime"],
+    "Value": "DateTime"
+  },
+  {
+    "Keys": ["datetimeoffset"],
+    "Value": "DateTimeOffset"
+  },
+  {
+    "Keys": ["char", "varchar", "nchar", "nvarchar", "text", "ntext", "xml"],
+    "Value": "string"
+  },
+  {
+    "Keys": ["binary", "image", "varbinary", "timestamp"],
+    "Value": "byte[]"
+  },
+  {
+    "Keys": ["uniqueidentifier"],
+    "Value": "Guid"
+  },
+  {
+    "Keys": ["variant", "Udt"],
+    "Value": "object"
+  },
+  {
+    "Keys": ["Structured"],
+    "Value": "DataTable"
+  },
+  {
+    "Keys": ["geography"],
+    "Value": "geography"
+  }
+]

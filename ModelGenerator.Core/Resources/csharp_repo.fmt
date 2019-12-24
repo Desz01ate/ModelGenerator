@@ -1,0 +1,20 @@
+@typedef:.\Resources\csharpdef.json
+@ext:Repository.cs
+@nullable:@type?
+@partial
+
+
+using System;
+@namespace:using @namespace_name.Repositories.Components;
+@namespace:using @namespace_name.Model;
+@namespace:namespace @namespace_name.Repositories {
+
+public partial class @class_nameRepository : Repository<@class_name,@database_type,@database_parameter_type>
+{
+    public @class_nameRepository(IDatabaseConnectorExtension<@database_type,@database_parameter_type> connector) : base(connector)
+    {
+
+    }
+}
+
+@#namespace:}

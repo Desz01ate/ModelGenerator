@@ -1,0 +1,48 @@
+[
+  {
+    "Keys": ["bit"],
+    "Value": "boolean"
+  },
+  {
+    "Keys": [
+      "tinyint",
+      "smallint",
+      "int",
+      "bigint",
+      "real",
+      "float",
+      "decimal",
+      "money",
+      "smallmoney"
+    ],
+    "Value": "number"
+  },
+  {
+    "Keys": [
+      "time",
+      "date",
+      "datetime",
+      "datetime2",
+      "smalldatetime",
+      "datetimeoffset"
+    ],
+    "Value": "Date"
+  },
+  {
+    "Keys": ["char", "varchar", "nchar", "nvarchar", "text", "ntext", "xml"],
+    "Value": "string"
+  },
+  {
+    "Keys": [
+      "uniqueidentifier",
+      "binary",
+      "image",
+      "varbinary",
+      "timestamp",
+      "variant",
+      "Udt",
+      "default"
+    ],
+    "Value": "any"
+  }
+]

@@ -1,0 +1,65 @@
+[
+  {
+    "Keys": ["bit"],
+    "Value": "bool"
+  },
+  {
+    "Keys": ["tinyint"],
+    "Value": "byte"
+  },
+  {
+    "Keys": ["smallint"],
+    "Value": "int8"
+  },
+  {
+    "Keys": ["int", "integer"],
+    "Value": "int"
+  },
+  {
+    "Keys": ["bigint"],
+    "Value": "int64"
+  },
+  {
+    "Keys": ["real", "float"],
+    "Value": "float32"
+  },
+  {
+    "Keys": ["decimal", "money", "smallmoney", "numeric"],
+    "Value": "float64"
+  },
+  {
+    "Keys": [
+      "time",
+      "date",
+      "datetime",
+      "datetime2",
+      "smalldatetime",
+      "datetimeoffset"
+    ],
+    "Value": "time.Time"
+  },
+  {
+    "Keys": ["char", "varchar", "nchar", "nvarchar", "text", "ntext", "xml"],
+    "Value": "string"
+  },
+  {
+    "Keys": ["binary", "image", "varbinary", "timestamp"],
+    "Value": "[]byte"
+  },
+  {
+    "Keys": ["uniqueidentifier"],
+    "Value": "string"
+  },
+  {
+    "Keys": ["variant", "Udt", "udt", "blob"],
+    "Value": "interface{}"
+  },
+  {
+    "Keys": ["Structured", "structured"],
+    "Value": "interface{}"
+  },
+  {
+    "Keys": ["geography"],
+    "Value": "interface{}"
+  }
+]

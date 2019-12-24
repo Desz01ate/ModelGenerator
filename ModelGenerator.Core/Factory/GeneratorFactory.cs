@@ -11,13 +11,15 @@ using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Data.SQLite;
+using System.IO;
 using System.Text;
 
 namespace ModelGenerator.Core.Factory
 {
-    public static class GeneratorFactory
+    public static class _OldGeneratorFactory
     {
         public static void PerformModelGenerate(TargetLanguage targetLanguage, TargetDatabaseConnector targetDatabaseConnector, string connectionString, string directory, string @namespace)
         {
@@ -205,6 +207,117 @@ namespace ModelGenerator.Core.Factory
                     }
                     break;
             }
+            generator.Generate();
+        }
+        public static void PerformRepositoryGenerate(TargetLanguage targetLanguage, TargetDatabaseConnector targetDatabaseConnector, string connectionString, string directory, string @namespace)
+        {
+            IServiceGenerator strategy = default;
+            var generator = new UnitOfWorkGenerator();
+            switch (targetLanguage)
+            {
+                case TargetLanguage.CSharp:
+                    strategy = new CSharpStrategy(connectionString, directory, @namespace);
+                    break;
+                case TargetLanguage.VisualBasic:
+                    strategy = new VisualBasicStrategy(connectionString, directory, @namespace);
+                    break;
+                case TargetLanguage.TypeScript:
+                    strategy = new TypeScriptStrategy(connectionString, directory, @namespace);
+                    break;
+            }
+            switch (targetDatabaseConnector)
+            {
+                case TargetDatabaseConnector.SQLServer:
+                    strategy.SetGenerator<SqlConnection, SqlParameter>((x) => $"[{x}]");
+                    break;
+                case TargetDatabaseConnector.Oracle:
+                    strategy.SetGenerator<OracleConnection, OracleParameter>();
+                    break;
+                case TargetDatabaseConnector.MySQL:
+                    strategy.SetGenerator<MySqlConnection, MySqlParameter>();
+                    break;
+                case TargetDatabaseConnector.PostgreSQL:
+                    strategy.SetGenerator<NpgsqlConnection, NpgsqlParameter>();
+                    break;
+                case TargetDatabaseConnector.SQLite:
+                    strategy.SetGenerator<SQLiteConnection, SQLiteParameter>();
+                    break;
+            }
+            generator.UseStrategy(strategy);
+            generator.Generate();
+        }
+    }
+    public static class GeneratorFactory
+    {
+        public static void PerformModelGenerate(TargetLanguage targetLanguage, TargetDatabaseConnector targetDatabaseConnector, string connectionString, string directory, string @namespace)
+        {
+            string[] resources = null;
+            switch (targetLanguage)
+            {
+                case TargetLanguage.CSharp:
+                    resources = File.ReadAllLines(@".\Resources\csharp.fmt");
+                    break;
+                case TargetLanguage.VisualBasic:
+                    resources = File.ReadAllLines(@".\Resources\vb.fmt");
+                    break;
+                case TargetLanguage.TypeScript:
+                    resources = File.ReadAllLines(@".\Resources\typescript.fmt");
+                    break;
+                case TargetLanguage.PHP:
+                    resources = File.ReadAllLines(@".\Resources\php.fmt");
+                    break;
+                case TargetLanguage.Python:
+                    resources = File.ReadAllLines(@".\Resources\python.fmt");
+                    break;
+                case TargetLanguage.Python37:
+                    resources = File.ReadAllLines(@".\Resources\python.fmt");
+                    break;
+                case TargetLanguage.Java:
+                    resources = File.ReadAllLines(@".\Resources\java.fmt");
+                    break;
+                case TargetLanguage.CPP:
+                    resources = File.ReadAllLines(@".\Resources\cpp.fmt");
+                    break;
+                case TargetLanguage.Golang:
+                    resources = File.ReadAllLines(@".\Resources\go.fmt");
+                    break;
+            }
+            PerformModelGenerate(resources, targetDatabaseConnector, connectionString, directory, @namespace);
+        }
+        public static void PerformModelGenerate(string[] resources, TargetDatabaseConnector targetDatabaseConnector, string connectionString, string directory, string @namespace)
+        {
+            DbConnection connector = null;
+            DbParameter parameter = null;
+            Func<string, string> cleanser = null;
+            switch (targetDatabaseConnector)
+            {
+                case TargetDatabaseConnector.SQLServer:
+                    connector = new SqlConnection();
+                    parameter = new SqlParameter();
+                    cleanser = (x) => $"[{x}]";
+                    break;
+                case TargetDatabaseConnector.Oracle:
+                    connector = new OracleConnection();
+                    parameter = new OracleParameter();
+                    break;
+                case TargetDatabaseConnector.MySQL:
+                    connector = new MySqlConnection();
+                    parameter = new MySqlParameter();
+                    break;
+                case TargetDatabaseConnector.PostgreSQL:
+                    connector = new NpgsqlConnection();
+                    parameter = new NpgsqlParameter();
+                    break;
+                case TargetDatabaseConnector.SQLite:
+                    connector = new SQLiteConnection();
+                    parameter = new SQLiteParameter();
+                    break;
+            }
+            if (resources == null) throw new ArgumentNullException(nameof(resources));
+            if (connector == null) throw new ArgumentNullException(nameof(connector));
+            if (parameter == null) throw new ArgumentNullException(nameof(parameter));
+            var generator = new GenericGenerator(connectionString, directory, @namespace, resources, cleanser);
+            generator.SetDbConnector(connector, parameter);
             generator.Generate();
         }
         public static void PerformRepositoryGenerate(TargetLanguage targetLanguage, TargetDatabaseConnector targetDatabaseConnector, string connectionString, string directory, string @namespace)

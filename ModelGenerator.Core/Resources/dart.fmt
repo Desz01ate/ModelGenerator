@@ -1,0 +1,13 @@
+@typedef:.\Resources\dart.json
+@ext:.dart
+
+using System;
+
+@namespace:namespace @namespace_name {
+
+public partial class @class_name
+{
+    @properties:public @property_type @property_name { get; set; }
+}
+
+@#namespace:}

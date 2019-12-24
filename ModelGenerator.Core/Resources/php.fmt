@@ -1,0 +1,15 @@
+@typedef:.\Resources\phpdef.json
+@ext:.php
+
+<?php
+    class @class_name
+    {
+        @properties:var $@property_name;
+        @properties:function get@property_name(){
+        @properties:    return $this->@property_name;
+        @properties:}
+        @properties:function set@property_name($value){
+        @properties:    $this->@property_name = $value;
+        @properties:}
+    }
+?>

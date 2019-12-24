@@ -1,0 +1,21 @@
+@typedef:.\Resources\visualbasicdef.json
+@ext:.vb
+@nullable:Nullable(Of @type)
+
+Imports System;
+
+@namespace:Namespace @namespace_name
+
+Public Class @class_name
+    @properties:Private _@property_name As [@property_type]
+    @properties:Public Property [@property_name] As [@property_type]
+    @properties:    Get
+    @properties:        Return _@property_name
+    @properties:    End Get
+    @properties:    Set(value As [@property_type])
+    @properties:        _@property_name = value
+    @properties:    End Set
+    @properties:End Property
+
+
+@#namespace:End Namespace
