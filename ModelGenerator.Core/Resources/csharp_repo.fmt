@@ -5,8 +5,10 @@
 
 
 using System;
+using Utilities.Interfaces;
 @namespace:using @namespace_name.Repositories.Components;
-@namespace:using @namespace_name.Model;
+@namespace:using @namespace_name.Models;
+
 @namespace:namespace @namespace_name.Repositories {
 
 public partial class @class_nameRepository : Repository<@class_name,@database_type,@database_parameter_type>

@@ -7,15 +7,15 @@ Imports System;
 @namespace:Namespace @namespace_name
 
 Public Class @class_name
-    @properties:Private _@property_name As [@property_type]
-    @properties:Public Property [@property_name] As [@property_type]
-    @properties:    Get
-    @properties:        Return _@property_name
-    @properties:    End Get
-    @properties:    Set(value As [@property_type])
-    @properties:        _@property_name = value
-    @properties:    End Set
-    @properties:End Property
+    @repeat-col:Private _@property_name As [@property_type]
+    @repeat-col:Public Property [@property_name] As [@property_type]
+    @repeat-col:    Get
+    @repeat-col:        Return _@property_name
+    @repeat-col:    End Get
+    @repeat-col:    Set(value As [@property_type])
+    @repeat-col:        _@property_name = value
+    @repeat-col:    End Set
+    @repeat-col:End Property
 
 
 @#namespace:End Namespace

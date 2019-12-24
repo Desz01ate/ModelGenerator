@@ -2,7 +2,7 @@ fmt file is a FORMAT file for model generator
 you can write any language into the .fmt file with
 embeded directives
 
-directives are split into 2 categories : Header and Decorator
+directives are split into 3 categories : Header, Decorator and Repeater
 
 Possible Header directives:
     - [REQUIRED] @typdef:filepath
@@ -14,8 +14,10 @@ Possible Header directives:
         |format can include @type.
 	- @partial
 		|specified that the langauge is support multiple-partial files.
-		|partial file do not contains any property (@properties had no effects there).
-
+		|partial file do not contains any property (@repeat-col had no effects there).
+    - @once
+        |specified that the file will generate only once regardless of how many columns or tables found.
+        
 Possible Decorator directives:
     - @namespace:format
         |specified that this directive will render if the namespace is supplied.
@@ -24,13 +26,17 @@ Possible Decorator directives:
         |specified that this directive will render the end of namespace so no parameter required.
     - @class_name
         |specified the class name, this is not a required directive but it should be mandatory.
-    - @properties:format
+
+Possible Repeater directives:
+    - @repeat-col:format
         |specified the property-format, this directive will render multiple times according to columns in database.
         |this directive can be uses multiple times if the property requires more than 1 line.
-        |format can include @property_type, @property_name.
-
-
-there are a special directives extended the usage for Unit of Work generator listed below.
-Possible Decorator directives:
-    - @database_type
-    - @database_parameter_type
+        |format can include @class_name, @property_type, @property_name.
+    - @repeat-tab:
+        |specified the property-format, this directive will render multiple times according to tables in database.
+        |this directive can be uses multiple times if the property requires more than 1 line.
+        |format can include @class_name.
+    - @repeat-sp:
+        |specified the property-format, this directive will render multiple times according to store procedures in database.
+        |this directive can be uses multiple times if the property requires more than 1 line.
+        |format can include @class_name, @sp_name, @sp_args, @database_type, @database_parameter_type, @sp_params_name.

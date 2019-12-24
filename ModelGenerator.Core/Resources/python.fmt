@@ -3,4 +3,4 @@
 
 class @class_name:
     def __init__(self):
-        @properties:self.@property_name = None
+        @repeat-col:self.@property_name = None

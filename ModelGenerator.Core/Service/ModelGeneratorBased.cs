@@ -20,9 +20,9 @@ namespace ModelGenerator.Core.Service
 
         public string ConnectionString { get; private set; }
 
-        public string Directory { get; private set; }
+        public string Directory { get; protected set; }
 
-        public string PartialDirectory { get; private set; }
+        public string PartialDirectory { get; protected set; }
 
         public string Namespace { get; private set; }
 
@@ -53,6 +53,7 @@ namespace ModelGenerator.Core.Service
             PartialDirectory = partialDirectory;
             Namespace = @namespace;
             System.IO.Directory.CreateDirectory(directory);
+            System.IO.Directory.CreateDirectory(partialDirectory);
         }
         public void SetDbConnector(DbConnection connection, DbParameter parameterType)
         {

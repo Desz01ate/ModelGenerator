@@ -14,16 +14,29 @@ namespace ModelGenerator.Core.Service.Generator
 {
     public class GenericGenerator : ModelGeneratorBased
     {
-        private readonly TypeDefinition[] typeDefinitions;
-        private readonly string[] formats;
-        private readonly bool nullableEnabled;
-        private readonly string nullableFormat;
-        private readonly string extension;
-        private readonly bool partialFilesEnabled;
-        private readonly bool renderOnce;
+        private TypeDefinition[] typeDefinitions;
+        private string[] formats;
+        private bool nullableEnabled;
+        private string nullableFormat;
+        private string extension;
+        private bool partialFilesEnabled;
+        private bool renderOnce;
         private bool renderOnceExecuted;
         public GenericGenerator(string connectionString, string directory, string @namespace, string[] formatResources, Func<string, string> cleaner = null) : base(connectionString, directory, @namespace, cleaner)
         {
+            ChangeDirectory(directory);
+            ReloadResource(formatResources);
+        }
+        public void ChangeDirectory(string directory)
+        {
+            this.Directory = directory;
+            this.PartialDirectory = Path.Combine(Directory, "Partials");
+            System.IO.Directory.CreateDirectory(directory);
+            System.IO.Directory.CreateDirectory(PartialDirectory);
+        }
+        public void ReloadResource(string[] formatResources)
+        {
+            InitialState();
             if (formatResources == null || formatResources.Length == 0) throw new ArgumentNullException(nameof(formatResources));
             formats = formatResources;
             foreach (var line in formats)
@@ -65,6 +78,18 @@ namespace ModelGenerator.Core.Service.Generator
                 throw new ArgumentNullException("@ext");
             }
         }
+
+        private void InitialState()
+        {
+            typeDefinitions = null;
+            formats = null;
+            nullableEnabled = false;
+            extension = null;
+            partialFilesEnabled = false;
+            renderOnce = false;
+            renderOnceExecuted = false;
+        }
+
         private string[] SplitDirective(string line)
         {
             var lines = line.Split(new char[] { ':' }, 2);
@@ -174,7 +199,8 @@ namespace ModelGenerator.Core.Service.Generator
                             var splitProps = SplitDirective(pdrLine);
                             if (splitProps.Length != 2) throw new FormatException("@repeat-col");
                             var replaced = Interprete(table, col, null, splitProps[1]);
-                            sb.AppendLine(replaced);
+                            if (!string.IsNullOrWhiteSpace(replaced))
+                                sb.AppendLine(replaced);
                         }
                     }
                     repeatColRendered = true;
@@ -190,7 +216,8 @@ namespace ModelGenerator.Core.Service.Generator
                             var splitProps = SplitDirective(_line);
                             if (splitProps.Length != 2) throw new FormatException("@repeat-tab");
                             var replaced = Interprete(_table, null, null, splitProps[1]);
-                            sb.AppendLine(replaced);
+                            if (!string.IsNullOrWhiteSpace(replaced))
+                                sb.AppendLine(replaced);
 
                         }
                     }
@@ -207,14 +234,17 @@ namespace ModelGenerator.Core.Service.Generator
                             var splitProps = SplitDirective(_line);
                             if (splitProps.Length != 2) throw new FormatException("@repeat-tab");
                             var replaced = Interprete(table, null, sp, splitProps[1]);
-                            sb.AppendLine(replaced);
+                            if (!string.IsNullOrWhiteSpace(replaced))
+                                sb.AppendLine(replaced);
                         }
                     }
                     repeatSpRendered = true;
                 }
                 else
                 {
-                    sb.AppendLine(Interprete(table, null, null, line));
+                    var replaced = Interprete(table, null, null, line);
+                    if (!string.IsNullOrWhiteSpace(replaced))
+                        sb.AppendLine(replaced);
                 }
             }
             var text = sb.ToString();
@@ -229,40 +259,33 @@ namespace ModelGenerator.Core.Service.Generator
                 var sb = new StringBuilder();
                 foreach (var line in formats)
                 {
-                    if (line.StartsWith("@typedef")) continue;
-                    else if (line.StartsWith("@nullable")) continue;
-                    else if (line.StartsWith("@ext")) continue;
-                    else if (line.StartsWith("@partial")) continue;
-                    else if (line.Contains("@namespace") && !string.IsNullOrWhiteSpace(Namespace))
+                    if (line.Contains("@repeat-col"))
                     {
-                        var splitNamespace = SplitDirective(line);
-                        if (splitNamespace.Length != 2) throw new FormatException("@namespace");
-                        var replaced = splitNamespace[1].Replace("@namespace_name", Namespace);
-                        sb.AppendLine(replaced);
+                        continue;
                     }
-                    else if (line.Contains("@#namespace") && !string.IsNullOrWhiteSpace(Namespace))
+                    else if (line.Contains("@repeat-tab"))
                     {
-                        var splitEndNs = SplitDirective(line);
-                        if (splitEndNs.Length != 2) throw new FormatException("@#namespace");
-                        sb.AppendLine(splitEndNs[1]);
+                        continue;
                     }
-                    else if (line.Contains("@class_name"))
+                    else if (line.Contains("@repeat-sp"))
                     {
-                        var replaced = line.Replace("@class_name", this.RemoveSpecialChars(table.Name));
-                        sb.AppendLine(replaced);
+                        continue;
                     }
                     else
                     {
-                        sb.AppendLine(line);
+                        var replaced = Interprete(table, null, null, line);
+                        if (!string.IsNullOrWhiteSpace(replaced))
+                            sb.AppendLine(replaced);
                     }
                 }
                 var text = sb.ToString();
-                var codeFile = Path.Combine(PartialDirectory, $@"{table.Name}{extension}");
-                File.WriteAllText(codeFile, text);
+                string path = Path.Combine(PartialDirectory, renderOnce ? extension : $@"{table.Name}{extension}");
+                File.WriteAllText(path, text);
             }
         }
         protected override string GetNullableDataType(TableSchema column)
         {
+            if (column == null) return string.Empty;
             var type = DataTypeMapper(column.DataTypeName);
             if (nullableEnabled && column.AllowDBNull)
             {

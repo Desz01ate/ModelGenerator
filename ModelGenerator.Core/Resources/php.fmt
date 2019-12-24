@@ -4,12 +4,12 @@
 <?php
     class @class_name
     {
-        @properties:var $@property_name;
-        @properties:function get@property_name(){
-        @properties:    return $this->@property_name;
-        @properties:}
-        @properties:function set@property_name($value){
-        @properties:    $this->@property_name = $value;
-        @properties:}
+        @repeat-col:var $@property_name;
+        @repeat-col:function get@property_name(){
+        @repeat-col:    return $this->@property_name;
+        @repeat-col:}
+        @repeat-col:function set@property_name($value){
+        @repeat-col:    $this->@property_name = $value;
+        @repeat-col:}
     }
 ?>

@@ -7,7 +7,7 @@ using System;
 
 public partial class @class_name
 {
-    @properties:public @property_type @property_name { get; set; }
+    @repeat-col:public @property_type @property_name { get; set; }
 }
 
 @#namespace:}

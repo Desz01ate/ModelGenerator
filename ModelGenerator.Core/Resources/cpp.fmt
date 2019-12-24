@@ -7,14 +7,14 @@
 class @class_name
 {
     private:
-        @properties:@property_type _@property_name;
+        @repeat-col:@property_type _@property_name;
 	public:
-		@properties:@property_type get@property_name(){
-		@properties:	return _@property_name;
-		@properties:}
-		@properties:void set@property_name(@property_type value){
-		@properties:	_@property_name = value;
-		@properties:}
+		@repeat-col:@property_type get@property_name(){
+		@repeat-col:	return _@property_name;
+		@repeat-col:}
+		@repeat-col:void set@property_name(@property_type value){
+		@repeat-col:	_@property_name = value;
+		@repeat-col:}
 }
 
 @#namespace:}

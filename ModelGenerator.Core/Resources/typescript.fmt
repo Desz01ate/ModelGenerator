@@ -6,7 +6,7 @@
 
 export interface @class_name
 {
-    @properties:@property_name : @property_type
+    @repeat-col:@property_name : @property_type
 }
 
 @#namespace:}
