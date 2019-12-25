@@ -1,0 +1,15 @@
+@typedef:.\Resources\typescriptdef.json
+@ext:Service.ts
+@nullable:@type | null | undefined
+@once
+
+@repeat-tab:import @class_nameRepository from "./Repositories/@class_nameRepository";
+export default class Service
+{
+    static Context : Service = new Service();
+    private constructor()
+    {
+
+    }
+    @repeat-tab:readonly @class_name : @class_nameRepository = new @class_nameRepository();
+}

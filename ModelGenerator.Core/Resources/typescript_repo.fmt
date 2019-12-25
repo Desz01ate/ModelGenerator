@@ -1,0 +1,10 @@
+@typedef:.\Resources\typescriptdef.json
+@ext:Repository.ts
+@nullable:@type | null | undefined
+
+import { Repository } from './Components/Repository';
+import { I@class_name } from '../Models/I@class_name';
+export default class @class_nameRepository extends Repository<I{@class_name}>
+{
+
+}

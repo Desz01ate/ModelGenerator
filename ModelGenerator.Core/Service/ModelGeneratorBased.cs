@@ -24,7 +24,7 @@ namespace ModelGenerator.Core.Service
 
         public string PartialDirectory { get; protected set; }
 
-        public string Namespace { get; private set; }
+        public string Namespace { get; protected set; }
 
         public List<Table> Tables { get; } = new List<Table>();
         private bool _initialized = false;

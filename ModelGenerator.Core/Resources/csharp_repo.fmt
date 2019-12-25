@@ -13,10 +13,12 @@ using Utilities.Interfaces;
 
 public partial class @class_nameRepository : Repository<@class_name,@database_type,@database_parameter_type>
 {
+	@partial-ignore
     public @class_nameRepository(IDatabaseConnectorExtension<@database_type,@database_parameter_type> connector) : base(connector)
     {
 
     }
+	@#partial-ignore
 }
 
 @#namespace:}

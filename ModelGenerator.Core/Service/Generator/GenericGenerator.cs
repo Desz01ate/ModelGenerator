@@ -34,6 +34,14 @@ namespace ModelGenerator.Core.Service.Generator
             System.IO.Directory.CreateDirectory(directory);
             System.IO.Directory.CreateDirectory(PartialDirectory);
         }
+        public void ChangeNamespace(string @namespace)
+        {
+            if (string.IsNullOrWhiteSpace(@namespace))
+            {
+                throw new ArgumentNullException(nameof(@namespace));
+            }
+            this.Namespace = @namespace;
+        }
         public void ReloadResource(string[] formatResources)
         {
             InitialState();
@@ -106,14 +114,21 @@ namespace ModelGenerator.Core.Service.Generator
             }
             return column;
         }
-        private string Interprete(Table table, TableSchema column, StoredProcedureSchema sp, string line)
+        static bool partialIgnoring = false;
+        private string Interprete(Table table, TableSchema column, StoredProcedureSchema sp, string line, bool isPartialRendering = false)
         {
             var buffer = line;
+            if (line.Contains("@partial-ignore")) partialIgnoring = true;
+            if (line.Contains("@#partial-ignore")) partialIgnoring = false;
+            if (partialIgnoring && isPartialRendering)
+                return string.Empty;
             if (line.StartsWith("@typedef")
                 || line.StartsWith("@nullable")
                 || line.StartsWith("@ext")
                 || line.StartsWith("@partial")
-                || line.Contains("@once"))
+                || line.Contains("@once")
+                || line.Contains("@partial-ignore")
+                || line.Contains("@#partial-ignore"))
                 return string.Empty;
             if (line.Contains("@namespace") && !string.IsNullOrWhiteSpace(Namespace))
             {
@@ -273,7 +288,7 @@ namespace ModelGenerator.Core.Service.Generator
                     }
                     else
                     {
-                        var replaced = Interprete(table, null, null, line);
+                        var replaced = Interprete(table, null, null, line, true);
                         if (!string.IsNullOrWhiteSpace(replaced))
                             sb.AppendLine(replaced);
                     }
