@@ -156,6 +156,9 @@ namespace ModelGenerator
                     case TargetGeneratorType.UnitOfWork:
                         GeneratorFactory.PerformRepositoryGenerate(language, databaseConnector, connectionString, directory, defaultNamespace);
                         break;
+                    case TargetGeneratorType.Controller:
+                        GeneratorFactory.PerformControllerGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Controllers"), defaultNamespace);
+                        break;
                 }
                 //if (reloadProject) dte2.ExecuteCommand("Project.ReloadProject");
                 MessageBox.Show($"Successfully generate services file for {projectName}");

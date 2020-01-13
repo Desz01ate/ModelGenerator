@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id=".51e58d1c-6359-4775-a365-242862440dee" Version="1.6.0" Language="en-US" Publisher="Deszolate_C" />
+        <Identity Id=".51e58d1c-6359-4775-a365-242862440dee" Version="1.6.1" Language="en-US" Publisher="Deszolate_C" />
         <DisplayName>ModelGenerator</DisplayName>
         <Description xml:space="preserve">Extension for generate micro-ORM on top of Deszolate.Utilities.Lite library</Description>
         <ReleaseNotes>New UI and increase overall responsiveness.</ReleaseNotes>

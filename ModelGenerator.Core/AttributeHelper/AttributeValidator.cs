@@ -13,6 +13,11 @@ namespace ModelGenerator.Core.AttributeHelper
             var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.RepositoryGenerateEnabledAttribute)) != null;
             return isAssigned;
         }
+        public static bool IsControllerGeneratorEnabled(MemberInfo member)
+        {
+            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.ControllerGenerateEnabledAtribute)) != null;
+            return isAssigned;
+        }
         public static string Description(MemberInfo member)
         {
             var descAttrib = member.GetCustomAttribute(typeof(DescriptionAttribute)) as DescriptionAttribute;

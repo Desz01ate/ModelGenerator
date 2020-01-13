@@ -57,37 +57,25 @@ namespace ModelGenerator
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                var supportedLanguages = typeof(TargetLanguage).GetMembers(BindingFlags.Static | BindingFlags.Public);
+                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Helpers.EnumHelper.Expand<TargetLanguage>();
+
                 switch (selectedIndex)
                 {
                     case 0: //model generator
                         GeneratorType = TargetGeneratorType.Model;
-                        foreach (var langauge in supportedLanguages)
-                        {
-                            if (!(langauge.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
-                            {
-                                cb_TargetLang.Items.Add(langauge.Name);
-                            }
-                            else
-                            {
-                                cb_TargetLang.Items.Add(description.Description);
-                            }
-                        }
                         break;
                     case 1: //unit of work generator
                         GeneratorType = TargetGeneratorType.UnitOfWork;
-                        foreach (var langauge in supportedLanguages.Where(AttributeValidator.IsModelGeneratorEnabled))
-                        {
-                            if (!(langauge.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
-                            {
-                                cb_TargetLang.Items.Add(langauge.Name);
-                            }
-                            else
-                            {
-                                cb_TargetLang.Items.Add(description.Description);
-                            }
-                        }
+                        supportedLanguages = supportedLanguages.Where(x => x.IsModelGenerator);
                         break;
+                    case 2: //controller generator
+                        GeneratorType = TargetGeneratorType.Controller;
+                        supportedLanguages = supportedLanguages.Where(x => x.IsControllerGenerator);
+                        break;
+                }
+                foreach (var language in supportedLanguages)
+                {
+                    cb_TargetLang.Items.Add(language.Name);
                 }
                 cb_TargetLang.SelectedIndex = 0;
             }

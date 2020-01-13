@@ -3,6 +3,7 @@
     public enum TargetGeneratorType
     {
         Model,
-        UnitOfWork
+        UnitOfWork,
+        Controller
     }
 }

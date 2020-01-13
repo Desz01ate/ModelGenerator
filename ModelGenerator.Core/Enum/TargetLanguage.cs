@@ -7,6 +7,7 @@ namespace ModelGenerator.Core.Enum
     {
         [Description("C#")]
         [RepositoryGenerateEnabled]
+        [ControllerGenerateEnabledAtribute]
         CSharp = 0,
         [Description("Visual Basic")]
         [RepositoryGenerateEnabled]

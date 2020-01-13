@@ -43,7 +43,8 @@ namespace ModelGeneratorWPF
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                IEnumerable<(int Index, string Name, bool IsModelGenerator)> supportedLanguages = ModelGenerator.Core.Helpers.EnumHelper.Expand<TargetLanguage>();
+                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Helpers.EnumHelper.Expand<TargetLanguage>();
+
                 switch (selectedIndex)
                 {
                     case 0: //model generator
@@ -52,6 +53,10 @@ namespace ModelGeneratorWPF
                     case 1: //unit of work generator
                         generatorType = TargetGeneratorType.UnitOfWork;
                         supportedLanguages = supportedLanguages.Where(x => x.IsModelGenerator);
+                        break;
+                    case 2: //controller generator
+                        generatorType = TargetGeneratorType.Controller;
+                        supportedLanguages = supportedLanguages.Where(x => x.IsControllerGenerator);
                         break;
                 }
                 foreach (var language in supportedLanguages)
@@ -106,6 +111,9 @@ namespace ModelGeneratorWPF
                         break;
                     case TargetGeneratorType.UnitOfWork:
                         GeneratorFactory.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
+                        break;
+                    case TargetGeneratorType.Controller:
+                        GeneratorFactory.PerformControllerGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                         break;
                 }
                 Process.Start("explorer.exe", outputDir);

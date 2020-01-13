@@ -66,7 +66,8 @@
             this.cb_GeneratorMode.FormattingEnabled = true;
             this.cb_GeneratorMode.Items.AddRange(new object[] {
             "Model",
-            "Unit of Work"});
+            "Unit of Work",
+            "Controller"});
             this.cb_GeneratorMode.Location = new System.Drawing.Point(170, 12);
             this.cb_GeneratorMode.Name = "cb_GeneratorMode";
             this.cb_GeneratorMode.Size = new System.Drawing.Size(370, 21);
@@ -138,11 +139,11 @@
             this.label5.TabIndex = 9;
             this.label5.Text = "Automatic reload project :";
             // 
-            // checkBox1
+            // cb_AutoReload
             // 
             this.cb_AutoReload.AutoSize = true;
             this.cb_AutoReload.Location = new System.Drawing.Point(170, 227);
-            this.cb_AutoReload.Name = "checkBox1";
+            this.cb_AutoReload.Name = "cb_AutoReload";
             this.cb_AutoReload.Size = new System.Drawing.Size(15, 14);
             this.cb_AutoReload.TabIndex = 10;
             this.cb_AutoReload.UseVisualStyleBackColor = true;
