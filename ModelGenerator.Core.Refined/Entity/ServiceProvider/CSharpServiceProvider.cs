@@ -55,7 +55,8 @@ namespace ModelGenerator.Core.Refined.Entity.ServiceProvider
             template.DatabaseType = tables.First().ConnectionProvider;
             template.DatabaseParamType = tables.First().ConnectionProviderParameterType;
             template.TableNameTransformer = this.TableNameTransformer;
-            template.DataTypeMap = this.DataTypeMapper;
+            template.DataTypeMap = this.Mapper;
+            template.StoredProcedures = storedProcedures;
             return template.TransformText();
         }
     }

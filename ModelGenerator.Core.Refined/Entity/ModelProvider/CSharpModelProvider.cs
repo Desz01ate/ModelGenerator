@@ -46,7 +46,7 @@ namespace ModelGenerator.Core.Refined.Entity.ModelProvider
             var addNullability = column.AllowDBNull && typecs != "string" && typecs != "byte[]";
             return addNullability ? typecs + "?" : typecs;
         }
-        private string Mapper(string columnType)
+        protected string Mapper(string columnType)
         {
             columnType = columnType.ToLower();
             switch (columnType)

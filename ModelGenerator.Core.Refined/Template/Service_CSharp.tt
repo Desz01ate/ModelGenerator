@@ -5,7 +5,6 @@
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".txt" #>
 using System;
-using System.Transaction;
 using Utilities.SQL;
 using Utilities.Interfaces;
 using System.Data;
@@ -39,6 +38,28 @@ namespace <#= Namespace #>
 			}
 		}
 <# } #>
+<# foreach(var sp in StoredProcedures) { #>
+<# List<string> paramArgs = new List<string>();#>
+<# List<string> paramFunc = new List<string>();#>
+<# foreach(var param in sp.Parameters) { #>
+<# paramArgs.Add($"{DataTypeMap(param.DATA_TYPE)} {param.PARAMETER_NAME}"); #>
+<# } #>
+<# //continue from here #>
+		public dynamic <#= sp.SPECIFIC_NAME #>(<#= string.Join(",",paramArgs) #>)
+		{
+			var command = "<#= sp.SPECIFIC_NAME #>";
+			var parameters = new List<<#= DatabaseParamType #>>();
+<# foreach(var param in sp.Parameters) { #>
+			parameters.Add(new <#= DatabaseParamType #>("<#= param.PARAMETER_NAME #>",<#= param.PARAMETER_NAME #>));
+<# } #>
+			var result = Connector.ExecuteReader(command,parameters,commandType : System.Data.CommandType.StoredProcedure);
+			return result;
+		}
+<# } #>
+        public void Dispose()
+        {
+            Connector?.Dispose();
+        }
 	}
 <# if(IsNamespaceProvided) { #>
 }
@@ -47,9 +68,9 @@ namespace <#= Namespace #>
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
 	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Refined.Entity.Table> Tables { get; set; }
-	public System.Collections.Generic.IEnumerable<Utilities.Classes.TableSchema> Columns {get;set;}
+	public System.Collections.Generic.IEnumerable<Utilities.Classes.StoredProcedureSchema> StoredProcedures {get;set;}
 	public string DatabaseType { get; set; }
 	public string DatabaseParamType { get; set ;}
-	public Func<Utilities.Classes.TableSchema,string> DataTypeMap { get; set; }
+	public Func<string,string> DataTypeMap { get; set; }
 	public Func<string,string> TableNameTransformer {get;set;}
 #>

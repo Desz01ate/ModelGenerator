@@ -28,32 +28,31 @@ namespace ModelGenerator.Core.Refined.Template
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("using System;\r\nusing System.Transaction;\r\nusing Utilities.SQL;\r\nusing Utilities.I" +
-                    "nterfaces;\r\nusing System.Data;\r\nusing System.Data.Common;\r\nusing System.Collecti" +
-                    "ons.Generic;\r\n");
+            this.Write("using System;\r\nusing Utilities.SQL;\r\nusing Utilities.Interfaces;\r\nusing System.Da" +
+                    "ta;\r\nusing System.Data.Common;\r\nusing System.Collections.Generic;\r\n");
             
-            #line 14 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 13 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 15 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 14 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write(".Repositories;\r\nnamespace ");
             
-            #line 16 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 15 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n");
             
-            #line 18 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 17 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
@@ -61,14 +60,14 @@ namespace ModelGenerator.Core.Refined.Template
             this.Write("\tpublic sealed class Service : IDisposable\r\n\t{\r\n\t\tprivate readonly IDatabaseConne" +
                     "ctorExtension<");
             
-            #line 21 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 20 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseType));
             
             #line default
             #line hidden
             this.Write(",");
             
-            #line 21 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 20 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
             
             #line default
@@ -76,110 +75,224 @@ namespace ModelGenerator.Core.Refined.Template
             this.Write("> Connector;\r\n\t\tpublic Service(string connectionString)\r\n\t\t{\r\n\t\t\tConnector = new " +
                     "DatabaseConnector<");
             
-            #line 24 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 23 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseType));
             
             #line default
             #line hidden
             this.Write(",");
             
-            #line 24 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 23 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
             
             #line default
             #line hidden
             this.Write(">(connectionString);\r\n\t\t}\r\n");
             
-            #line 26 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 25 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  foreach(var table in Tables) { 
             
             #line default
             #line hidden
             
-            #line 27 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 26 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  var tableName = TableNameTransformer(table.Name); 
             
             #line default
             #line hidden
             
-            #line 28 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 27 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  var repositoryName = $"{tableName}Repository"; 
             
             #line default
             #line hidden
             this.Write("\t\tprivate ");
             
-            #line 29 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 28 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(repositoryName));
             
             #line default
             #line hidden
             this.Write(" _");
             
-            #line 29 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 28 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(" { get; set; }\r\n\t\tpublic ");
             
-            #line 30 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 29 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(repositoryName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 30 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 29 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\tif(_");
             
-            #line 34 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 33 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(" == null)\r\n\t\t\t\t{\r\n\t\t\t\t\t_");
             
-            #line 36 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 35 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(" = new ");
             
-            #line 36 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 35 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(repositoryName));
             
             #line default
             #line hidden
             this.Write("(Connector);\r\n\t\t\t\t}\r\n\t\t\t\treturn _");
             
-            #line 38 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 37 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t}\r\n\t\t}\r\n");
             
-            #line 41 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 40 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("\t}\r\n");
+            
+            #line 41 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ foreach(var sp in StoredProcedures) { 
+            
+            #line default
+            #line hidden
+            
+            #line 42 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ List<string> paramArgs = new List<string>();
+            
+            #line default
+            #line hidden
             
             #line 43 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ List<string> paramFunc = new List<string>();
+            
+            #line default
+            #line hidden
+            
+            #line 44 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ foreach(var param in sp.Parameters) { 
+            
+            #line default
+            #line hidden
+            
+            #line 45 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ paramArgs.Add($"{DataTypeMap(param.DATA_TYPE)} {param.PARAMETER_NAME}"); 
+            
+            #line default
+            #line hidden
+            
+            #line 46 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ } 
+            
+            #line default
+            #line hidden
+            
+            #line 47 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ //continue from here 
+            
+            #line default
+            #line hidden
+            this.Write("\t\tpublic dynamic ");
+            
+            #line 48 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(sp.SPECIFIC_NAME));
+            
+            #line default
+            #line hidden
+            this.Write("(");
+            
+            #line 48 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",paramArgs)));
+            
+            #line default
+            #line hidden
+            this.Write(")\r\n\t\t{\r\n\t\t\tvar command = \"");
+            
+            #line 50 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(sp.SPECIFIC_NAME));
+            
+            #line default
+            #line hidden
+            this.Write("\";\r\n\t\t\tvar parameters = new List<");
+            
+            #line 51 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
+            
+            #line default
+            #line hidden
+            this.Write(">();\r\n");
+            
+            #line 52 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ foreach(var param in sp.Parameters) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\tparameters.Add(new ");
+            
+            #line 53 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
+            
+            #line default
+            #line hidden
+            this.Write("(\"");
+            
+            #line 53 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(param.PARAMETER_NAME));
+            
+            #line default
+            #line hidden
+            this.Write("\",");
+            
+            #line 53 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(param.PARAMETER_NAME));
+            
+            #line default
+            #line hidden
+            this.Write("));\r\n");
+            
+            #line 54 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\t\t\tvar result = Connector.ExecuteReader(command,parameters,commandType : System.D" +
+                    "ata.CommandType.StoredProcedure);\r\n\t\t\treturn result;\r\n\t\t}\r\n");
+            
+            #line 58 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("        public void Dispose()\r\n        {\r\n            Connector?.Dispose();\r\n    " +
+                    "    }\r\n\t}\r\n");
+            
+            #line 64 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("}\r\n");
             
-            #line 45 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 66 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
@@ -187,15 +300,15 @@ namespace ModelGenerator.Core.Refined.Template
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 46 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+        #line 67 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
 
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
 	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Refined.Entity.Table> Tables { get; set; }
-	public System.Collections.Generic.IEnumerable<Utilities.Classes.TableSchema> Columns {get;set;}
+	public System.Collections.Generic.IEnumerable<Utilities.Classes.StoredProcedureSchema> StoredProcedures {get;set;}
 	public string DatabaseType { get; set; }
 	public string DatabaseParamType { get; set ;}
-	public Func<Utilities.Classes.TableSchema,string> DataTypeMap { get; set; }
+	public Func<string,string> DataTypeMap { get; set; }
 	public Func<string,string> TableNameTransformer {get;set;}
 
         
