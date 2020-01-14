@@ -16,8 +16,8 @@ namespace Runner
             //var gen = new ModelBuilder(@"C:\Users\TYCHE\Desktop\fmt", "test", tableDef);
             //gen.Generate(new CSharpModelProvider());
             //gen.Generate(new TypeScriptModelProvider());
-            var sgen = new ServiceBuilder(@"C:\Users\TYCHE\Documents\Visual Studio 2015\Projects\Playground\Local", "Local", tableDef, spDef);
-            sgen.Generate(new CSharpServiceProvider());
+            var sgen = new ServiceBuilder(@"C:\Users\TYCHE\Desktop\fmt", "test", tableDef, spDef);
+            sgen.Generate(new TypescriptServiceProvider());
         }
     }
 }

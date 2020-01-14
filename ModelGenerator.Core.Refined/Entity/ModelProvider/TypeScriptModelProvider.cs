@@ -40,7 +40,7 @@ namespace ModelGenerator.Core.Refined.Entity.ModelProvider
             return typets;
         }
 
-        private string Mapper(string dataTypeName)
+        protected string Mapper(string dataTypeName)
         {
             switch (dataTypeName)
             {

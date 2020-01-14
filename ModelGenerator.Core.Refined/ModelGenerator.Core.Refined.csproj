@@ -43,13 +43,25 @@
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>RepositoryBased_CSharp.cs</LastGenOutput>
     </None>
+    <None Update="Template\RepositoryBased_TypeScript.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RepositoryBased_TypeScript.cs</LastGenOutput>
+    </None>
     <None Update="Template\Repository_CSharp.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>Repository_CSharp.cs</LastGenOutput>
     </None>
+    <None Update="Template\Repository_TypeScript.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Repository_TypeScript.cs</LastGenOutput>
+    </None>
     <None Update="Template\Service_CSharp.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>Service_CSharp.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Service_TypeScript.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Service_TypeScript.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
@@ -73,15 +85,30 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>RepositoryBased_CSharp.tt</DependentUpon>
     </Compile>
+    <Compile Update="Template\RepositoryBased_TypeScript.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RepositoryBased_TypeScript.tt</DependentUpon>
+    </Compile>
     <Compile Update="Template\Repository_CSharp.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Repository_CSharp.tt</DependentUpon>
     </Compile>
+    <Compile Update="Template\Repository_TypeScript.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Repository_TypeScript.tt</DependentUpon>
+    </Compile>
     <Compile Update="Template\Service_CSharp.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Service_CSharp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\Service_TypeScript.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Service_TypeScript.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
