@@ -1,0 +1,55 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".txt" #>
+using System;
+using System.Transaction;
+using Utilities.SQL;
+using Utilities.Interfaces;
+using System.Data;
+using System.Data.Common;
+using System.Collections.Generic;
+<# if(IsNamespaceProvided) { #>
+using <#= Namespace #>.Repositories;
+namespace <#= Namespace #>
+{
+<# } #>
+	public sealed class Service : IDisposable
+	{
+		private readonly IDatabaseConnectorExtension<<#= DatabaseType #>,<#= DatabaseParamType #>> Connector;
+		public Service(string connectionString)
+		{
+			Connector = new DatabaseConnector<<#= DatabaseType #>,<#= DatabaseParamType #>>(connectionString);
+		}
+<# foreach(var table in Tables) { #>
+<# var tableName = TableNameTransformer(table.Name); #>
+<# var repositoryName = $"{tableName}Repository"; #>
+		private <#= repositoryName #> _<#= tableName #> { get; set; }
+		public <#= repositoryName #> <#= tableName #>
+		{
+			get
+			{
+				if(_<#= tableName #> == null)
+				{
+					_<#= tableName #> = new <#= repositoryName #>(Connector);
+				}
+				return _<#= tableName #>;
+			}
+		}
+<# } #>
+	}
+<# if(IsNamespaceProvided) { #>
+}
+<# } #>
+<#+
+	public string Namespace {get; set;}
+	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
+	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Refined.Entity.Table> Tables { get; set; }
+	public System.Collections.Generic.IEnumerable<Utilities.Classes.TableSchema> Columns {get;set;}
+	public string DatabaseType { get; set; }
+	public string DatabaseParamType { get; set ;}
+	public Func<Utilities.Classes.TableSchema,string> DataTypeMap { get; set; }
+	public Func<string,string> TableNameTransformer {get;set;}
+#>
