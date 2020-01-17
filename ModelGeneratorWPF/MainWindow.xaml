@@ -6,12 +6,11 @@
         xmlns:local="clr-namespace:ModelGeneratorWPF"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Model Generator" Height="370" Width="576">
+        Title="Model Generator" Height="550" Width="576">
     <Grid>
         <ComboBox x:Name="cb_GeneratorMode" HorizontalAlignment="Left" Margin="170,12,0,0" VerticalAlignment="Top" Width="347" SelectionChanged="ComboBox_SelectionChanged" SelectedIndex="0">
             <ComboBoxItem Content="Model"/>
-            <ComboBoxItem Content="Unit Of Work"/>
-            <ComboBoxItem Content="Controller"/>
+            <ComboBoxItem Content="Service"/>
         </ComboBox>
         <ComboBox x:Name="cb_TargetLang" HorizontalAlignment="Left" Margin="170,51,0,0" VerticalAlignment="Top" Width="347" SelectionChanged="Cb_TargetLang_SelectionChanged" SelectedIndex="0">
         </ComboBox>
@@ -28,6 +27,6 @@
         <TextBox x:Name="txt_namespace" HorizontalAlignment="Left" Margin="170,244,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="347"/>
         <Label Content="Namespace (optional) :" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="143"/>
         <Button x:Name="btn_Generate" Content="Generate" HorizontalAlignment="Center" Margin="0,289,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.025,0.002" Width="556" Height="32" Click="Button_Click"/>
-
+        <RichTextBox x:Name="txt_richProgress" Margin="10,330,10,10" IsReadOnly="True" FontSize="10" Block.LineHeight="1" />
     </Grid>
 </Window>

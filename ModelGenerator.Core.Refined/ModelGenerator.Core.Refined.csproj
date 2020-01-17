@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="Template\Model_VisualBasic.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model_VisualBasic.tt</DependentUpon>
+    </None>
     <None Include="Template\RepositoryBased_CSharp.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -38,6 +43,10 @@
     <None Update="Template\Model_TypeScript.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>Model_TypeScript.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Model_VisualBasic.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Model_VisualBasic.cs</LastGenOutput>
     </None>
     <None Update="Template\RepositoryBased_CSharp.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
@@ -80,6 +89,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Model_TypeScript.tt</DependentUpon>
     </Compile>
+    <Compile Update="Template\Model_VisualBasic.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model_VisualBasic.tt</DependentUpon>
+    </Compile>
     <Compile Update="Template\RepositoryBased_CSharp.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -110,6 +124,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Service_TypeScript.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Attributes\" />
   </ItemGroup>
 
 </Project>

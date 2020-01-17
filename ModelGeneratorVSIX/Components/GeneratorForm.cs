@@ -1,13 +1,19 @@
-﻿using ModelGenerator.Core.AttributeHelper;
-using ModelGenerator.Core.Enum;
+﻿using ModelGenerator.Core.Refined.Builder;
+using ModelGenerator.Core.Refined.Entity;
+using ModelGenerator.Core.Refined.Entity.ModelProvider;
+using ModelGenerator.Core.Refined.Entity.ServiceProvider;
+using ModelGenerator.Core.Refined.Enum;
+using ModelGenerator.Core.Refined.Helper;
+using MySql.Data.MySqlClient;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Drawing;
+using System.Data.OracleClient;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,37 +21,87 @@ namespace ModelGenerator
 {
     public partial class GeneratorForm : Form
     {
-        public event EventHandler OnSubmitGenerate;
-        public string ConnectionString => this.txt_ConnectionString.Text;
-        public TargetGeneratorType GeneratorType { get; private set; }
-        public TargetLanguage TargetLanguage { get; private set; }
-        public TargetDatabaseConnector TargetDatabaseConnector { get; private set; }
-        public bool AutomaticReload => this.cb_AutoReload.Checked;
-        public GeneratorForm()
+        private SupportMode mode;
+        private SupportLanguage language;
+        private SupportDatabase database;
+        private readonly string Namespace;
+        private readonly string Directory;
+        public GeneratorForm(string @namespace, string directory)
         {
+            this.Namespace = @namespace;
+            this.Directory = directory;
             InitializeComponent();
-            var supportedDatabase = typeof(TargetDatabaseConnector).GetMembers(BindingFlags.Static | BindingFlags.Public);
+            cb_GeneratorMode.SelectedIndex = 1;
+            cb_GeneratorMode.SelectedIndex = 0;
+            var supportedDatabase = ModelGenerator.Core.Refined.Helper.EnumHelper.Expand<SupportDatabase>();
             foreach (var database in supportedDatabase)
             {
-                if (!(database.GetCustomAttribute(typeof(DescriptionAttribute)) is DescriptionAttribute description))
-                {
-                    cb_TargetDatabase.Items.Add(database.Name);
-                }
-                else
-                {
-                    cb_TargetDatabase.Items.Add(description.Description);
-                }
+                cb_TargetDatabase.Items.Add(database.Name);
             }
-
-            cb_GeneratorMode.SelectedIndex = 1;
-            cb_TargetLang.SelectedIndex = 0;
-            cb_TargetDatabase.SelectedIndex = 0;
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            OnSubmitGenerate.Invoke(this, e);
+            if (!System.IO.Directory.Exists(Directory))
+            {
+                MessageBox.Show("You must select an output directory before trying to generate!");
+                return;
+            }
+            var connectionString = this.txt_ConnectionString.Text;
+            Task.Run(() =>
+            {
+                DatabaseDefinition databaseDefinition = GetDatabaseDefinition(connectionString);
+                try
+                {
+                    switch (mode)
+                    {
+                        case SupportMode.Model:
+                            var provider = language switch
+                            {
+                                SupportLanguage.CSharp => CSharpModelProvider.Context,
+                                SupportLanguage.TypeScript => TypeScriptModelProvider.Context,
+                                SupportLanguage.VisualBasic => VisualBasicModelProvider.Context,
+                                _ => throw new NotSupportedException()
+                            };
+                            var modelGenerator = new ModelBuilder(Directory, Namespace, databaseDefinition);
+                            modelGenerator.Generate(provider);
+                            break;
+                        case SupportMode.Service:
+                            var serviceProvider = language switch
+                            {
+                                SupportLanguage.CSharp => CSharpServiceProvider.Context,
+                                SupportLanguage.TypeScript => TypescriptServiceProvider.Context,
+                                _ => throw new NotSupportedException()
+                            };
+                            var serviceGenerator = new ServiceBuilder(Directory, Namespace, databaseDefinition);
+                            var totalFiles = serviceGenerator.Generate(serviceProvider);
+                            //GeneratorFactory.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+                MessageBox.Show("Done");
+                this.Dispose();
+            });
+
         }
+
+
+        private DatabaseDefinition GetDatabaseDefinition(string connectionString)
+        {
+            return database switch
+            {
+                SupportDatabase.SQLServer => SqlDefinition.GetDatabaseDefinition<SqlConnection, SqlParameter>(connectionString, (x) => $"[{x}]"),
+                SupportDatabase.MySQL => SqlDefinition.GetDatabaseDefinition<MySqlConnection, MySqlParameter>(connectionString),
+                SupportDatabase.Oracle => SqlDefinition.GetDatabaseDefinition<OracleConnection, OracleParameter>(connectionString),
+                SupportDatabase.PostgreSQL => SqlDefinition.GetDatabaseDefinition<NpgsqlConnection, NpgsqlParameter>(connectionString),
+                _ => null,
+            };
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
@@ -57,19 +113,20 @@ namespace ModelGenerator
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Helpers.EnumHelper.Expand<TargetLanguage>();
+                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Refined.Helper.EnumHelper.Expand<SupportLanguage>();
 
                 switch (selectedIndex)
                 {
                     case 0: //model generator
-                        GeneratorType = TargetGeneratorType.Model;
+                        mode = SupportMode.Model;
                         break;
                     case 1: //unit of work generator
-                        GeneratorType = TargetGeneratorType.UnitOfWork;
+                        mode = SupportMode.Service;
                         supportedLanguages = supportedLanguages.Where(x => x.IsModelGenerator);
                         break;
                     case 2: //controller generator
-                        GeneratorType = TargetGeneratorType.Controller;
+                        throw new NotImplementedException();
+                        //generatorType = TargetGeneratorType.Controller;
                         supportedLanguages = supportedLanguages.Where(x => x.IsControllerGenerator);
                         break;
                 }
@@ -80,31 +137,27 @@ namespace ModelGenerator
                 cb_TargetLang.SelectedIndex = 0;
             }
         }
-
         private void Cb_TargetLang_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TargetLanguage = (TargetLanguage)cb_TargetLang.SelectedIndex;
+            language = (SupportLanguage)cb_TargetLang.SelectedIndex;
         }
 
         private void Cb_TargetDatabase_SelectedIndexChanged(object sender, EventArgs e)
         {
-            TargetDatabaseConnector = (TargetDatabaseConnector)cb_TargetDatabase.SelectedIndex;
-            switch (TargetDatabaseConnector)
+            database = (SupportDatabase)cb_TargetDatabase.SelectedIndex;
+            switch (database)
             {
-                case TargetDatabaseConnector.SQLServer:
+                case SupportDatabase.SQLServer:
                     txt_ConnectionString.Text = "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password = myPassword;";
                     break;
-                case TargetDatabaseConnector.Oracle:
+                case SupportDatabase.Oracle:
                     txt_ConnectionString.Text = "Data Source=MyOracleDB;User Id=myUsername;Password=myPassword;";
                     break;
-                case TargetDatabaseConnector.MySQL:
+                case SupportDatabase.MySQL:
                     txt_ConnectionString.Text = "Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;";
                     break;
-                case TargetDatabaseConnector.PostgreSQL:
+                case SupportDatabase.PostgreSQL:
                     txt_ConnectionString.Text = "Server=myServerAddress;Port=5432;Database=myDataBase;User Id=myUsername;Password = myPassword;";
-                    break;
-                case TargetDatabaseConnector.SQLite:
-                    txt_ConnectionString.Text = @"Data Source=C:/path/to/yourdb.db;Version=3;";
                     break;
             }
         }

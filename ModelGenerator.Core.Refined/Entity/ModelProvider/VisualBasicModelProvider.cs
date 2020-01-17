@@ -8,19 +8,19 @@ using Utilities.Classes;
 
 namespace ModelGenerator.Core.Refined.Entity.ModelProvider
 {
-    public class TypeScriptModelProvider : IModelBuilderProvider
+    public class VisualBasicModelProvider : IModelBuilderProvider
     {
-        private static readonly Lazy<TypeScriptModelProvider> TypeScriptModel = new Lazy<TypeScriptModelProvider>(() => new TypeScriptModelProvider(), true);
-        public static IModelBuilderProvider Context => TypeScriptModel.Value;
-        internal TypeScriptModelProvider()
+        private static readonly Lazy<VisualBasicModelProvider> VbModel = new Lazy<VisualBasicModelProvider>(() => new VisualBasicModelProvider(), true);
+        public static IModelBuilderProvider Context => VbModel.Value;
+        internal VisualBasicModelProvider()
         {
 
         }
-        public string FileExtension => "ts";
+        public string FileExtension => "vb";
 
         public virtual string? GenerateModelFile(string @namespace, Table table)
         {
-            var template = new Model_TypeScript();
+            var template = new Model_VisualBasic();
             template.ClassName = table.Name;
             template.Namespace = @namespace;
             template.PrimaryKey = table.PrimaryKey;
@@ -29,46 +29,62 @@ namespace ModelGenerator.Core.Refined.Entity.ModelProvider
             template.TableNameTransformer = TableNameTransformer;
             return template.TransformText();
         }
-
+        public virtual string? GeneratePartialModelFile(string @namespace, Table table)
+        {
+            var template = new Model_VisualBasic();
+            template.ClassName = table.Name;
+            template.Namespace = @namespace;
+            template.PrimaryKey = table.PrimaryKey;
+            template.Columns = table.Columns;
+            template.DataTypeMap = DataTypeMapper;
+            template.TableNameTransformer = TableNameTransformer;
+            template.IsPartial = true;
+            return template.TransformText();
+        }
         protected string TableNameTransformer(string tableName)
         {
             var v = Regex.Replace(tableName, "[-\\s]", "");
             return v;
         }
-
         protected string DataTypeMapper(TableSchema column)
         {
-            var typets = Mapper(column.DataTypeName);
-            if (column.AllowDBNull)
-            {
-                return $"{typets} | undefined | null";
-            }
-            return typets;
+            var typevb = Mapper(column.DataTypeName);
+            var addNullable = column.AllowDBNull && typevb != "String" && typevb != "Byte()";
+            return addNullable ? $"Nullable(Of {typevb})" : typevb;
         }
-
-        protected string Mapper(string dataTypeName)
+        protected string Mapper(string columnType)
         {
-            switch (dataTypeName)
+            columnType = columnType.ToLower();
+            switch (columnType)
             {
                 case "bit":
-                    return "boolean";
+                    return "Boolean";
 
                 case "tinyint":
+                    return "Byte";
                 case "smallint":
+                    return "Short";
                 case "int":
+                    return "Integer";
                 case "bigint":
+                    return "Long";
+
                 case "real":
+                    return "Single";
                 case "float":
+                    return "Double";
                 case "decimal":
                 case "money":
                 case "smallmoney":
-                    return "number";
+                    return "Decimal";
 
                 case "time":
+                    return "TimeSpan";
                 case "date":
                 case "datetime":
                 case "datetime2":
                 case "smalldatetime":
+                    return "Date";
                 case "datetimeoffset":
                     return "Date";
 
@@ -79,25 +95,32 @@ namespace ModelGenerator.Core.Refined.Entity.ModelProvider
                 case "text":
                 case "ntext":
                 case "xml":
-                    return "string";
+                    return "String";
 
-                case "uniqueidentifier":
                 case "binary":
                 case "image":
                 case "varbinary":
                 case "timestamp":
+                    return "Byte()";
+
+                case "uniqueidentifier":
+                    return "Guid";
+
                 case "variant":
                 case "Udt":
+                    return "Object";
+
+                case "Structured":
+                    return "DataTable";
+
+                case "geography":
+                    return "geography";
+
                 default:
                     // Fallback to be manually handled by user
-                    return "any";
+                    return columnType;
             };
-
         }
 
-        public virtual string? GeneratePartialModelFile(string @namespace, Table table)
-        {
-            return null;
-        }
     }
 }

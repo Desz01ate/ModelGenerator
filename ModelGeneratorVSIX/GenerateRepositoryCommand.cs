@@ -2,11 +2,16 @@
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using ModelGenerator.Core.Enum;
-using ModelGenerator.Core.Factory;
+using ModelGenerator.Core.Refined.Entity;
+using ModelGenerator.Core.Refined.Enum;
+using ModelGenerator.Core.Refined.Helper;
 using ModelGenerator.Helpers;
+using MySql.Data.MySqlClient;
+using Npgsql;
 using System;
 using System.ComponentModel.Design;
+using System.Data.OracleClient;
+using System.Data.SqlClient;
 using System.IO;
 using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
@@ -93,37 +98,50 @@ namespace ModelGenerator
         private void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var form = new GeneratorForm();
-            form.OnSubmitGenerate += delegate
+            if (!NugetHelper.NugetHelper.IsNugetPackageInstalled(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite"))
             {
-                var genType = form.GeneratorType;
-                var targetLang = form.TargetLanguage;
-                var targetDb = form.TargetDatabaseConnector;
-                var dbCon = form.ConnectionString;
-                var autoReload = form.AutomaticReload;
-
-                form.Dispose();
-                if (!NugetHelper.NugetHelper.IsNugetPackageInstalled(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite"))
+                var acceptLibraryInstaller = MessageBox.Show(
+                        $"{DevenvHelper.ProjectName} currently not install 'Deszolate.Utilities.Lite'. This library is required in order to make the generated code works, do you want to install now?",
+                        "ModelGenerator",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Warning
+                    );
+                if (acceptLibraryInstaller == DialogResult.Yes)
                 {
-                    var acceptLibraryInstaller = MessageBox.Show(
-                            $"{DevenvHelper.ProjectName} currently not install 'Deszolate.Utilities.Lite'. This library is required in order to make the generated code works, do you want to install now?",
-                            "ModelGenerator",
-                            MessageBoxButtons.YesNo,
-                            MessageBoxIcon.Warning
-                        );
-                    if (acceptLibraryInstaller == DialogResult.Yes)
-                    {
-                        NugetHelper.NugetHelper.InstallNugetPackage(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite");
-                    }
+                    NugetHelper.NugetHelper.InstallNugetPackage(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite");
                 }
-                var thread = new System.Threading.Thread(
-                new System.Threading.ThreadStart(() => this.GenerateService(genType, targetLang, targetDb, dbCon, autoReload)));
-                thread.Start();
-                var messageResult = MessageBox.Show("Generator now working on background thread, your files will soon generated.", "ModelGenerator", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            };
+            }
+            var form = new GeneratorForm(DevenvHelper.ProjectDefaultNamespace, DevenvHelper.ProjectDirectory);
+            //form.OnSubmitGenerate += delegate
+            //{
+            //    var genType = form.GeneratorType;
+            //    var targetLang = form.TargetLanguage;
+            //    var targetDb = form.TargetDatabaseConnector;
+            //    var dbCon = form.ConnectionString;
+            //    var autoReload = form.AutomaticReload;
+
+            //    form.Dispose();
+            //    if (!NugetHelper.NugetHelper.IsNugetPackageInstalled(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite"))
+            //    {
+            //        var acceptLibraryInstaller = MessageBox.Show(
+            //                $"{DevenvHelper.ProjectName} currently not install 'Deszolate.Utilities.Lite'. This library is required in order to make the generated code works, do you want to install now?",
+            //                "ModelGenerator",
+            //                MessageBoxButtons.YesNo,
+            //                MessageBoxIcon.Warning
+            //            );
+            //        if (acceptLibraryInstaller == DialogResult.Yes)
+            //        {
+            //            NugetHelper.NugetHelper.InstallNugetPackage(DevenvHelper.SelectedProject, "Deszolate.Utilities.Lite");
+            //        }
+            //    }
+            //    var thread = new System.Threading.Thread(
+            //    new System.Threading.ThreadStart(() => this.GenerateService(genType, targetLang, targetDb, dbCon, autoReload)));
+            //    thread.Start();
+            //    var messageResult = MessageBox.Show("Generator now working on background thread, your files will soon generated.", "ModelGenerator", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //};
             form.Show();
         }
-        private void GenerateService(TargetGeneratorType generatorType, TargetLanguage language, TargetDatabaseConnector databaseConnector, string connectionString, bool reloadProject)
+        private void GenerateService(SupportMode mode, SupportLanguage language, SupportDatabase database, string connectionString, bool reloadProject)
         {
             try
             {
@@ -147,19 +165,7 @@ namespace ModelGenerator
 
                 dte2.Windows.Item(EnvDTE.Constants.vsWindowKindSolutionExplorer).Activate();
                 dte2.ToolWindows.SolutionExplorer.GetItem($@"{solutionName}\{projectName}").Select(vsUISelectionType.vsUISelectionTypeSelect);
-                //if (reloadProject) dte2.ExecuteCommand("Project.UnloadProject");
-                switch (generatorType)
-                {
-                    case TargetGeneratorType.Model:
-                        GeneratorFactory.PerformModelGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Models"), defaultNamespace);
-                        break;
-                    case TargetGeneratorType.UnitOfWork:
-                        GeneratorFactory.PerformRepositoryGenerate(language, databaseConnector, connectionString, directory, defaultNamespace);
-                        break;
-                    case TargetGeneratorType.Controller:
-                        GeneratorFactory.PerformControllerGenerate(language, databaseConnector, connectionString, Path.Combine(directory, "Controllers"), defaultNamespace);
-                        break;
-                }
+
                 //if (reloadProject) dte2.ExecuteCommand("Project.ReloadProject");
                 MessageBox.Show($"Successfully generate services file for {projectName}");
             }
@@ -168,5 +174,6 @@ namespace ModelGenerator
                 MessageBox.Show(ex.ToString());
             }
         }
+
     }
 }

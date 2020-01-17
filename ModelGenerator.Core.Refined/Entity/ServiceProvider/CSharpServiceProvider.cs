@@ -11,6 +11,12 @@ namespace ModelGenerator.Core.Refined.Entity.ServiceProvider
 {
     public class CSharpServiceProvider : CSharpModelProvider, IServiceBuilderProvider
     {
+        private static readonly Lazy<CSharpServiceProvider> CSharpService = new Lazy<CSharpServiceProvider>(() => new CSharpServiceProvider(), true);
+        public new static IServiceBuilderProvider Context => CSharpService.Value;
+        internal CSharpServiceProvider()
+        {
+
+        }
         public override string? GenerateModelFile(string @namespace, Table table)
         {
             return base.GenerateModelFile(@namespace + ".Models", table);

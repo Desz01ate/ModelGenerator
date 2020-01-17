@@ -12,8 +12,7 @@ namespace ModelGenerator.Core.Refined.Builder
     {
         private readonly string _directory;
         private readonly string? _namespace;
-        private readonly IEnumerable<Table> _tables;
-        private readonly IEnumerable<StoredProcedureSchema>? storedProcedures;
+        private readonly DatabaseDefinition _databaseDefinition;
         private string _modelDirectory => Path.Combine(_directory, "Models");
         private string _partialModelDirectory => Path.Combine(_modelDirectory, "Partials");
         private readonly bool _allowGeneratePartialModel;
@@ -21,12 +20,11 @@ namespace ModelGenerator.Core.Refined.Builder
         private string _partialRepositoryDirectory => Path.Combine(_repositoryDirectory, "Partials");
         private string _repositoryBasedDirectory => Path.Combine(_repositoryDirectory, "Based");
         private readonly bool _allowGeneratePartialRepository;
-        public ServiceBuilder(string directory, string? @namespace, IEnumerable<Table> tables, IEnumerable<StoredProcedureSchema> storedProcedures)
+        public ServiceBuilder(string directory, string? @namespace, DatabaseDefinition databaseDefinition)
         {
             this._directory = directory;
             this._namespace = @namespace;
-            this._tables = tables;
-            this.storedProcedures = storedProcedures;
+            this._databaseDefinition = databaseDefinition;
             Directory.CreateDirectory(_directory);
             Directory.CreateDirectory(_modelDirectory);
             Directory.CreateDirectory(_repositoryDirectory);
@@ -34,9 +32,10 @@ namespace ModelGenerator.Core.Refined.Builder
             _allowGeneratePartialModel = !Directory.Exists(_partialModelDirectory);
             _allowGeneratePartialRepository = !Directory.Exists(_partialRepositoryDirectory);
         }
-        public void Generate(IServiceBuilderProvider provider)
+        public int Generate(IServiceBuilderProvider provider)
         {
-            foreach (var table in this._tables)
+            int totalFiles = 0;
+            foreach (var table in this._databaseDefinition.Tables)
             {
                 var modelCode = provider.GenerateModelFile(this._namespace, table);
                 var modelFileName = $"{table.Name}.{provider.FileExtension}";
@@ -44,6 +43,7 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(_modelDirectory, modelFileName);
                     File.WriteAllText(fileLoc, modelCode);
+                    totalFiles++;
                 }
                 if (_allowGeneratePartialModel)
                 {
@@ -54,6 +54,7 @@ namespace ModelGenerator.Core.Refined.Builder
                     {
                         var fileLoc = Path.Combine(_partialModelDirectory, modelFileName);
                         File.WriteAllText(fileLoc, partialModelCode);
+                        totalFiles++;
                     }
                 }
 
@@ -64,6 +65,7 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(_repositoryDirectory, repositoryFileName);
                     File.WriteAllText(fileLoc, repositoryCode);
+                    totalFiles++;
                 }
                 if (_allowGeneratePartialRepository)
                 {
@@ -74,6 +76,7 @@ namespace ModelGenerator.Core.Refined.Builder
                     {
                         var fileLoc = Path.Combine(_partialRepositoryDirectory, repositoryFileName);
                         File.WriteAllText(fileLoc, partialRepoCode);
+                        totalFiles++;
                     }
                 }
 
@@ -81,9 +84,12 @@ namespace ModelGenerator.Core.Refined.Builder
             var repoBasedCode = provider.GenerateRepositoryBasedFile(this._namespace);
             var repoBasedFile = Path.Combine(this._repositoryBasedDirectory, $"Repository.{provider.FileExtension}");
             File.WriteAllText(repoBasedFile, repoBasedCode);
-            var serviceCode = provider.GenerateServiceFile(this._namespace, _tables, this.storedProcedures);
+            totalFiles++;
+            var serviceCode = provider.GenerateServiceFile(this._namespace, this._databaseDefinition.Tables, this._databaseDefinition.StoredProcedures);
             var serviceFile = Path.Combine(this._directory, $"Service.{provider.FileExtension}");
             File.WriteAllText(serviceFile, serviceCode);
+            totalFiles++;
+            return totalFiles;
         }
 
     }

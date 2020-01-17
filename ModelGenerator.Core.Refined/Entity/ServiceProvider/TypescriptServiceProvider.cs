@@ -11,6 +11,12 @@ namespace ModelGenerator.Core.Refined.Entity.ServiceProvider
 {
     public class TypescriptServiceProvider : TypeScriptModelProvider, IServiceBuilderProvider
     {
+        private static readonly Lazy<TypescriptServiceProvider> TypescriptService = new Lazy<TypescriptServiceProvider>(() => new TypescriptServiceProvider(), true);
+        public new static IServiceBuilderProvider Context => TypescriptService.Value;
+        internal TypescriptServiceProvider()
+        {
+
+        }
         public override string? GenerateModelFile(string @namespace, Table table)
         {
             return base.GenerateModelFile(null, table);

@@ -14,8 +14,8 @@ namespace ModelGenerator.Core.Refined.Builder
         private readonly string _partialDirectory;
         private readonly bool _allowGeneratePartial;
         private readonly string? _namespace;
-        private readonly IEnumerable<Table> _tables;
-        public ModelBuilder(string directory, string? @namespace, IEnumerable<Table> tables)
+        private readonly DatabaseDefinition _databaseDefinition;
+        public ModelBuilder(string directory, string? @namespace, DatabaseDefinition databaseDefinition)
         {
             this._directory = directory;
             this._partialDirectory = Path.Combine(directory, "Partials");
@@ -26,11 +26,12 @@ namespace ModelGenerator.Core.Refined.Builder
                 _allowGeneratePartial = true;
             }
             this._namespace = @namespace;
-            this._tables = tables;
+            this._databaseDefinition = databaseDefinition;
         }
-        public void Generate(IModelBuilderProvider provider)
+        public int Generate(IModelBuilderProvider provider)
         {
-            foreach (var table in this._tables)
+            var totalFiles = 0;
+            foreach (var table in this._databaseDefinition.Tables)
             {
                 var modelCode = provider.GenerateModelFile(this._namespace, table);
                 var fileName = $"{table.Name}.{provider.FileExtension}";
@@ -38,6 +39,7 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(_directory, fileName);
                     File.WriteAllText(fileLoc, modelCode);
+                    totalFiles++;
                 }
                 if (!_allowGeneratePartial) continue;
                 var partialModelCode = provider.GeneratePartialModelFile(this._namespace, table);
@@ -45,8 +47,10 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(Path.Combine(_directory, "Partials"), fileName);
                     File.WriteAllText(fileLoc, partialModelCode);
+                    totalFiles++;
                 }
             }
+            return totalFiles;
         }
     }
 }

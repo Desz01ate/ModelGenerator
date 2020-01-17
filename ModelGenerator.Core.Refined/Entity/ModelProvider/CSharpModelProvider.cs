@@ -10,6 +10,12 @@ namespace ModelGenerator.Core.Refined.Entity.ModelProvider
 {
     public class CSharpModelProvider : IModelBuilderProvider
     {
+        private static readonly Lazy<CSharpModelProvider> CSharpModel = new Lazy<CSharpModelProvider>(() => new CSharpModelProvider(), true);
+        public static IModelBuilderProvider Context => CSharpModel.Value;
+        internal CSharpModelProvider()
+        {
+
+        }
         public string FileExtension => "cs";
 
         public virtual string? GenerateModelFile(string @namespace, Table table)
