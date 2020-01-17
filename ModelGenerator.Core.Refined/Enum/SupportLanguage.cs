@@ -1,10 +1,10 @@
-﻿using ModelGenerator.Core.Refined.Attributes;
+﻿using ModelGenerator.Core.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace ModelGenerator.Core.Refined.Enum
+namespace ModelGenerator.Core.Enum
 {
     public enum SupportLanguage
     {

@@ -1,12 +1,13 @@
-﻿using ModelGenerator.Core.Refined.Entity;
-using ModelGenerator.Core.Refined.Interface;
+﻿using ModelGenerator.Core.Entity;
+using ModelGenerator.Core.Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Utilities.Classes;
+using static ModelGenerator.Core.Event.Delegate.File;
 
-namespace ModelGenerator.Core.Refined.Builder
+namespace ModelGenerator.Core.Builder
 {
     public sealed class ServiceBuilder
     {
@@ -20,6 +21,8 @@ namespace ModelGenerator.Core.Refined.Builder
         private string _partialRepositoryDirectory => Path.Combine(_repositoryDirectory, "Partials");
         private string _repositoryBasedDirectory => Path.Combine(_repositoryDirectory, "Based");
         private readonly bool _allowGeneratePartialRepository;
+        public event OnFileGenerated OnFileGenerated;
+
         public ServiceBuilder(string directory, string? @namespace, DatabaseDefinition databaseDefinition)
         {
             this._directory = directory;
@@ -32,9 +35,8 @@ namespace ModelGenerator.Core.Refined.Builder
             _allowGeneratePartialModel = !Directory.Exists(_partialModelDirectory);
             _allowGeneratePartialRepository = !Directory.Exists(_partialRepositoryDirectory);
         }
-        public int Generate(IServiceBuilderProvider provider)
+        public void Generate(IServiceBuilderProvider provider)
         {
-            int totalFiles = 0;
             foreach (var table in this._databaseDefinition.Tables)
             {
                 var modelCode = provider.GenerateModelFile(this._namespace, table);
@@ -43,7 +45,7 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(_modelDirectory, modelFileName);
                     File.WriteAllText(fileLoc, modelCode);
-                    totalFiles++;
+                    this.OnFileGenerated.Invoke(fileLoc);
                 }
                 if (_allowGeneratePartialModel)
                 {
@@ -54,7 +56,7 @@ namespace ModelGenerator.Core.Refined.Builder
                     {
                         var fileLoc = Path.Combine(_partialModelDirectory, modelFileName);
                         File.WriteAllText(fileLoc, partialModelCode);
-                        totalFiles++;
+                        this.OnFileGenerated.Invoke(fileLoc);
                     }
                 }
 
@@ -65,7 +67,7 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(_repositoryDirectory, repositoryFileName);
                     File.WriteAllText(fileLoc, repositoryCode);
-                    totalFiles++;
+                    this.OnFileGenerated.Invoke(fileLoc);
                 }
                 if (_allowGeneratePartialRepository)
                 {
@@ -76,7 +78,7 @@ namespace ModelGenerator.Core.Refined.Builder
                     {
                         var fileLoc = Path.Combine(_partialRepositoryDirectory, repositoryFileName);
                         File.WriteAllText(fileLoc, partialRepoCode);
-                        totalFiles++;
+                        this.OnFileGenerated.Invoke(fileLoc);
                     }
                 }
 
@@ -84,12 +86,11 @@ namespace ModelGenerator.Core.Refined.Builder
             var repoBasedCode = provider.GenerateRepositoryBasedFile(this._namespace);
             var repoBasedFile = Path.Combine(this._repositoryBasedDirectory, $"Repository.{provider.FileExtension}");
             File.WriteAllText(repoBasedFile, repoBasedCode);
-            totalFiles++;
+            this.OnFileGenerated.Invoke(repoBasedFile);
             var serviceCode = provider.GenerateServiceFile(this._namespace, this._databaseDefinition.Tables, this._databaseDefinition.StoredProcedures);
             var serviceFile = Path.Combine(this._directory, $"Service.{provider.FileExtension}");
             File.WriteAllText(serviceFile, serviceCode);
-            totalFiles++;
-            return totalFiles;
+            this.OnFileGenerated.Invoke(serviceFile);
         }
 
     }

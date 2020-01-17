@@ -4,18 +4,18 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Text;
 
-namespace ModelGenerator.Core.Refined.Helper
+namespace ModelGenerator.Core.Helper
 {
     public static class AttributeValidator
     {
         public static bool IsModelGeneratorEnabled(MemberInfo member)
         {
-            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Refined.Attributes.ServiceGenerateEnabledAttribute)) != null;
+            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.ServiceGenerateEnabledAttribute)) != null;
             return isAssigned;
         }
         public static bool IsControllerGeneratorEnabled(MemberInfo member)
         {
-            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Refined.Attributes.ControllerGenerateEnabledAtribute)) != null;
+            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.ControllerGenerateEnabledAtribute)) != null;
             return isAssigned;
         }
         public static string Description(MemberInfo member)

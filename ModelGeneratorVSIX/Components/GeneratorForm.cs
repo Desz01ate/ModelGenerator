@@ -1,9 +1,9 @@
-﻿using ModelGenerator.Core.Refined.Builder;
-using ModelGenerator.Core.Refined.Entity;
-using ModelGenerator.Core.Refined.Entity.ModelProvider;
-using ModelGenerator.Core.Refined.Entity.ServiceProvider;
-using ModelGenerator.Core.Refined.Enum;
-using ModelGenerator.Core.Refined.Helper;
+﻿using ModelGenerator.Core.Builder;
+using ModelGenerator.Core.Entity;
+using ModelGenerator.Core.Entity.ModelProvider;
+using ModelGenerator.Core.Entity.ServiceProvider;
+using ModelGenerator.Core.Enum;
+using ModelGenerator.Core.Helper;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using System;
@@ -31,13 +31,17 @@ namespace ModelGenerator
             this.Namespace = @namespace;
             this.Directory = directory;
             InitializeComponent();
+            Log("Components initializing...");
             cb_GeneratorMode.SelectedIndex = 1;
             cb_GeneratorMode.SelectedIndex = 0;
-            var supportedDatabase = ModelGenerator.Core.Refined.Helper.EnumHelper.Expand<SupportDatabase>();
+            var supportedDatabase = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportDatabase>();
             foreach (var database in supportedDatabase)
             {
                 cb_TargetDatabase.Items.Add(database.Name);
             }
+            cb_TargetDatabase.SelectedIndex = 0;
+            cb_GeneratorMode.SelectedIndex = 1;
+            Log("Initiailized.");
         }
 
         private void Button1_Click(object sender, EventArgs e)
@@ -48,6 +52,11 @@ namespace ModelGenerator
                 return;
             }
             var connectionString = this.txt_ConnectionString.Text;
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                Log("Connection string is not provide, process aborted.");
+            }
+            Log($"Start generate with settings : mode : {mode} | language : {language}");
             Task.Run(() =>
             {
                 DatabaseDefinition databaseDefinition = GetDatabaseDefinition(connectionString);
@@ -64,6 +73,7 @@ namespace ModelGenerator
                                 _ => throw new NotSupportedException()
                             };
                             var modelGenerator = new ModelBuilder(Directory, Namespace, databaseDefinition);
+                            modelGenerator.OnFileGenerated += (f) => Log($"Generated {f}");
                             modelGenerator.Generate(provider);
                             break;
                         case SupportMode.Service:
@@ -74,16 +84,17 @@ namespace ModelGenerator
                                 _ => throw new NotSupportedException()
                             };
                             var serviceGenerator = new ServiceBuilder(Directory, Namespace, databaseDefinition);
-                            var totalFiles = serviceGenerator.Generate(serviceProvider);
+                            serviceGenerator.OnFileGenerated += (f) => Log($"Generated {f}");
+                            serviceGenerator.Generate(serviceProvider);
                             //GeneratorFactory.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                             break;
                     }
+                    Log($"All tasks are done.");
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    Log($"Error with message : {ex.Message}");
                 }
-                MessageBox.Show("Done");
                 this.Dispose();
             });
 
@@ -92,14 +103,22 @@ namespace ModelGenerator
 
         private DatabaseDefinition GetDatabaseDefinition(string connectionString)
         {
-            return database switch
+            try
             {
-                SupportDatabase.SQLServer => SqlDefinition.GetDatabaseDefinition<SqlConnection, SqlParameter>(connectionString, (x) => $"[{x}]"),
-                SupportDatabase.MySQL => SqlDefinition.GetDatabaseDefinition<MySqlConnection, MySqlParameter>(connectionString),
-                SupportDatabase.Oracle => SqlDefinition.GetDatabaseDefinition<OracleConnection, OracleParameter>(connectionString),
-                SupportDatabase.PostgreSQL => SqlDefinition.GetDatabaseDefinition<NpgsqlConnection, NpgsqlParameter>(connectionString),
-                _ => null,
-            };
+                return database switch
+                {
+                    SupportDatabase.SQLServer => SqlDefinition.GetDatabaseDefinition<SqlConnection, SqlParameter>(connectionString, (x) => $"[{x}]"),
+                    SupportDatabase.MySQL => SqlDefinition.GetDatabaseDefinition<MySqlConnection, MySqlParameter>(connectionString),
+                    SupportDatabase.Oracle => SqlDefinition.GetDatabaseDefinition<OracleConnection, OracleParameter>(connectionString),
+                    SupportDatabase.PostgreSQL => SqlDefinition.GetDatabaseDefinition<NpgsqlConnection, NpgsqlParameter>(connectionString),
+                    _ => null,
+                };
+            }
+            catch (Exception ex)
+            {
+                Log(ex.Message);
+                return null;
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
@@ -113,7 +132,7 @@ namespace ModelGenerator
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Refined.Helper.EnumHelper.Expand<SupportLanguage>();
+                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportLanguage>();
 
                 switch (selectedIndex)
                 {
@@ -160,6 +179,24 @@ namespace ModelGenerator
                     txt_ConnectionString.Text = "Server=myServerAddress;Port=5432;Database=myDataBase;User Id=myUsername;Password = myPassword;";
                     break;
             }
+        }
+        private void Log(string text)
+        {
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new Action(() =>
+                {
+                    this.txt_Log.AppendText($"[{DateTime.Now.ToString("hh:mm:ss")}] {text} \n");
+                    this.txt_Log.ScrollToCaret();
+
+                }));
+            }
+            else
+            {
+                this.txt_Log.AppendText($"[{DateTime.Now.ToString("hh:mm:ss")}] {text} \n");
+                this.txt_Log.ScrollToCaret();
+            }
+
         }
     }
 }

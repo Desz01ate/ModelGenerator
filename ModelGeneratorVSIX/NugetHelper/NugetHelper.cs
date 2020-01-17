@@ -39,7 +39,7 @@ namespace ModelGenerator.NugetHelper
                     installer.InstallPackage("All", project, packageId, (System.Version)null, false);
                 }
             }
-            catch 
+            catch(Exception ex)
             {
                 installedPkg = false;
             }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace ModelGenerator.Core.Refined.Enum
+namespace ModelGenerator.Core.Enum
 {
     public enum SupportDatabase
     {

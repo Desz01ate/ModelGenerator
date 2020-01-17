@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace ModelGenerator.Core.Refined.Template
+namespace ModelGenerator.Core.Template
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace ModelGenerator.Core.Refined.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_TypeScript.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_TypeScript.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class RepositoryBased_TypeScript : RepositoryBased_TypeScriptBase
     {

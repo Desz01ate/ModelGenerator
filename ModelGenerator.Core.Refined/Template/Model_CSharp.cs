@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace ModelGenerator.Core.Refined.Template
+namespace ModelGenerator.Core.Template
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace ModelGenerator.Core.Refined.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class Model_CSharp : Model_CSharpBase
     {
@@ -29,7 +29,7 @@ namespace ModelGenerator.Core.Refined.Template
         public virtual string TransformText()
         {
             
-            #line 7 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 7 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
 if(!IsPartial) { 
             
             #line default
@@ -44,28 +44,28 @@ if(!IsPartial) {
 // ------------------------------------------------------------------------------
 ");
             
-            #line 16 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 16 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("using System;\r\n");
             
-            #line 18 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 18 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("namespace ");
             
-            #line 19 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 19 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n");
             
-            #line 21 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 21 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
@@ -73,81 +73,81 @@ if(!IsPartial) {
             this.Write("\t//You can get Utilities package via nuget : Install-Package Deszolate.Utilities." +
                     "Lite\r\n\t//[Utilities.Attributes.SQL.Table(\"");
             
-            #line 23 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
             this.Write("\")]\r\n\tpublic partial class ");
             
-            #line 24 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 24 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableNameTransformer(ClassName)));
             
             #line default
             #line hidden
             this.Write("\r\n\t{\r\n");
             
-            #line 26 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 26 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  if(!IsPartial) { 
             
             #line default
             #line hidden
             
-            #line 27 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  foreach(var column in Columns) { 
             
             #line default
             #line hidden
             
-            #line 28 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 28 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  if(!string.IsNullOrWhiteSpace(PrimaryKey) && column.ColumnName == PrimaryKey) { 
             
             #line default
             #line hidden
             this.Write("\t\t//[Utilities.Attributes.SQL.PrimaryKey]\r\n");
             
-            #line 30 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\tpublic ");
             
-            #line 31 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 31 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DataTypeMap(column)));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 31 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 31 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
             
             #line default
             #line hidden
             this.Write(" { get; set; }\r\n");
             
-            #line 32 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 32 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
             #line hidden
             
-            #line 33 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t}\r\n");
             
-            #line 35 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("}\r\n");
             
-            #line 37 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
@@ -156,7 +156,7 @@ if(!IsPartial) {
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 39 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+        #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 	public string PrimaryKey {get;set;} = null;

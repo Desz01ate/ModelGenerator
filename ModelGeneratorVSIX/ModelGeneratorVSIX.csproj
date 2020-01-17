@@ -150,9 +150,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ModelGenerator.Core.Refined\ModelGenerator.Core.Refined.csproj">
+    <ProjectReference Include="..\ModelGenerator.Core.Refined\ModelGenerator.Core.csproj">
       <Project>{8def67ce-e50e-4339-afc7-7cc8cebe2ff2}</Project>
-      <Name>ModelGenerator.Core.Refined</Name>
+      <Name>ModelGenerator.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace ModelGenerator.Core.Refined.Template
+namespace ModelGenerator.Core.Template
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace ModelGenerator.Core.Refined.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class Repository_TypeScript : Repository_TypeScriptBase
     {
@@ -40,28 +40,28 @@ namespace ModelGenerator.Core.Refined.Template
 import { Repository } from './Based/Repository';
 import { ");
             
-            #line 17 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
+            #line 17 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableName));
             
             #line default
             #line hidden
             this.Write(" } from \'../Models/");
             
-            #line 17 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
+            #line 17 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Table.Name));
             
             #line default
             #line hidden
             this.Write("\';\r\nexport default class ");
             
-            #line 18 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
+            #line 18 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(RepositoryName));
             
             #line default
             #line hidden
             this.Write(" extends Repository<");
             
-            #line 18 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
+            #line 18 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableName));
             
             #line default
@@ -70,11 +70,11 @@ import { ");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 22 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
+        #line 22 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_TypeScript.tt"
 
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
-	public ModelGenerator.Core.Refined.Entity.Table Table { get; set; }
+	public ModelGenerator.Core.Entity.Table Table { get; set; }
 	public bool IsPartial {get;set;}
 	public string TableName => TableNameTransformer(Table.Name);
 	public string RepositoryName => $"{TableName}Repository";

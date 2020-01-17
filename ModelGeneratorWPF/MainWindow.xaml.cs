@@ -1,12 +1,12 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using ModelGenerator.Core.Refined.Builder;
-using ModelGenerator.Core.Refined.Entity;
-using ModelGenerator.Core.Refined.Entity.ModelProvider;
-using ModelGenerator.Core.Refined.Entity.ServiceProvider;
-using ModelGenerator.Core.Refined.Enum;
-using ModelGenerator.Core.Refined.Helper;
-using ModelGenerator.Core.Refined.Interface;
+using ModelGenerator.Core.Builder;
+using ModelGenerator.Core.Entity;
+using ModelGenerator.Core.Entity.ModelProvider;
+using ModelGenerator.Core.Entity.ServiceProvider;
+using ModelGenerator.Core.Enum;
+using ModelGenerator.Core.Helper;
+using ModelGenerator.Core.Interface;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using Oracle.ManagedDataAccess.Client;
@@ -37,7 +37,7 @@ namespace ModelGeneratorWPF
             #region initializer
             cb_GeneratorMode.SelectedIndex = 1;
             cb_GeneratorMode.SelectedIndex = 0;
-            var supportedDatabase = ModelGenerator.Core.Refined.Helper.EnumHelper.Expand<SupportDatabase>();
+            var supportedDatabase = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportDatabase>();
             foreach (var database in supportedDatabase)
             {
                 cb_TargetDatabase.Items.Add(database.Name);
@@ -52,7 +52,7 @@ namespace ModelGeneratorWPF
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Refined.Helper.EnumHelper.Expand<SupportLanguage>();
+                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportLanguage>();
 
                 switch (selectedIndex)
                 {
@@ -113,6 +113,10 @@ namespace ModelGeneratorWPF
             btn_Generate.IsEnabled = false;
             var connectionString = txt_connectionString.Text;
             var @namespace = txt_namespace.Text;
+            if (string.IsNullOrWhiteSpace(connectionString))
+            {
+                Log("Connection string is not provide, process aborted.");
+            }
             Log($"Start generate with settings : mode : {mode} | language : {language}");
             Task.Run(async () =>
             {
@@ -130,8 +134,9 @@ namespace ModelGeneratorWPF
                                 _ => throw new NotSupportedException()
                             };
                             var modelGenerator = new ModelBuilder(outputDir, @namespace, databaseDefinition);
-                            var total = modelGenerator.Generate(provider);
-                            Log($"{total} files generated.");
+                            modelGenerator.OnFileGenerated += (f) => Log($"Generated {f}");
+                            modelGenerator.Generate(provider);
+
                             break;
                         case SupportMode.Service:
                             IServiceBuilderProvider serviceProvider = language switch
@@ -141,20 +146,21 @@ namespace ModelGeneratorWPF
                                 _ => throw new NotSupportedException()
                             };
                             var serviceGenerator = new ServiceBuilder(outputDir, @namespace, databaseDefinition);
-                            var genServiceTotal = serviceGenerator.Generate(serviceProvider);
-                            Log($"{genServiceTotal} files generated.");
+                            serviceGenerator.OnFileGenerated += (f) => Log($"Generated {f}");
+                            serviceGenerator.Generate(serviceProvider);
+
 
                             //GeneratorFactory.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                             break;
                     }
+                    Log($"All tasks are done.");
                     Process.Start("explorer.exe", outputDir);
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message);
+                    Log($"Error with message : {ex.Message}");
                 }
             });
-            btn_Generate.Content = "Generate";
             btn_Generate.IsEnabled = true;
         }
         private void Log(string text)
@@ -162,18 +168,27 @@ namespace ModelGeneratorWPF
             this.Dispatcher.Invoke(() =>
             {
                 this.txt_richProgress.AppendText($"[{DateTime.Now.ToString("hh:mm:ss")}] {text} \n");
+                this.txt_richProgress.ScrollToEnd();
             });
         }
         private DatabaseDefinition GetDatabaseDefinition(string connectionString)
         {
-            return database switch
+            try
             {
-                SupportDatabase.SQLServer => SqlDefinition.GetDatabaseDefinition<SqlConnection, SqlParameter>(connectionString, (x) => $"[{x}]"),
-                SupportDatabase.MySQL => SqlDefinition.GetDatabaseDefinition<MySqlConnection, MySqlParameter>(connectionString),
-                SupportDatabase.Oracle => SqlDefinition.GetDatabaseDefinition<OracleConnection, OracleParameter>(connectionString),
-                SupportDatabase.PostgreSQL => SqlDefinition.GetDatabaseDefinition<NpgsqlConnection, NpgsqlParameter>(connectionString),
-                _ => null,
-            };
+                return database switch
+                {
+                    SupportDatabase.SQLServer => SqlDefinition.GetDatabaseDefinition<SqlConnection, SqlParameter>(connectionString, (x) => $"[{x}]"),
+                    SupportDatabase.MySQL => SqlDefinition.GetDatabaseDefinition<MySqlConnection, MySqlParameter>(connectionString),
+                    SupportDatabase.Oracle => SqlDefinition.GetDatabaseDefinition<OracleConnection, OracleParameter>(connectionString),
+                    SupportDatabase.PostgreSQL => SqlDefinition.GetDatabaseDefinition<NpgsqlConnection, NpgsqlParameter>(connectionString),
+                    _ => null,
+                };
+            }
+            catch (Exception ex)
+            {
+                Log(ex.Message);
+                return null;
+            }
         }
 
         private void Txt_outputDir_MouseDown(object sender, MouseButtonEventArgs e)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Utilities.Classes;
 
-namespace ModelGenerator.Core.Refined.Entity
+namespace ModelGenerator.Core.Entity
 {
     public class DatabaseDefinition
     {

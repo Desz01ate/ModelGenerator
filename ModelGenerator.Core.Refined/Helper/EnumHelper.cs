@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace ModelGenerator.Core.Refined.Helper
+namespace ModelGenerator.Core.Helper
 {
     public static class EnumHelper
     {

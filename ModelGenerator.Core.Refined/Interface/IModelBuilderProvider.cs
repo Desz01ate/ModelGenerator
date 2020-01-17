@@ -1,9 +1,9 @@
-﻿using ModelGenerator.Core.Refined.Entity;
+﻿using ModelGenerator.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace ModelGenerator.Core.Refined.Interface
+namespace ModelGenerator.Core.Interface
 {
     public interface IModelBuilderProvider
     {

@@ -1,12 +1,12 @@
-﻿using ModelGenerator.Core.Refined.Interface;
-using ModelGenerator.Core.Refined.Template;
+﻿using ModelGenerator.Core.Interface;
+using ModelGenerator.Core.Template;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Utilities.Classes;
 
-namespace ModelGenerator.Core.Refined.Entity.ModelProvider
+namespace ModelGenerator.Core.Entity.ModelProvider
 {
     public class VisualBasicModelProvider : IModelBuilderProvider
     {

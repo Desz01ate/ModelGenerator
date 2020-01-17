@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace ModelGenerator.Core.Refined.Enum
+namespace ModelGenerator.Core.Enum
 {
     public enum SupportMode
     {

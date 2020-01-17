@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace ModelGenerator.Core.Refined.Template
+namespace ModelGenerator.Core.Template
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace ModelGenerator.Core.Refined.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class Model_VisualBasic : Model_VisualBasicBase
     {
@@ -29,7 +29,7 @@ namespace ModelGenerator.Core.Refined.Template
         public virtual string TransformText()
         {
             
-            #line 7 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 7 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
 if(!IsPartial) { 
             
             #line default
@@ -44,28 +44,28 @@ if(!IsPartial) {
 '------------------------------------------------------------------------------
 ");
             
-            #line 16 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 16 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  } 
             
             #line default
             #line hidden
             this.Write("Imports System\r\n");
             
-            #line 18 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 18 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("Namespace ");
             
-            #line 19 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 19 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 20 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 20 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  } 
             
             #line default
@@ -73,81 +73,81 @@ if(!IsPartial) {
             this.Write("\t\'You can get Utilities package via nuget : Install-Package Deszolate.Utilities.L" +
                     "ite\r\n\t\'<Utilities.Attributes.SQL.Table(\"");
             
-            #line 22 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 22 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
             this.Write("\")>\r\n\tPublic Partial Class ");
             
-            #line 23 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableNameTransformer(ClassName)));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 24 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 24 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  if(!IsPartial) { 
             
             #line default
             #line hidden
             
-            #line 25 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 25 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  foreach(var column in Columns) { 
             
             #line default
             #line hidden
             
-            #line 26 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 26 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  if(!string.IsNullOrWhiteSpace(PrimaryKey) && column.ColumnName == PrimaryKey) { 
             
             #line default
             #line hidden
             this.Write("\t\t\'<Utilities.Attributes.SQL.PrimaryKey>\r\n");
             
-            #line 28 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 28 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t\tPublic Property ");
             
-            #line 29 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
             
             #line default
             #line hidden
             this.Write(" As ");
             
-            #line 29 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DataTypeMap(column)));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 30 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  } 
             
             #line default
             #line hidden
             
-            #line 31 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 31 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\tEnd Class\r\n");
             
-            #line 33 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("End Namespace\r\n");
             
-            #line 35 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
  } 
             
             #line default
@@ -156,7 +156,7 @@ if(!IsPartial) {
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 37 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
+        #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_VisualBasic.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 	public string PrimaryKey {get;set;} = null;

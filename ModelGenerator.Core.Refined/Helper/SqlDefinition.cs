@@ -1,4 +1,4 @@
-﻿using ModelGenerator.Core.Refined.Entity;
+﻿using ModelGenerator.Core.Entity;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -11,7 +11,7 @@ using Utilities.Enum;
 using Utilities.Shared;
 using Utilities.SQL.Extension;
 
-namespace ModelGenerator.Core.Refined.Helper
+namespace ModelGenerator.Core.Helper
 {
     public static class SqlDefinition
     {

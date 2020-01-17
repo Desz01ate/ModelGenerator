@@ -22,7 +22,7 @@ export default class <#= RepositoryName #> extends Repository<<#= TableName #>>
 <#+
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
-	public ModelGenerator.Core.Refined.Entity.Table Table { get; set; }
+	public ModelGenerator.Core.Entity.Table Table { get; set; }
 	public bool IsPartial {get;set;}
 	public string TableName => TableNameTransformer(Table.Name);
 	public string RepositoryName => $"{TableName}Repository";

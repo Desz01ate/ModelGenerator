@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ModelGenerator.Core.Refined\ModelGenerator.Core.Refined.csproj" />
+    <ProjectReference Include="..\ModelGenerator.Core.Refined\ModelGenerator.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,13 +1,13 @@
-﻿using ModelGenerator.Core.Refined.Entity.ModelProvider;
-using ModelGenerator.Core.Refined.Interface;
-using ModelGenerator.Core.Refined.Template;
+﻿using ModelGenerator.Core.Entity.ModelProvider;
+using ModelGenerator.Core.Interface;
+using ModelGenerator.Core.Template;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Utilities.Classes;
 
-namespace ModelGenerator.Core.Refined.Entity.ServiceProvider
+namespace ModelGenerator.Core.Entity.ServiceProvider
 {
     public class TypescriptServiceProvider : TypeScriptModelProvider, IServiceBuilderProvider
     {

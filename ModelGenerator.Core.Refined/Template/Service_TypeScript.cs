@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace ModelGenerator.Core.Refined.Template
+namespace ModelGenerator.Core.Template
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace ModelGenerator.Core.Refined.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class Service_TypeScript : Service_TypeScriptBase
     {
@@ -29,52 +29,52 @@ namespace ModelGenerator.Core.Refined.Template
         public virtual string TransformText()
         {
             
-            #line 7 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 7 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  var members = new System.Collections.Generic.List<string>(); 
             
             #line default
             #line hidden
             
-            #line 8 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 8 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  foreach(var table in Tables) { 
             
             #line default
             #line hidden
             
-            #line 9 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 9 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  var tableName = TableNameTransformer(table.Name); 
             
             #line default
             #line hidden
             
-            #line 10 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 10 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  var repositoryName = $"{tableName}Repository"; 
             
             #line default
             #line hidden
             
-            #line 11 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 11 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  members.Add($"readonly {tableName} : {repositoryName} = new {repositoryName}();"); 
             
             #line default
             #line hidden
             this.Write("import ");
             
-            #line 12 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 12 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(repositoryName));
             
             #line default
             #line hidden
             this.Write(" from \'./Repositories/");
             
-            #line 12 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 12 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(table.Name + "Repository"));
             
             #line default
             #line hidden
             this.Write("\';\r\n");
             
-            #line 13 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 13 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  } 
             
             #line default
@@ -82,21 +82,21 @@ namespace ModelGenerator.Core.Refined.Template
             this.Write("export default class Service\r\n{\r\n\tstatic Context : Service = new Service();\r\n\tpri" +
                     "vate constructor()\r\n\t{\r\n\t}\r\n");
             
-            #line 20 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 20 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  foreach(var member in members) { 
             
             #line default
             #line hidden
             this.Write("\t");
             
-            #line 21 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 21 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(member));
             
             #line default
             #line hidden
             this.Write("\r\n");
             
-            #line 22 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+            #line 22 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
  } 
             
             #line default
@@ -105,11 +105,11 @@ namespace ModelGenerator.Core.Refined.Template
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 24 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
+        #line 24 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_TypeScript.tt"
 
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
-	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Refined.Entity.Table> Tables { get; set; }
+	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Entity.Table> Tables { get; set; }
 	public System.Collections.Generic.IEnumerable<Utilities.Classes.StoredProcedureSchema> StoredProcedures {get;set;}
 	public string DatabaseType { get; set; }
 	public string DatabaseParamType { get; set ;}

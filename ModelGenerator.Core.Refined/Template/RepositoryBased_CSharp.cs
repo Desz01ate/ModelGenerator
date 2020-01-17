@@ -7,7 +7,7 @@
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
-namespace ModelGenerator.Core.Refined.Template
+namespace ModelGenerator.Core.Template
 {
     using System.Linq;
     using System.Text;
@@ -18,7 +18,7 @@ namespace ModelGenerator.Core.Refined.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class RepositoryBased_CSharp : RepositoryBased_CSharpBase
     {
@@ -47,7 +47,7 @@ using Utilities.Interfaces;
 
 namespace ");
             
-            #line 23 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
+            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
@@ -146,7 +146,7 @@ namespace ");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 241 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
+        #line 241 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 

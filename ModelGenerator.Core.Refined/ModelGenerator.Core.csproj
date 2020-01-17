@@ -1,0 +1,134 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <LangVersion>8.0</LangVersion>
+    <Nullable>enable</Nullable>
+    <AssemblyName>ModelGenerator.Core</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="Template\Model_VisualBasic.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model_VisualBasic.tt</DependentUpon>
+    </None>
+    <None Include="Template\RepositoryBased_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RepositoryBased_CSharp.tt</DependentUpon>
+    </None>
+    <None Include="Template\Repository_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Repository_CSharp.tt</DependentUpon>
+    </None>
+    <None Include="Template\Service_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Service_CSharp.tt</DependentUpon>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Deszolate.Utilities.Lite" Version="0.2.1.5" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="1.1.0" />
+    <PackageReference Include="System.CodeDom" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Template\Model_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Model_CSharp.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Model_TypeScript.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Model_TypeScript.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Model_VisualBasic.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Model_VisualBasic.cs</LastGenOutput>
+    </None>
+    <None Update="Template\RepositoryBased_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RepositoryBased_CSharp.cs</LastGenOutput>
+    </None>
+    <None Update="Template\RepositoryBased_TypeScript.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>RepositoryBased_TypeScript.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Repository_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Repository_CSharp.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Repository_TypeScript.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Repository_TypeScript.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Service_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Service_CSharp.cs</LastGenOutput>
+    </None>
+    <None Update="Template\Service_TypeScript.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Service_TypeScript.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Template\Model_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model_CSharp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\Model_TypeScript.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model_TypeScript.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\Model_VisualBasic.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Model_VisualBasic.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\RepositoryBased_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RepositoryBased_CSharp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\RepositoryBased_TypeScript.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>RepositoryBased_TypeScript.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\Repository_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Repository_CSharp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\Repository_TypeScript.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Repository_TypeScript.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\Service_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Service_CSharp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\Service_TypeScript.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Service_TypeScript.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Attributes\" />
+  </ItemGroup>
+
+</Project>

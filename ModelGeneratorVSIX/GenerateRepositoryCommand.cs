@@ -2,17 +2,10 @@
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using ModelGenerator.Core.Refined.Entity;
-using ModelGenerator.Core.Refined.Enum;
-using ModelGenerator.Core.Refined.Helper;
+using ModelGenerator.Core.Enum;
 using ModelGenerator.Helpers;
-using MySql.Data.MySqlClient;
-using Npgsql;
 using System;
 using System.ComponentModel.Design;
-using System.Data.OracleClient;
-using System.Data.SqlClient;
-using System.IO;
 using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
 

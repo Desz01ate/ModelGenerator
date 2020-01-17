@@ -1,12 +1,14 @@
-﻿using ModelGenerator.Core.Refined.Entity;
-using ModelGenerator.Core.Refined.Interface;
+﻿using ModelGenerator.Core.Entity;
+using ModelGenerator.Core.Event;
+using ModelGenerator.Core.Interface;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static ModelGenerator.Core.Event.Delegate.File;
 
-namespace ModelGenerator.Core.Refined.Builder
+namespace ModelGenerator.Core.Builder
 {
     public sealed class ModelBuilder
     {
@@ -15,6 +17,7 @@ namespace ModelGenerator.Core.Refined.Builder
         private readonly bool _allowGeneratePartial;
         private readonly string? _namespace;
         private readonly DatabaseDefinition _databaseDefinition;
+        public event OnFileGenerated OnFileGenerated;
         public ModelBuilder(string directory, string? @namespace, DatabaseDefinition databaseDefinition)
         {
             this._directory = directory;
@@ -28,9 +31,8 @@ namespace ModelGenerator.Core.Refined.Builder
             this._namespace = @namespace;
             this._databaseDefinition = databaseDefinition;
         }
-        public int Generate(IModelBuilderProvider provider)
+        public void Generate(IModelBuilderProvider provider)
         {
-            var totalFiles = 0;
             foreach (var table in this._databaseDefinition.Tables)
             {
                 var modelCode = provider.GenerateModelFile(this._namespace, table);
@@ -39,7 +41,7 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(_directory, fileName);
                     File.WriteAllText(fileLoc, modelCode);
-                    totalFiles++;
+                    this.OnFileGenerated.Invoke(fileLoc);
                 }
                 if (!_allowGeneratePartial) continue;
                 var partialModelCode = provider.GeneratePartialModelFile(this._namespace, table);
@@ -47,10 +49,9 @@ namespace ModelGenerator.Core.Refined.Builder
                 {
                     var fileLoc = Path.Combine(Path.Combine(_directory, "Partials"), fileName);
                     File.WriteAllText(fileLoc, partialModelCode);
-                    totalFiles++;
+                    this.OnFileGenerated.Invoke(fileLoc);
                 }
             }
-            return totalFiles;
         }
     }
 }

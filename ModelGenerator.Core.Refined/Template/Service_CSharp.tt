@@ -67,7 +67,7 @@ namespace <#= Namespace #>
 <#+
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
-	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Refined.Entity.Table> Tables { get; set; }
+	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Entity.Table> Tables { get; set; }
 	public System.Collections.Generic.IEnumerable<Utilities.Classes.StoredProcedureSchema> StoredProcedures {get;set;}
 	public string DatabaseType { get; set; }
 	public string DatabaseParamType { get; set ;}

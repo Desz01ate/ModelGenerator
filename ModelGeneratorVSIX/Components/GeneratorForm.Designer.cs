@@ -37,13 +37,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cb_AutoReload = new System.Windows.Forms.CheckBox();
+            this.txt_Log = new System.Windows.Forms.RichTextBox();
             this.SuspendLayout();
             // 
             // btn_Generate
             // 
-            this.btn_Generate.Location = new System.Drawing.Point(12, 257);
+            this.btn_Generate.Location = new System.Drawing.Point(12, 205);
             this.btn_Generate.Name = "btn_Generate";
             this.btn_Generate.Size = new System.Drawing.Size(536, 43);
             this.btn_Generate.TabIndex = 0;
@@ -56,7 +55,7 @@
             this.txt_ConnectionString.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.txt_ConnectionString.Location = new System.Drawing.Point(170, 127);
             this.txt_ConnectionString.Name = "txt_ConnectionString";
-            this.txt_ConnectionString.Size = new System.Drawing.Size(370, 72);
+            this.txt_ConnectionString.Size = new System.Drawing.Size(378, 72);
             this.txt_ConnectionString.TabIndex = 1;
             this.txt_ConnectionString.Text = "";
             // 
@@ -70,7 +69,7 @@
             "Controller"});
             this.cb_GeneratorMode.Location = new System.Drawing.Point(170, 12);
             this.cb_GeneratorMode.Name = "cb_GeneratorMode";
-            this.cb_GeneratorMode.Size = new System.Drawing.Size(370, 21);
+            this.cb_GeneratorMode.Size = new System.Drawing.Size(378, 21);
             this.cb_GeneratorMode.TabIndex = 2;
             this.cb_GeneratorMode.SelectedIndexChanged += new System.EventHandler(this.Cb_GeneratorMode_SelectedIndexChanged);
             // 
@@ -80,7 +79,7 @@
             this.cb_TargetLang.FormattingEnabled = true;
             this.cb_TargetLang.Location = new System.Drawing.Point(170, 51);
             this.cb_TargetLang.Name = "cb_TargetLang";
-            this.cb_TargetLang.Size = new System.Drawing.Size(370, 21);
+            this.cb_TargetLang.Size = new System.Drawing.Size(378, 21);
             this.cb_TargetLang.TabIndex = 3;
             this.cb_TargetLang.SelectedIndexChanged += new System.EventHandler(this.Cb_TargetLang_SelectedIndexChanged);
             // 
@@ -90,7 +89,7 @@
             this.cb_TargetDatabase.FormattingEnabled = true;
             this.cb_TargetDatabase.Location = new System.Drawing.Point(170, 90);
             this.cb_TargetDatabase.Name = "cb_TargetDatabase";
-            this.cb_TargetDatabase.Size = new System.Drawing.Size(370, 21);
+            this.cb_TargetDatabase.Size = new System.Drawing.Size(378, 21);
             this.cb_TargetDatabase.TabIndex = 4;
             this.cb_TargetDatabase.SelectedIndexChanged += new System.EventHandler(this.Cb_TargetDatabase_SelectedIndexChanged);
             // 
@@ -130,31 +129,23 @@
             this.label4.TabIndex = 8;
             this.label4.Text = "Connection string :";
             // 
-            // label5
+            // txt_Log
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 227);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(127, 13);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Automatic reload project :";
-            // 
-            // cb_AutoReload
-            // 
-            this.cb_AutoReload.AutoSize = true;
-            this.cb_AutoReload.Location = new System.Drawing.Point(170, 227);
-            this.cb_AutoReload.Name = "cb_AutoReload";
-            this.cb_AutoReload.Size = new System.Drawing.Size(15, 14);
-            this.cb_AutoReload.TabIndex = 10;
-            this.cb_AutoReload.UseVisualStyleBackColor = true;
+            this.txt_Log.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txt_Log.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.txt_Log.Location = new System.Drawing.Point(12, 254);
+            this.txt_Log.Name = "txt_Log";
+            this.txt_Log.ReadOnly = true;
+            this.txt_Log.Size = new System.Drawing.Size(536, 200);
+            this.txt_Log.TabIndex = 11;
+            this.txt_Log.Text = "";
             // 
             // GeneratorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(560, 312);
-            this.Controls.Add(this.cb_AutoReload);
-            this.Controls.Add(this.label5);
+            this.ClientSize = new System.Drawing.Size(561, 463);
+            this.Controls.Add(this.txt_Log);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -164,6 +155,7 @@
             this.Controls.Add(this.cb_GeneratorMode);
             this.Controls.Add(this.txt_ConnectionString);
             this.Controls.Add(this.btn_Generate);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "GeneratorForm";
@@ -185,7 +177,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.CheckBox cb_AutoReload;
+        private System.Windows.Forms.RichTextBox txt_Log;
     }
 }
