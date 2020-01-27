@@ -18,7 +18,7 @@ namespace ModelGenerator.Core.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+    #line 1 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class Repository_CSharp : Repository_CSharpBase
     {
@@ -29,7 +29,7 @@ namespace ModelGenerator.Core.Template
         public virtual string TransformText()
         {
             
-            #line 7 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 7 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
 if(!IsPartial) { 
             
             #line default
@@ -44,126 +44,126 @@ if(!IsPartial) {
 // ------------------------------------------------------------------------------
 ");
             
-            #line 16 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 16 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("using Utilities.Interfaces;\r\n");
             
-            #line 18 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 18 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 19 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 19 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write(".Repositories.Based;\r\nusing ");
             
-            #line 20 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 20 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write(".Models;\r\nnamespace ");
             
-            #line 21 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 21 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write("\r\n{\r\n");
+            this.Write(".Repositories\r\n{\r\n");
             
-            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 23 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t///<summary>\r\n\t/// Data contractor for ");
             
-            #line 25 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 25 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableName));
             
             #line default
             #line hidden
             this.Write("\r\n\t///</summary>\r\n\tpublic partial class ");
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 27 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(RepositoryName));
             
             #line default
             #line hidden
             this.Write(" : Repository<");
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 27 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableName));
             
             #line default
             #line hidden
             this.Write(",");
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 27 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProvider));
             
             #line default
             #line hidden
             this.Write(",");
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 27 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProviderParameterType));
             
             #line default
             #line hidden
             this.Write(">\r\n\t{\r\n");
             
-            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 29 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  if(!IsPartial) { 
             
             #line default
             #line hidden
             this.Write("\t\tpublic ");
             
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 30 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(RepositoryName));
             
             #line default
             #line hidden
             this.Write("(IDatabaseConnectorExtension<");
             
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 30 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProvider));
             
             #line default
             #line hidden
             this.Write(",");
             
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 30 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProviderParameterType));
             
             #line default
             #line hidden
             this.Write("> connector) : base(connector)\r\n\t\t{\r\n\t\t}\r\n");
             
-            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 33 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t}\r\n");
             
-            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 35 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("}\r\n");
             
-            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 37 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  } 
             
             #line default
@@ -172,7 +172,7 @@ if(!IsPartial) {
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+        #line 39 "D:\Users\TYCHE\Source\Repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
 
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);

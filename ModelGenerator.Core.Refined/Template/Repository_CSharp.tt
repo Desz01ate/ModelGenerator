@@ -18,7 +18,7 @@ using Utilities.Interfaces;
 <# if(IsNamespaceProvided) { #>
 using <#= Namespace #>.Repositories.Based;
 using <#= Namespace #>.Models;
-namespace <#= Namespace #>
+namespace <#= Namespace #>.Repositories
 {
 <# } #>
 	///<summary>
