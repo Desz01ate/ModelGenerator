@@ -37,6 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Template\Controller_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>Controller_CSharp.cs</LastGenOutput>
+    </None>
     <None Update="Template\Model_CSharp.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>Model_CSharp.cs</LastGenOutput>
@@ -80,6 +84,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Template\Controller_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Controller_CSharp.tt</DependentUpon>
+    </Compile>
     <Compile Update="Template\Model_CSharp.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -125,10 +134,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Service_TypeScript.tt</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Attributes\" />
   </ItemGroup>
 
 </Project>

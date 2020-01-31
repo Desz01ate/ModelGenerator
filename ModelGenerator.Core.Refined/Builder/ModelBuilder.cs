@@ -23,11 +23,8 @@ namespace ModelGenerator.Core.Builder
             this._directory = directory;
             this._partialDirectory = Path.Combine(directory, "Partials");
             Directory.CreateDirectory(_directory);
-            if (!Directory.Exists(_partialDirectory))
-            {
-                Directory.CreateDirectory(_partialDirectory);
-                _allowGeneratePartial = true;
-            }
+            Directory.CreateDirectory(_partialDirectory);
+            _allowGeneratePartial = true;
             this._namespace = @namespace;
             this._databaseDefinition = databaseDefinition;
         }
@@ -41,15 +38,18 @@ namespace ModelGenerator.Core.Builder
                 {
                     var fileLoc = Path.Combine(_directory, fileName);
                     File.WriteAllText(fileLoc, modelCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    this.OnFileGenerated?.Invoke(fileLoc);
                 }
                 if (!_allowGeneratePartial) continue;
-                var partialModelCode = provider.GeneratePartialModelFile(this._namespace, table);
-                if (!string.IsNullOrWhiteSpace(partialModelCode))
+                var partialFileLoc = Path.Combine(Path.Combine(_directory, "Partials"), fileName);
+                if (!File.Exists(partialFileLoc))
                 {
-                    var fileLoc = Path.Combine(Path.Combine(_directory, "Partials"), fileName);
-                    File.WriteAllText(fileLoc, partialModelCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    var partialModelCode = provider.GeneratePartialModelFile(this._namespace, table);
+                    if (!string.IsNullOrWhiteSpace(partialModelCode))
+                    {
+                        File.WriteAllText(partialFileLoc, partialModelCode);
+                        this.OnFileGenerated?.Invoke(partialFileLoc);
+                    }
                 }
             }
         }

@@ -1,11 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
-using ModelGenerator.Core.Refined.Builder;
-using ModelGenerator.Core.Refined.Entity.ModelProvider;
-using ModelGenerator.Core.Refined.Entity.ServiceProvider;
-using ModelGenerator.Core.Refined.Helper;
-using System;
-using System.Data;
-using System.Linq;
+using ModelGenerator.Core.Builder;
+using ModelGenerator.Core.Helper;
 
 namespace Runner
 {

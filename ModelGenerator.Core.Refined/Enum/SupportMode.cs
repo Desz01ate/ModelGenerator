@@ -7,6 +7,7 @@ namespace ModelGenerator.Core.Enum
     public enum SupportMode
     {
         Model,
-        Service
+        Service,
+        Controller
     }
 }

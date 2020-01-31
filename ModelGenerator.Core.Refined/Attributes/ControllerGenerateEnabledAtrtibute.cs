@@ -5,7 +5,7 @@ using System.Text;
 namespace ModelGenerator.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.All)]
-    public class ControllerGenerateEnabledAtribute : Attribute
+    public class ControllerGenerateEnabledAttribute : Attribute
     {
     }
 }

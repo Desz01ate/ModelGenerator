@@ -18,9 +18,9 @@ namespace ModelGenerator.Core.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class Repository_CSharp : Repository_CSharpBase
+    public partial class Controller_CSharp : Controller_CSharpBase
     {
 #line hidden
         /// <summary>
@@ -29,7 +29,7 @@ namespace ModelGenerator.Core.Template
         public virtual string TransformText()
         {
             
-            #line 7 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 7 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
 if(!IsPartial) { 
             
             #line default
@@ -44,142 +44,82 @@ if(!IsPartial) {
 // ------------------------------------------------------------------------------
 ");
             
-            #line 16 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 16 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("using Utilities.Interfaces;\r\n");
+            this.Write("using System;\r\nusing System.Threading.Tasks;\r\nusing System.Collections.Generic;\r\n" +
+                    "using Microsoft.AspNetCore.Mvc;\r\nusing ");
             
-            #line 18 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
- if(IsNamespaceProvided) { 
-            
-            #line default
-            #line hidden
-            this.Write("using ");
-            
-            #line 19 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 21 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write(".Repositories.Based;\r\nusing ");
+            this.Write(".Models;\r\n\r\nnamespace ");
             
-            #line 20 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write(".Models;\r\nnamespace ");
+            this.Write(".Controllers\r\n{\r\n\t[Route(\"api/[controller]\")]\r\n\t[ApiController]\r\n\tpublic class ");
             
-            #line 21 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
-            
-            #line default
-            #line hidden
-            this.Write(".Repositories\r\n{\r\n");
-            
-            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
- } 
+            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TableNameTransformer(ClassName)));
             
             #line default
             #line hidden
-            this.Write("\t///<summary>\r\n\t/// Data contractor for ");
+            this.Write("Controller : ControllerBase\r\n\t{\r\n\t\tprivate readonly Service _service;\r\n\t\tpublic ");
             
-            #line 25 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TableName));
-            
-            #line default
-            #line hidden
-            this.Write("\r\n\t///</summary>\r\n\tpublic partial class ");
-            
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RepositoryName));
+            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(TableNameTransformer(ClassName)));
             
             #line default
             #line hidden
-            this.Write(" : Repository<");
+            this.Write("Controller(Service service)\r\n\t\t{\r\n\t\t\tthis._service = service;\r\n\t\t}\r\n\t\t[HttpGet]\r\n" +
+                    "\t\tpublic IEnumerable<");
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TableName));
-            
-            #line default
-            #line hidden
-            this.Write(",");
-            
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProvider));
+            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
-            this.Write(",");
-            
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProviderParameterType));
-            
-            #line default
-            #line hidden
-            this.Write(">\r\n\t{\r\n");
-            
-            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
- if(!IsPartial) { 
-            
-            #line default
-            #line hidden
-            this.Write("\t\tpublic ");
-            
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(RepositoryName));
-            
-            #line default
-            #line hidden
-            this.Write("(IDatabaseConnectorExtension<");
-            
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProvider));
-            
-            #line default
-            #line hidden
-            this.Write(",");
-            
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProviderParameterType));
-            
-            #line default
-            #line hidden
-            this.Write("> connector) : base(connector)\r\n\t\t{\r\n\t\t}\r\n");
-            
-            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\t}\r\n");
-            
-            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
- if(IsNamespaceProvided) { 
-            
-            #line default
-            #line hidden
-            this.Write("}\r\n");
-            
-            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\r\n");
+            this.Write(@"> Get()
+		{
+			throw new NotImplementedException();
+		}
+		[HttpPost]
+		public void Post([FromBody] object data)
+		{
+			throw new NotImplementedException();
+		}
+		[HttpPatch]
+		public void Patch([FromBody] object data)
+		{
+			throw new NotImplementedException();
+		}
+		[HttpDelete]
+		public void Delete([FromBody] object data)
+		{
+			throw new NotImplementedException();
+		}
+	}
+}
+
+");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+        #line 57 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
 
-	public string Namespace {get; set;}
+	public string Namespace {get; set;} = "YourNamespace";
+	public string PrimaryKey {get;set;} = null;
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
-	public ModelGenerator.Core.Entity.Table Table { get; set; }
+	public string ClassName {get; set;}
+	public System.Collections.Generic.IEnumerable<Utilities.Classes.TableSchema> Columns {get;set;}
 	public bool IsPartial {get;set;}
-	public string TableName => TableNameTransformer(Table.Name);
-	public string RepositoryName => $"{TableName.ToString().ToUpper()}{TableName[1..].ToLower()}Repository";
 	public Func<Utilities.Classes.TableSchema,string> DataTypeMap { get; set; }
 	public Func<string,string> TableNameTransformer {get;set;}
 
@@ -195,7 +135,7 @@ if(!IsPartial) {
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class Repository_CSharpBase
+    public class Controller_CSharpBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

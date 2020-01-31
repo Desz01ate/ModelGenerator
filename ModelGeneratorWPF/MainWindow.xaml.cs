@@ -2,11 +2,12 @@
 using Microsoft.WindowsAPICodePack.Dialogs;
 using ModelGenerator.Core.Builder;
 using ModelGenerator.Core.Entity;
-using ModelGenerator.Core.Entity.ModelProvider;
-using ModelGenerator.Core.Entity.ServiceProvider;
 using ModelGenerator.Core.Enum;
 using ModelGenerator.Core.Helper;
 using ModelGenerator.Core.Interface;
+using ModelGenerator.Core.Provider.ControllerProvider;
+using ModelGenerator.Core.Provider.ModelProvider;
+using ModelGenerator.Core.Provider.ServiceProvider;
 using MySql.Data.MySqlClient;
 using Npgsql;
 using Oracle.ManagedDataAccess.Client;
@@ -64,8 +65,7 @@ namespace ModelGeneratorWPF
                         supportedLanguages = supportedLanguages.Where(x => x.IsModelGenerator);
                         break;
                     case 2: //controller generator
-                        throw new NotImplementedException();
-                        //generatorType = TargetGeneratorType.Controller;
+                        mode = SupportMode.Controller;
                         supportedLanguages = supportedLanguages.Where(x => x.IsControllerGenerator);
                         break;
                 }
@@ -148,9 +148,17 @@ namespace ModelGeneratorWPF
                             var serviceGenerator = new ServiceBuilder(outputDir, @namespace, databaseDefinition);
                             serviceGenerator.OnFileGenerated += (f) => Log($"Generated {f}");
                             serviceGenerator.Generate(serviceProvider);
-
-
                             //GeneratorFactory.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
+                            break;
+                        case SupportMode.Controller:
+                            IControllerProvider controllerProvider = language switch
+                            {
+                                SupportLanguage.CSharp => CSharpControllerProvider.Context,
+                                _ => throw new NotSupportedException()
+                            };
+                            var controllerGenerator = new ControllerBuilder(outputDir, @namespace, databaseDefinition);
+                            controllerGenerator.OnFileGenerated += (f) => Log($"Generated {f}");
+                            controllerGenerator.Generate(controllerProvider);
                             break;
                     }
                     Log($"All tasks are done.");

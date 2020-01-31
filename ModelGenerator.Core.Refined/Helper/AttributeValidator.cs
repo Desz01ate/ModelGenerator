@@ -15,7 +15,7 @@ namespace ModelGenerator.Core.Helper
         }
         public static bool IsControllerGeneratorEnabled(MemberInfo member)
         {
-            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.ControllerGenerateEnabledAtribute)) != null;
+            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.ControllerGenerateEnabledAttribute)) != null;
             return isAssigned;
         }
         public static string Description(MemberInfo member)

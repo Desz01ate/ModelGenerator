@@ -32,8 +32,8 @@ namespace ModelGenerator.Core.Builder
             Directory.CreateDirectory(_modelDirectory);
             Directory.CreateDirectory(_repositoryDirectory);
             Directory.CreateDirectory(_repositoryBasedDirectory);
-            _allowGeneratePartialModel = !Directory.Exists(_partialModelDirectory);
-            _allowGeneratePartialRepository = !Directory.Exists(_partialRepositoryDirectory);
+            _allowGeneratePartialModel = true;//!Directory.Exists(_partialModelDirectory);
+            _allowGeneratePartialRepository = true;//!Directory.Exists(_partialRepositoryDirectory);
         }
         public void Generate(IServiceBuilderProvider provider)
         {
@@ -45,52 +45,58 @@ namespace ModelGenerator.Core.Builder
                 {
                     var fileLoc = Path.Combine(_modelDirectory, modelFileName);
                     File.WriteAllText(fileLoc, modelCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    this.OnFileGenerated?.Invoke(fileLoc);
                 }
                 if (_allowGeneratePartialModel)
                 {
                     Directory.CreateDirectory(_partialModelDirectory);
-                    var partialModelCode = provider.GeneratePartialModelFile(this._namespace, table);
                     var partialModelFileName = $"{table.Name}.{provider.FileExtension}";
-                    if (!string.IsNullOrWhiteSpace(partialModelCode))
+                    var fileLoc = Path.Combine(_partialModelDirectory, modelFileName);
+                    if (!File.Exists(fileLoc))
                     {
-                        var fileLoc = Path.Combine(_partialModelDirectory, modelFileName);
-                        File.WriteAllText(fileLoc, partialModelCode);
-                        this.OnFileGenerated.Invoke(fileLoc);
+                        var partialModelCode = provider.GeneratePartialModelFile(this._namespace, table);
+
+                        if (!string.IsNullOrWhiteSpace(partialModelCode))
+                        {
+                            File.WriteAllText(fileLoc, partialModelCode);
+                            this.OnFileGenerated?.Invoke(fileLoc);
+                        }
                     }
                 }
 
-
+                var repositoryName = $"{table.Name[0].ToString().ToUpper()}{table.Name[1..].ToLower()}Repository";
                 var repositoryCode = provider.GenerateRepositoryFile(this._namespace, table);
-                var repositoryFileName = $"{table.Name}Repository.{provider.FileExtension}";
+                var repositoryFileName = $"{repositoryName}.{provider.FileExtension}";
                 if (!string.IsNullOrWhiteSpace(repositoryCode))
                 {
                     var fileLoc = Path.Combine(_repositoryDirectory, repositoryFileName);
                     File.WriteAllText(fileLoc, repositoryCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    this.OnFileGenerated?.Invoke(fileLoc);
                 }
                 if (_allowGeneratePartialRepository)
                 {
                     Directory.CreateDirectory(_partialRepositoryDirectory);
-                    var partialRepoCode = provider.GeneratePartialRepositoryFile(this._namespace, table);
                     var partialRepoFileName = $"{table.Name}.{provider.FileExtension}";
-                    if (!string.IsNullOrWhiteSpace(partialRepoCode))
+                    var partialServiceFileLoc = Path.Combine(_partialRepositoryDirectory, repositoryFileName);
+                    if (!File.Exists(partialServiceFileLoc))
                     {
-                        var fileLoc = Path.Combine(_partialRepositoryDirectory, repositoryFileName);
-                        File.WriteAllText(fileLoc, partialRepoCode);
-                        this.OnFileGenerated.Invoke(fileLoc);
+                        var partialRepoCode = provider.GeneratePartialRepositoryFile(this._namespace, table);
+                        if (!string.IsNullOrWhiteSpace(partialRepoCode))
+                        {
+                            File.WriteAllText(partialServiceFileLoc, partialRepoCode);
+                            this.OnFileGenerated?.Invoke(partialServiceFileLoc);
+                        }
                     }
                 }
-
             }
             var repoBasedCode = provider.GenerateRepositoryBasedFile(this._namespace);
             var repoBasedFile = Path.Combine(this._repositoryBasedDirectory, $"Repository.{provider.FileExtension}");
             File.WriteAllText(repoBasedFile, repoBasedCode);
-            this.OnFileGenerated.Invoke(repoBasedFile);
+            this.OnFileGenerated?.Invoke(repoBasedFile);
             var serviceCode = provider.GenerateServiceFile(this._namespace, this._databaseDefinition.Tables, this._databaseDefinition.StoredProcedures);
             var serviceFile = Path.Combine(this._directory, $"Service.{provider.FileExtension}");
             File.WriteAllText(serviceFile, serviceCode);
-            this.OnFileGenerated.Invoke(serviceFile);
+            this.OnFileGenerated?.Invoke(serviceFile);
         }
 
     }

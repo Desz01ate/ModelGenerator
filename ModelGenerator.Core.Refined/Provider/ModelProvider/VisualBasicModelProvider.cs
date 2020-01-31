@@ -1,4 +1,5 @@
-﻿using ModelGenerator.Core.Interface;
+﻿using ModelGenerator.Core.Entity;
+using ModelGenerator.Core.Interface;
 using ModelGenerator.Core.Template;
 using System;
 using System.Collections.Generic;
@@ -6,21 +7,21 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Utilities.Classes;
 
-namespace ModelGenerator.Core.Entity.ModelProvider
+namespace ModelGenerator.Core.Provider.ModelProvider
 {
-    public class CSharpModelProvider : IModelBuilderProvider
+    public class VisualBasicModelProvider : IModelBuilderProvider
     {
-        private static readonly Lazy<CSharpModelProvider> CSharpModel = new Lazy<CSharpModelProvider>(() => new CSharpModelProvider(), true);
-        public static IModelBuilderProvider Context => CSharpModel.Value;
-        internal CSharpModelProvider()
+        private static readonly Lazy<VisualBasicModelProvider> VbModel = new Lazy<VisualBasicModelProvider>(() => new VisualBasicModelProvider(), true);
+        public static IModelBuilderProvider Context => VbModel.Value;
+        internal VisualBasicModelProvider()
         {
 
         }
-        public string FileExtension => "cs";
+        public string FileExtension => "vb";
 
         public virtual string? GenerateModelFile(string @namespace, Table table)
         {
-            var template = new Model_CSharp();
+            var template = new Model_VisualBasic();
             template.ClassName = table.Name;
             template.Namespace = @namespace;
             template.PrimaryKey = table.PrimaryKey;
@@ -31,7 +32,7 @@ namespace ModelGenerator.Core.Entity.ModelProvider
         }
         public virtual string? GeneratePartialModelFile(string @namespace, Table table)
         {
-            var template = new Model_CSharp();
+            var template = new Model_VisualBasic();
             template.ClassName = table.Name;
             template.Namespace = @namespace;
             template.PrimaryKey = table.PrimaryKey;
@@ -48,9 +49,9 @@ namespace ModelGenerator.Core.Entity.ModelProvider
         }
         protected string DataTypeMapper(TableSchema column)
         {
-            var typecs = Mapper(column.DataTypeName);
-            var addNullability = column.AllowDBNull && typecs != "string" && typecs != "byte[]";
-            return addNullability ? typecs + "?" : typecs;
+            var typevb = Mapper(column.DataTypeName);
+            var addNullable = column.AllowDBNull && typevb != "String" && typevb != "Byte()";
+            return addNullable ? $"Nullable(Of {typevb})" : typevb;
         }
         protected string Mapper(string columnType)
         {
@@ -58,27 +59,25 @@ namespace ModelGenerator.Core.Entity.ModelProvider
             switch (columnType)
             {
                 case "bit":
-                    return "bool";
+                    return "Boolean";
 
                 case "tinyint":
-                    return "byte";
+                    return "Byte";
                 case "smallint":
-                    return "short";
+                    return "Short";
                 case "int":
-                case "integer":
-                    return "int";
+                    return "Integer";
                 case "bigint":
-                    return "long";
+                    return "Long";
 
                 case "real":
-                    return "float";
+                    return "Single";
                 case "float":
-                    return "double";
+                    return "Double";
                 case "decimal":
                 case "money":
                 case "smallmoney":
-                case "numeric":
-                    return "decimal";
+                    return "Decimal";
 
                 case "time":
                     return "TimeSpan";
@@ -86,9 +85,9 @@ namespace ModelGenerator.Core.Entity.ModelProvider
                 case "datetime":
                 case "datetime2":
                 case "smalldatetime":
-                    return "DateTime";
+                    return "Date";
                 case "datetimeoffset":
-                    return "DateTimeOffset";
+                    return "Date";
 
                 case "char":
                 case "varchar":
@@ -97,29 +96,27 @@ namespace ModelGenerator.Core.Entity.ModelProvider
                 case "text":
                 case "ntext":
                 case "xml":
-                    return "string";
+                    return "String";
 
                 case "binary":
                 case "image":
                 case "varbinary":
                 case "timestamp":
-                    return "byte[]";
+                    return "Byte()";
 
                 case "uniqueidentifier":
                     return "Guid";
 
                 case "variant":
-                //case "Udt":
-                case "udt":
-                case "blob": //for sqlite
-                    return "object";
+                case "Udt":
+                    return "Object";
 
-                //case "Structured":
-                case "structured":
+                case "Structured":
                     return "DataTable";
 
                 case "geography":
                     return "geography";
+
                 default:
                     // Fallback to be manually handled by user
                     return columnType;
