@@ -21,6 +21,7 @@ namespace ModelVisualizer
         private string Namespace => this.txt_Namespace.Text;
         private DatabaseDefinition databaseDefinition { get; set; }
         private TreeView mainTreeView => this.tv_MainTreeView;
+        private DataGrid mainGridView => this.gv_MainGridView;
         private TablePreview previewable;
         public MainWindow()
         {
@@ -41,11 +42,14 @@ namespace ModelVisualizer
                 var tableTree = new TreeViewItem();
                 tableTree.Header = "Tables";
                 tableTree.ItemsSource = databaseDefinition.Tables.Select(x => new TablePreview(x));
-                var storedProcedureTree = new TreeViewItem();
-                storedProcedureTree.Header = "Stored Procedures";
-                storedProcedureTree.ItemsSource = databaseDefinition.StoredProcedures.Select(x => x.SPECIFIC_NAME);
                 mainTreeView.Items.Add(tableTree);
-                mainTreeView.Items.Add(storedProcedureTree);
+                if (databaseDefinition.StoredProcedures.Any())
+                {
+                    var storedProcedureTree = new TreeViewItem();
+                    storedProcedureTree.Header = "Stored Procedures";
+                    storedProcedureTree.ItemsSource = databaseDefinition.StoredProcedures.Select(x => new TablePreview(x));
+                    mainTreeView.Items.Add(storedProcedureTree);
+                }
                 btn_GenerateAllModels.IsEnabled = true;
                 btn_GenerateService.IsEnabled = true;
             }
@@ -63,12 +67,14 @@ namespace ModelVisualizer
                 txt_PreviewContent.Text = instance.Content;
                 this.previewable = instance;
                 this.btn_GenerateCurrentModel.IsEnabled = true;
+                this.mainGridView.ItemsSource = instance.Structure.DefaultView;
             }
             else
             {
                 txt_PreviewContent.Text = "Please select sub-item category (table, store procedure item) to preview code.";
                 this.previewable = null;
                 this.btn_GenerateCurrentModel.IsEnabled = false;
+                this.mainGridView.ItemsSource = null;
             }
         }
 
@@ -77,7 +83,11 @@ namespace ModelVisualizer
             if (FolderPick(out var directory))
             {
                 var code = previewable.Content;
-                var file = Path.Combine(directory, $"{previewable.Table.Name}.cs");
+                if (!string.IsNullOrWhiteSpace(Namespace))
+                {
+                    code = code.Replace("CustomNameSpace", Namespace);
+                }
+                var file = Path.Combine(directory, $"{previewable.Description}.cs");
                 File.WriteAllText(file, code);
                 MessageBox.Show($"File saved to {file}");
             }
@@ -90,6 +100,15 @@ namespace ModelVisualizer
             if (result == CommonFileDialogResult.Ok)
             {
                 directory = ofd.FileName;
+                if (string.IsNullOrWhiteSpace(Namespace))
+                {
+                    var hopefullyNamespace = directory.Split(@"\").Last();
+                    var namespaceReplace = MessageBox.Show($"We detected that you didn't specified the namespace, do you want to use '{hopefullyNamespace}' as a namespace?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                    if (namespaceReplace == MessageBoxResult.Yes)
+                    {
+                        txt_Namespace.Text = hopefullyNamespace;
+                    }
+                }
             }
             else
             {
@@ -102,7 +121,7 @@ namespace ModelVisualizer
             if (FolderPick(out var directory))
             {
                 var generator = new ModelGenerator.Core.Builder.ModelBuilder(directory, this.Namespace, databaseDefinition);
-                var template = ModelGenerator.Core.Entity.ModelProvider.CSharpModelProvider.Context;
+                var template = ModelGenerator.Core.Provider.ModelProvider.CSharpModelProvider.Context;
                 generator.Generate(template);
             }
         }
@@ -112,7 +131,7 @@ namespace ModelVisualizer
             if (FolderPick(out var directory))
             {
                 var generator = new ModelGenerator.Core.Builder.ServiceBuilder(directory, this.Namespace, databaseDefinition);
-                var template = ModelGenerator.Core.Entity.ServiceProvider.CSharpServiceProvider.Context;
+                var template = ModelGenerator.Core.Provider.ServiceProvider.CSharpServiceProvider.Context;
                 generator.Generate(template);
             }
         }

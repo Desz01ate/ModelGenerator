@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ModelVisualizer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="1500">
-    <Grid>
+        Title="Model Visualizer" Height="800" Width="1500">
+    <Grid Background="#FF343434">
         <TreeView x:Name="tv_MainTreeView" Margin="10,41,0,10" HorizontalAlignment="Left" Width="300" SelectedItemChanged="tv_MainTreeView_SelectedItemChanged"/>
         <TextBox x:Name="txt_ConnectionString" Margin="521,41,137,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" />
         <TextBox x:Name="txt_Namespace" Margin="521,75,137,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="26" />
 
-        <RichTextBox Margin="315,112,16,100" IsReadOnly="True" Background="#FFDADADA">
+        <RichTextBox Margin="315,112,0,100" IsReadOnly="True" Background="#FFDADADA" HorizontalAlignment="Left" Width="571">
             <FlowDocument>
                 <Paragraph>
                     <Run x:Name="txt_PreviewContent" Text=""/>
@@ -19,13 +19,14 @@
             </FlowDocument>
         </RichTextBox>
         <!--<Label x:Name="txt_PreviewLabel" HorizontalAlignment="Left" Margin="320,77,0,0" VerticalAlignment="Top" Width="1164"/>-->
-        <Label Content="Save As" HorizontalAlignment="Left" Margin="332,432,0,40" VerticalAlignment="Bottom" Width="82"/>
+        <Label Content="Save As" Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="332,432,0,40" VerticalAlignment="Bottom" Width="82"/>
         <Button x:Name="btn_Connect" Content="Connect" HorizontalAlignment="Right" Margin="0,40,16,0" VerticalAlignment="Top" Width="108" Height="26" Click="Button_Click"/>
         <Button x:Name="btn_GenerateCurrentModel" Content="Current Model" HorizontalAlignment="Left" Margin="432,0,0,40" VerticalAlignment="Bottom" Width="108" Height="26" Click="btn_GenerateCurrentModel_Click" IsEnabled="False"/>
         <Button x:Name="btn_GenerateAllModels" Content="All Models" HorizontalAlignment="Left" Margin="632,432,0,40" VerticalAlignment="Bottom" Width="108" Height="26" Click="btn_GenerateAllModels_Click" IsEnabled="False"/>
         <Button x:Name="btn_GenerateService" Content="Service" HorizontalAlignment="Left" Margin="832,432,0,40" VerticalAlignment="Bottom" Width="108" Height="26" Click="btn_GenerateService_Click" IsEnabled="False"/>
-        <Label Content="Connection string : " HorizontalAlignment="Left" Margin="315,41,0,0" VerticalAlignment="Top" Width="201"/>
-        <Label Content="Namespace :" HorizontalAlignment="Left" Margin="315,75,0,0" VerticalAlignment="Top" Width="201"/>
+        <Label Content="Connection string : " Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="315,41,0,0" VerticalAlignment="Top" Width="201"/>
+        <Label Content="Namespace :" Foreground="WhiteSmoke" HorizontalAlignment="Left" Margin="315,75,0,0" VerticalAlignment="Top" Width="201"/>
+        <DataGrid x:Name="gv_MainGridView" Margin="892,112,16,100" IsReadOnly="True" ColumnWidth="150"/>
 
     </Grid>
 </Window>
