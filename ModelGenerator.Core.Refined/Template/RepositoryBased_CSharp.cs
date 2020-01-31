@@ -410,7 +410,7 @@ namespace ");
                 }
                 else
                 {
-                    return ((string)(method.Invoke(objectToConvert, new object[] {
+                    return ((string)(method?.Invoke(objectToConvert, new object[] {
                                 this.formatProviderField })));
                 }
             }
