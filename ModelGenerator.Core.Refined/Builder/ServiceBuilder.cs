@@ -45,7 +45,7 @@ namespace ModelGenerator.Core.Builder
                 {
                     var fileLoc = Path.Combine(_modelDirectory, modelFileName);
                     File.WriteAllText(fileLoc, modelCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    this.OnFileGenerated?.Invoke(fileLoc);
                 }
                 if (_allowGeneratePartialModel)
                 {
@@ -56,7 +56,7 @@ namespace ModelGenerator.Core.Builder
                     {
                         var fileLoc = Path.Combine(_partialModelDirectory, modelFileName);
                         File.WriteAllText(fileLoc, partialModelCode);
-                        this.OnFileGenerated.Invoke(fileLoc);
+                        this.OnFileGenerated?.Invoke(fileLoc);
                     }
                 }
 
@@ -67,7 +67,7 @@ namespace ModelGenerator.Core.Builder
                 {
                     var fileLoc = Path.Combine(_repositoryDirectory, repositoryFileName);
                     File.WriteAllText(fileLoc, repositoryCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    this.OnFileGenerated?.Invoke(fileLoc);
                 }
                 if (_allowGeneratePartialRepository)
                 {
@@ -78,7 +78,7 @@ namespace ModelGenerator.Core.Builder
                     {
                         var fileLoc = Path.Combine(_partialRepositoryDirectory, repositoryFileName);
                         File.WriteAllText(fileLoc, partialRepoCode);
-                        this.OnFileGenerated.Invoke(fileLoc);
+                        this.OnFileGenerated?.Invoke(fileLoc);
                     }
                 }
 
@@ -86,11 +86,11 @@ namespace ModelGenerator.Core.Builder
             var repoBasedCode = provider.GenerateRepositoryBasedFile(this._namespace);
             var repoBasedFile = Path.Combine(this._repositoryBasedDirectory, $"Repository.{provider.FileExtension}");
             File.WriteAllText(repoBasedFile, repoBasedCode);
-            this.OnFileGenerated.Invoke(repoBasedFile);
+            this.OnFileGenerated?.Invoke(repoBasedFile);
             var serviceCode = provider.GenerateServiceFile(this._namespace, this._databaseDefinition.Tables, this._databaseDefinition.StoredProcedures);
             var serviceFile = Path.Combine(this._directory, $"Service.{provider.FileExtension}");
             File.WriteAllText(serviceFile, serviceCode);
-            this.OnFileGenerated.Invoke(serviceFile);
+            this.OnFileGenerated?.Invoke(serviceFile);
         }
 
     }

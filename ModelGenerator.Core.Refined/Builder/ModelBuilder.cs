@@ -41,7 +41,7 @@ namespace ModelGenerator.Core.Builder
                 {
                     var fileLoc = Path.Combine(_directory, fileName);
                     File.WriteAllText(fileLoc, modelCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    this.OnFileGenerated?.Invoke(fileLoc);
                 }
                 if (!_allowGeneratePartial) continue;
                 var partialModelCode = provider.GeneratePartialModelFile(this._namespace, table);
@@ -49,7 +49,7 @@ namespace ModelGenerator.Core.Builder
                 {
                     var fileLoc = Path.Combine(Path.Combine(_directory, "Partials"), fileName);
                     File.WriteAllText(fileLoc, partialModelCode);
-                    this.OnFileGenerated.Invoke(fileLoc);
+                    this.OnFileGenerated?.Invoke(fileLoc);
                 }
             }
         }

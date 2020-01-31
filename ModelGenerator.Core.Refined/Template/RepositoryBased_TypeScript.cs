@@ -325,7 +325,7 @@ export abstract class Repository<T> implements IGenericRepository<T>{
                 }
                 else
                 {
-                    return ((string)(method.Invoke(objectToConvert, new object[] {
+                    return ((string)(method?.Invoke(objectToConvert, new object[] {
                                 this.formatProviderField })));
                 }
             }
