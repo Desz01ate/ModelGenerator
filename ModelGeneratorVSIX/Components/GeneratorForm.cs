@@ -12,6 +12,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Data.OracleClient;
 using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -110,6 +111,7 @@ namespace ModelGenerator
                     SupportDatabase.MySQL => SqlDefinition.GetDatabaseDefinition<MySqlConnection, MySqlParameter>(connectionString),
                     SupportDatabase.Oracle => SqlDefinition.GetDatabaseDefinition<OracleConnection, OracleParameter>(connectionString),
                     SupportDatabase.PostgreSQL => SqlDefinition.GetDatabaseDefinition<NpgsqlConnection, NpgsqlParameter>(connectionString),
+                    SupportDatabase.SQLite => SqlDefinition.GetDatabaseDefinition<SQLiteConnection, SQLiteParameter>(connectionString),
                     _ => null,
                 };
             }

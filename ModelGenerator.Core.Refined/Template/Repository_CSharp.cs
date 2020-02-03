@@ -179,7 +179,7 @@ if(!IsPartial) {
 	public ModelGenerator.Core.Entity.Table Table { get; set; }
 	public bool IsPartial {get;set;}
 	public string TableName => TableNameTransformer(Table.Name);
-	public string RepositoryName => $"{TableName.ToString().ToUpper()}{TableName[1..].ToLower()}Repository";
+	public string RepositoryName => $"{TableName}Repository";
 	public Func<Utilities.Classes.TableSchema,string> DataTypeMap { get; set; }
 	public Func<string,string> TableNameTransformer {get;set;}
 
@@ -443,7 +443,7 @@ if(!IsPartial) {
                 }
                 else
                 {
-                    return ((string)(method?.Invoke(objectToConvert, new object[] {
+                    return ((string)(method.Invoke(objectToConvert, new object[] {
                                 this.formatProviderField })));
                 }
             }
