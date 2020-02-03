@@ -58,36 +58,15 @@ namespace ModelGenerator.Core.Template
             #line default
             #line hidden
             this.Write("\tpublic sealed class Service : IDisposable\r\n\t{\r\n\t\tprivate readonly IDatabaseConne" +
-                    "ctorExtension<");
-            
-            #line 20 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseType));
-            
-            #line default
-            #line hidden
-            this.Write(",");
-            
-            #line 20 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
-            
-            #line default
-            #line hidden
-            this.Write("> Connector;\r\n\t\tpublic Service(string connectionString)\r\n\t\t{\r\n\t\t\tConnector = new " +
-                    "DatabaseConnector<");
+                    "ctor Connector;\r\n\t\tpublic Service(string connectionString)\r\n\t\t{\r\n\t\t\tConnector = " +
+                    "new DatabaseConnector(typeof(");
             
             #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseType));
             
             #line default
             #line hidden
-            this.Write(",");
-            
-            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
-            
-            #line default
-            #line hidden
-            this.Write(">(connectionString);\r\n\t\t}\r\n");
+            this.Write("),connectionString);\r\n\t\t}\r\n");
             
             #line 25 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  foreach(var table in Tables) { 
@@ -571,7 +550,7 @@ namespace ModelGenerator.Core.Template
                 }
                 else
                 {
-                    return ((string)(method?.Invoke(objectToConvert, new object[] {
+                    return ((string)(method.Invoke(objectToConvert, new object[] {
                                 this.formatProviderField })));
                 }
             }

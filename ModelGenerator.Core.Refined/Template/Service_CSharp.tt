@@ -17,10 +17,10 @@ namespace <#= Namespace #>
 <# } #>
 	public sealed class Service : IDisposable
 	{
-		private readonly IDatabaseConnectorExtension<<#= DatabaseType #>,<#= DatabaseParamType #>> Connector;
+		private readonly IDatabaseConnector Connector;
 		public Service(string connectionString)
 		{
-			Connector = new DatabaseConnector<<#= DatabaseType #>,<#= DatabaseParamType #>>(connectionString);
+			Connector = new DatabaseConnector(typeof(<#= DatabaseType #>),connectionString);
 		}
 <# foreach(var table in Tables) { #>
 <# var tableName = TableNameTransformer(table.Name); #>

@@ -105,20 +105,6 @@ if(!IsPartial) {
             
             #line default
             #line hidden
-            this.Write(",");
-            
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProvider));
-            
-            #line default
-            #line hidden
-            this.Write(",");
-            
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProviderParameterType));
-            
-            #line default
-            #line hidden
             this.Write(">\r\n\t{\r\n");
             
             #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
@@ -133,21 +119,7 @@ if(!IsPartial) {
             
             #line default
             #line hidden
-            this.Write("(IDatabaseConnectorExtension<");
-            
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProvider));
-            
-            #line default
-            #line hidden
-            this.Write(",");
-            
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Table.ConnectionProviderParameterType));
-            
-            #line default
-            #line hidden
-            this.Write("> connector) : base(connector)\r\n\t\t{\r\n\t\t}\r\n");
+            this.Write("(IDatabaseConnector connector) : base(connector)\r\n\t\t{\r\n\t\t}\r\n");
             
             #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  } 

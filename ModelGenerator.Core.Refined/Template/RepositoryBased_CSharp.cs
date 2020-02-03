@@ -55,98 +55,96 @@ namespace ");
             this.Write(".Repositories.Based\r\n{\r\n    /// <summary>\r\n    /// Repository class designed for " +
                     "IDatabaseConnectorExtension.\r\n    /// </summary>\r\n    /// <typeparam name=\"T\"></" +
                     "typeparam>\r\n    /// <typeparam name=\"TDatabase\"></typeparam>\r\n    /// <typeparam" +
-                    " name=\"TParameter\"></typeparam>\r\n    public partial class Repository<T, TDatabas" +
-                    "e, TParameter> : IEnumerable<T>\r\n        where T : class, new()\r\n        where T" +
-                    "Database : DbConnection, new()\r\n        where TParameter : DbParameter, new()\r\n " +
-                    "   {\r\n        /// <summary>\r\n        /// Instance of database connector.\r\n      " +
-                    "  /// </summary>\r\n        protected readonly IDatabaseConnectorExtension<TDataba" +
-                    "se, TParameter> Connector;\r\n        /// <summary>\r\n        /// Constructor.\r\n   " +
-                    "     /// </summary>\r\n        /// <param name=\"databaseConnector\">Instance of Dat" +
-                    "abaseConnector.</param>\r\n        public Repository(IDatabaseConnectorExtension<T" +
-                    "Database, TParameter> databaseConnector)\r\n        {\r\n            Connector = dat" +
-                    "abaseConnector;\r\n        }\r\n\r\n        /// <summary>\r\n        /// Delete data fro" +
-                    "m repository.\r\n        /// </summary>\r\n        /// <param name=\"data\">Generic ob" +
-                    "ject.</param>\r\n        public virtual void Delete(T data)\r\n        {\r\n          " +
-                    "  Connector.Delete(data);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Delet" +
-                    "e data from repository.\r\n        /// </summary>\r\n        /// <param name=\"key\">P" +
-                    "rimary key of target object.</param>\r\n        public virtual void Delete(object " +
-                    "key)\r\n        {\r\n            Connector.Delete<T>(key);\r\n        }\r\n\r\n        ///" +
-                    " <summary>\r\n        /// Delete data from repository in an asynchronous manner.\r\n" +
-                    "        /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n" +
-                    "        public virtual async Task DeleteAsync(T data)\r\n        {\r\n            aw" +
-                    "ait Connector.DeleteAsync(data).ConfigureAwait(false);\r\n        }\r\n\r\n        ///" +
-                    " <summary>\r\n        /// Delete data from repository in an asynchronous manner.\r\n" +
-                    "        /// </summary>\r\n        /// <param name=\"key\">Primary key of target obje" +
-                    "ct.</param>\r\n        public virtual async Task DeleteAsync(object key)\r\n        " +
-                    "{\r\n            await Connector.DeleteAsync<T>(key).ConfigureAwait(false);\r\n     " +
-                    "   }\r\n\r\n        /// <summary>\r\n        /// Insert data into repository.\r\n       " +
-                    " /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n       " +
-                    " public virtual void Insert(T data)\r\n        {\r\n            Connector.Insert(dat" +
-                    "a);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Insert data into repository" +
-                    " in an asynchronous manner.\r\n        /// </summary>\r\n        /// <param name=\"da" +
-                    "ta\">Generic object.</param>\r\n        public virtual async Task InsertManyAsync(I" +
-                    "Enumerable<T> data)\r\n        {\r\n            await Connector.InsertManyAsync(data" +
-                    ").ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Insert" +
-                    " data into repository.\r\n        /// </summary>\r\n        /// <param name=\"data\">G" +
-                    "eneric object.</param>\r\n        public virtual void InsertMany(IEnumerable<T> da" +
-                    "ta)\r\n        {\r\n            Connector.InsertMany(data);\r\n        }\r\n\r\n        //" +
-                    "/ <summary>\r\n        /// Insert data into repository in an asynchronous manner.\r" +
-                    "\n        /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r" +
-                    "\n        public virtual async Task InsertAsync(T data)\r\n        {\r\n            a" +
-                    "wait Connector.InsertAsync(data).ConfigureAwait(false);\r\n        }\r\n\r\n        //" +
-                    "/ <summary>\r\n        /// Get all data from repository.\r\n        /// </summary>\r\n" +
-                    "        /// <returns></returns>\r\n        public virtual IEnumerable<T> Query()\r\n" +
-                    "        {\r\n            return Connector.Query<T>();\r\n        }\r\n\r\n        /// <s" +
-                    "ummary>\r\n        /// Get data by specific condition from repository.\r\n        //" +
-                    "/ </summary>\r\n        /// <param name=\"predicate\">Predicate condition.</param>\r\n" +
-                    "        /// <returns></returns>\r\n        public virtual IEnumerable<T> Query(Exp" +
-                    "ression<Func<T, bool>> predicate)\r\n        {\r\n            return Connector.Query" +
-                    "<T>(predicate);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Get data from r" +
-                    "epository.\r\n        /// </summary>\r\n        /// <param name=\"key\">Primary key of" +
-                    " target object.</param>\r\n        /// <returns></returns>\r\n        public virtual" +
-                    " T Query(object key)\r\n        {\r\n            return Connector.Query<T>(key);\r\n  " +
-                    "      }\r\n\r\n        /// <summary>\r\n        /// Get all data from repository in an" +
-                    " asynchronous manner.\r\n        /// </summary>\r\n        /// <returns></returns>\r\n" +
-                    "        public virtual async Task<IEnumerable<T>> QueryAsync()\r\n        {\r\n     " +
-                    "       return await Connector.QueryAsync<T>().ConfigureAwait(false);\r\n        }\r" +
-                    "\n\r\n        /// <summary>\r\n        /// Get data by specific condition from reposi" +
-                    "tory in an asynchronous manner.\r\n        /// </summary>\r\n        /// <param name" +
-                    "=\"predicate\">Predicate condition.</param>\r\n        /// <returns></returns>\r\n    " +
-                    "    public virtual async Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool" +
-                    ">> predicate)\r\n        {\r\n            return await Connector.QueryAsync<T>(predi" +
-                    "cate).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Ge" +
-                    "t data from repository.\r\n        /// </summary>\r\n        /// <param name=\"key\">P" +
-                    "rimary key of target object.</param>\r\n        /// <returns></returns>\r\n        p" +
-                    "ublic virtual async Task<T> QueryAsync(object key)\r\n        {\r\n            retur" +
-                    "n await Connector.QueryAsync<T>(key).ConfigureAwait(false);\r\n        }\r\n\r\n      " +
-                    "  /// <summary>\r\n        /// Update data in repository.\r\n        /// </summary>\r" +
-                    "\n        /// <param name=\"data\">Generic object.</param>\r\n        public virtual " +
-                    "void Update(T data)\r\n        {\r\n            Connector.Update(data);\r\n        }\r\n" +
-                    "\r\n        /// <summary>\r\n        /// Update data in repository in an asynchronou" +
-                    "s manner.\r\n        /// </summary>\r\n        /// <param name=\"data\">Generic object" +
-                    ".</param>\r\n        public virtual async Task UpdateAsync(T data)\r\n        {\r\n   " +
-                    "         await Connector.UpdateAsync(data).ConfigureAwait(false);\r\n        }\r\n  " +
-                    "      /// <summary>\r\n        /// Returns rows count from repository.\r\n        //" +
-                    "/ </summary>\r\n        /// <returns></returns>\r\n        public int Count()\r\n     " +
-                    "   {\r\n            return this.Connector.Count<T>();\r\n        }\r\n        /// <sum" +
-                    "mary>\r\n        /// Filters a sequence of values based on a predicate.\r\n        /" +
-                    "// </summary>\r\n        /// <param name=\"predicate\"></param>\r\n        /// <return" +
-                    "s></returns>\r\n        public IEnumerable<T> Where(Expression<Func<T, bool>> pred" +
-                    "icate)\r\n        {\r\n            return Query(predicate);\r\n        }\r\n        /// " +
-                    "<summary>\r\n        /// Returns a specified number of contiguous elements from th" +
-                    "e start of a sequence.\r\n        /// </summary>\r\n        /// <param name=\"count\">" +
-                    "</param>\r\n        /// <returns></returns>\r\n        public IEnumerable<T> Take(in" +
-                    "t count)\r\n        {\r\n            return Connector.Query<T>(top: count);\r\n       " +
-                    " }\r\n        /// <summary>\r\n        /// Get enumerator of data repository.\r\n     " +
-                    "   /// </summary>\r\n        /// <returns></returns>\r\n        public IEnumerator<T" +
-                    "> GetEnumerator()\r\n        {\r\n            foreach (var data in Query())\r\n       " +
-                    "     {\r\n                yield return data;\r\n            }\r\n        }\r\n\r\n        " +
-                    "IEnumerator IEnumerable.GetEnumerator()\r\n        {\r\n            return GetEnumer" +
-                    "ator();\r\n        }\r\n    }\r\n}\r\n\r\n");
+                    " name=\"TParameter\"></typeparam>\r\n    public partial class Repository<T> : IEnume" +
+                    "rable<T>\r\n        where T : class, new()\r\n    {\r\n        /// <summary>\r\n        " +
+                    "/// Instance of database connector.\r\n        /// </summary>\r\n        protected r" +
+                    "eadonly IDatabaseConnector Connector;\r\n        /// <summary>\r\n        /// Constr" +
+                    "uctor.\r\n        /// </summary>\r\n        /// <param name=\"databaseConnector\">Inst" +
+                    "ance of DatabaseConnector.</param>\r\n        public Repository(IDatabaseConnector" +
+                    " databaseConnector)\r\n        {\r\n            Connector = databaseConnector;\r\n    " +
+                    "    }\r\n\r\n        /// <summary>\r\n        /// Delete data from repository.\r\n      " +
+                    "  /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n      " +
+                    "  public virtual void Delete(T data)\r\n        {\r\n            Connector.Delete(da" +
+                    "ta);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Delete data from repositor" +
+                    "y.\r\n        /// </summary>\r\n        /// <param name=\"key\">Primary key of target " +
+                    "object.</param>\r\n        public virtual void Delete(object key)\r\n        {\r\n    " +
+                    "        Connector.Delete<T>(key);\r\n        }\r\n\r\n        /// <summary>\r\n        /" +
+                    "// Delete data from repository in an asynchronous manner.\r\n        /// </summary" +
+                    ">\r\n        /// <param name=\"data\">Generic object.</param>\r\n        public virtua" +
+                    "l async Task DeleteAsync(T data)\r\n        {\r\n            await Connector.DeleteA" +
+                    "sync(data).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n        /" +
+                    "// Delete data from repository in an asynchronous manner.\r\n        /// </summary" +
+                    ">\r\n        /// <param name=\"key\">Primary key of target object.</param>\r\n        " +
+                    "public virtual async Task DeleteAsync(object key)\r\n        {\r\n            await " +
+                    "Connector.DeleteAsync<T>(key).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <" +
+                    "summary>\r\n        /// Insert data into repository.\r\n        /// </summary>\r\n    " +
+                    "    /// <param name=\"data\">Generic object.</param>\r\n        public virtual void " +
+                    "Insert(T data)\r\n        {\r\n            Connector.Insert(data);\r\n        }\r\n\r\n   " +
+                    "     /// <summary>\r\n        /// Insert data into repository in an asynchronous m" +
+                    "anner.\r\n        /// </summary>\r\n        /// <param name=\"data\">Generic object.</" +
+                    "param>\r\n        public virtual async Task InsertManyAsync(IEnumerable<T> data)\r\n" +
+                    "        {\r\n            await Connector.InsertManyAsync(data).ConfigureAwait(fals" +
+                    "e);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Insert data into repository" +
+                    ".\r\n        /// </summary>\r\n        /// <param name=\"data\">Generic object.</param" +
+                    ">\r\n        public virtual void InsertMany(IEnumerable<T> data)\r\n        {\r\n     " +
+                    "       Connector.InsertMany(data);\r\n        }\r\n\r\n        /// <summary>\r\n        " +
+                    "/// Insert data into repository in an asynchronous manner.\r\n        /// </summar" +
+                    "y>\r\n        /// <param name=\"data\">Generic object.</param>\r\n        public virtu" +
+                    "al async Task InsertAsync(T data)\r\n        {\r\n            await Connector.Insert" +
+                    "Async(data).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n        " +
+                    "/// Get all data from repository.\r\n        /// </summary>\r\n        /// <returns>" +
+                    "</returns>\r\n        public virtual IEnumerable<T> Query()\r\n        {\r\n          " +
+                    "  return Connector.Query<T>();\r\n        }\r\n\r\n        /// <summary>\r\n        /// " +
+                    "Get data by specific condition from repository.\r\n        /// </summary>\r\n       " +
+                    " /// <param name=\"predicate\">Predicate condition.</param>\r\n        /// <returns>" +
+                    "</returns>\r\n        public virtual IEnumerable<T> Query(Expression<Func<T, bool>" +
+                    "> predicate)\r\n        {\r\n            return Connector.Query<T>(predicate);\r\n    " +
+                    "    }\r\n\r\n        /// <summary>\r\n        /// Get data from repository.\r\n        /" +
+                    "// </summary>\r\n        /// <param name=\"key\">Primary key of target object.</para" +
+                    "m>\r\n        /// <returns></returns>\r\n        public virtual T Query(object key)\r" +
+                    "\n        {\r\n            return Connector.Query<T>(key);\r\n        }\r\n\r\n        //" +
+                    "/ <summary>\r\n        /// Get all data from repository in an asynchronous manner." +
+                    "\r\n        /// </summary>\r\n        /// <returns></returns>\r\n        public virtua" +
+                    "l async Task<IEnumerable<T>> QueryAsync()\r\n        {\r\n            return await C" +
+                    "onnector.QueryAsync<T>().ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summa" +
+                    "ry>\r\n        /// Get data by specific condition from repository in an asynchrono" +
+                    "us manner.\r\n        /// </summary>\r\n        /// <param name=\"predicate\">Predicat" +
+                    "e condition.</param>\r\n        /// <returns></returns>\r\n        public virtual as" +
+                    "ync Task<IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> predicate)\r\n      " +
+                    "  {\r\n            return await Connector.QueryAsync<T>(predicate).ConfigureAwait(" +
+                    "false);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Get data from repositor" +
+                    "y.\r\n        /// </summary>\r\n        /// <param name=\"key\">Primary key of target " +
+                    "object.</param>\r\n        /// <returns></returns>\r\n        public virtual async T" +
+                    "ask<T> QueryAsync(object key)\r\n        {\r\n            return await Connector.Que" +
+                    "ryAsync<T>(key).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n    " +
+                    "    /// Update data in repository.\r\n        /// </summary>\r\n        /// <param n" +
+                    "ame=\"data\">Generic object.</param>\r\n        public virtual void Update(T data)\r\n" +
+                    "        {\r\n            Connector.Update(data);\r\n        }\r\n\r\n        /// <summar" +
+                    "y>\r\n        /// Update data in repository in an asynchronous manner.\r\n        //" +
+                    "/ </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n        pu" +
+                    "blic virtual async Task UpdateAsync(T data)\r\n        {\r\n            await Connec" +
+                    "tor.UpdateAsync(data).ConfigureAwait(false);\r\n        }\r\n        /// <summary>\r\n" +
+                    "        /// Returns rows count from repository.\r\n        /// </summary>\r\n       " +
+                    " /// <returns></returns>\r\n        public int Count()\r\n        {\r\n            ret" +
+                    "urn this.Connector.Count<T>();\r\n        }\r\n        /// <summary>\r\n        /// Fi" +
+                    "lters a sequence of values based on a predicate.\r\n        /// </summary>\r\n      " +
+                    "  /// <param name=\"predicate\"></param>\r\n        /// <returns></returns>\r\n       " +
+                    " public IEnumerable<T> Where(Expression<Func<T, bool>> predicate)\r\n        {\r\n  " +
+                    "          return Query(predicate);\r\n        }\r\n        /// <summary>\r\n        //" +
+                    "/ Returns a specified number of contiguous elements from the start of a sequence" +
+                    ".\r\n        /// </summary>\r\n        /// <param name=\"count\"></param>\r\n        ///" +
+                    " <returns></returns>\r\n        public IEnumerable<T> Take(int count)\r\n        {\r\n" +
+                    "            return Connector.Query<T>(top: count);\r\n        }\r\n        /// <summ" +
+                    "ary>\r\n        /// Get enumerator of data repository.\r\n        /// </summary>\r\n  " +
+                    "      /// <returns></returns>\r\n        public IEnumerator<T> GetEnumerator()\r\n  " +
+                    "      {\r\n            foreach (var data in Query())\r\n            {\r\n             " +
+                    "   yield return data;\r\n            }\r\n        }\r\n\r\n        IEnumerator IEnumerab" +
+                    "le.GetEnumerator()\r\n        {\r\n            return GetEnumerator();\r\n        }\r\n " +
+                    "   }\r\n}\r\n\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 241 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
+        #line 239 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 
@@ -410,7 +408,7 @@ namespace ");
                 }
                 else
                 {
-                    return ((string)(method?.Invoke(objectToConvert, new object[] {
+                    return ((string)(method.Invoke(objectToConvert, new object[] {
                                 this.formatProviderField })));
                 }
             }

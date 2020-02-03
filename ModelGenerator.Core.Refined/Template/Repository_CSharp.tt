@@ -24,10 +24,10 @@ namespace <#= Namespace #>.Repositories
 	///<summary>
 	/// Data contractor for <#= TableName #>
 	///</summary>
-	public partial class <#= RepositoryName #> : Repository<<#= TableName #>,<#= Table.ConnectionProvider #>,<#= Table.ConnectionProviderParameterType #>>
+	public partial class <#= RepositoryName #> : Repository<<#= TableName #>>
 	{
 <# if(!IsPartial) { #>
-		public <#= RepositoryName #>(IDatabaseConnectorExtension<<#= Table.ConnectionProvider #>,<#= Table.ConnectionProviderParameterType #>> connector) : base(connector)
+		public <#= RepositoryName #>(IDatabaseConnector connector) : base(connector)
 		{
 		}
 <# } #>
