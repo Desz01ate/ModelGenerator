@@ -29,226 +29,220 @@ namespace ModelGenerator.Core.Template
         public virtual string TransformText()
         {
             this.Write("using System;\r\nusing Utilities.SQL;\r\nusing Utilities.Interfaces;\r\nusing System.Da" +
-                    "ta;\r\nusing System.Data.Common;\r\nusing System.Collections.Generic;\r\n");
+                    "ta;\r\nusing System.Data.Common;\r\nusing System.Collections.Generic;\r\nusing Microso" +
+                    "ft.Extensions.Configuration;\r\n");
             
-            #line 13 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 14 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("using ");
             
-            #line 14 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 15 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write(".Repositories;\r\nnamespace ");
+            this.Write(".Repositories;\r\n\r\nnamespace ");
             
-            #line 15 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 17 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n");
             
-            #line 17 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 19 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("\tpublic sealed class Service : IDisposable\r\n\t{\r\n\t\tprivate readonly IDatabaseConne" +
-                    "ctor Connector;\r\n\t\tpublic Service(string connectionString)\r\n\t\t{\r\n\t\t\tConnector = " +
-                    "new DatabaseConnector(typeof(");
+            this.Write("\tpublic partial class Service : IDisposable\r\n\t{\r\n\t\tinternal protected readonly ID" +
+                    "atabaseConnector Connector;\r\n\t\tpublic Service(string connectionString)\r\n\t\t{\r\n\t\t\t" +
+                    "Connector = new DatabaseConnector(typeof(");
             
-            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 25 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseType));
             
             #line default
             #line hidden
-            this.Write("),connectionString);\r\n\t\t}\r\n");
+            this.Write(@"),connectionString);
+		}
+		public Service(IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString(""connectionStringName"");
+            Connector = new DatabaseConnector(typeof(Microsoft.Data.SqlClient.SqlConnection), connectionString);
+        }
+");
             
-            #line 25 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 32 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  foreach(var table in Tables) { 
             
             #line default
             #line hidden
             
-            #line 26 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  var tableName = TableNameTransformer(table.Name); 
             
             #line default
             #line hidden
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 34 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  var repositoryName = $"{tableName}Repository"; 
             
             #line default
             #line hidden
             this.Write("\t\tprivate ");
             
-            #line 28 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(repositoryName));
             
             #line default
             #line hidden
             this.Write(" _");
             
-            #line 28 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(" { get; set; }\r\n\t\tpublic ");
             
-            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 36 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(repositoryName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 36 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write("\r\n\t\t{\r\n\t\t\tget\r\n\t\t\t{\r\n\t\t\t\tif(_");
             
-            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 40 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(" == null)\r\n\t\t\t\t{\r\n\t\t\t\t\t_");
             
-            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 42 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(" = new ");
             
-            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 42 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(repositoryName));
             
             #line default
             #line hidden
-            this.Write("(Connector);\r\n\t\t\t\t}\r\n\t\t\t\treturn _");
+            this.Write("(this);\r\n\t\t\t\t}\r\n\t\t\t\treturn _");
             
-            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 44 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(tableName));
             
             #line default
             #line hidden
             this.Write(";\r\n\t\t\t}\r\n\t\t}\r\n");
             
-            #line 40 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 47 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
             #line hidden
             
-            #line 41 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 48 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  foreach(var sp in StoredProcedures) { 
             
             #line default
             #line hidden
             
-            #line 42 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 49 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  List<string> paramArgs = new List<string>();
             
             #line default
             #line hidden
             
-            #line 43 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 50 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  List<string> paramFunc = new List<string>();
             
             #line default
             #line hidden
             
-            #line 44 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 51 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  foreach(var param in sp.Parameters) { 
             
             #line default
             #line hidden
             
-            #line 45 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 52 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  paramArgs.Add($"{DataTypeMap(param.DATA_TYPE)} {param.PARAMETER_NAME}"); 
             
             #line default
             #line hidden
             
-            #line 46 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 53 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
             #line hidden
             
-            #line 47 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 54 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  //continue from here 
             
             #line default
             #line hidden
             this.Write("\t\tpublic dynamic ");
             
-            #line 48 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 55 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(sp.SPECIFIC_NAME));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 48 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 55 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(string.Join(",",paramArgs)));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t{\r\n\t\t\tvar command = \"");
             
-            #line 50 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 57 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(sp.SPECIFIC_NAME));
             
             #line default
             #line hidden
-            this.Write("\";\r\n\t\t\tvar parameters = new List<");
+            this.Write("\";\r\n\t\t\tvar parameters = new List<Utilities.Classes.DatabaseParameter>();\r\n");
             
-            #line 51 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
-            
-            #line default
-            #line hidden
-            this.Write(">();\r\n");
-            
-            #line 52 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 59 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  foreach(var param in sp.Parameters) { 
             
             #line default
             #line hidden
-            this.Write("\t\t\tparameters.Add(new ");
+            this.Write("\t\t\tparameters.Add(new Utilities.Classes.DatabaseParameter(\"");
             
-            #line 53 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DatabaseParamType));
-            
-            #line default
-            #line hidden
-            this.Write("(\"");
-            
-            #line 53 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 60 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(param.PARAMETER_NAME));
             
             #line default
             #line hidden
             this.Write("\",");
             
-            #line 53 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 60 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(param.PARAMETER_NAME));
             
             #line default
             #line hidden
             this.Write("));\r\n");
             
-            #line 54 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 61 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
@@ -256,7 +250,7 @@ namespace ModelGenerator.Core.Template
             this.Write("\t\t\tvar result = Connector.ExecuteReader(command,parameters,commandType : System.D" +
                     "ata.CommandType.StoredProcedure);\r\n\t\t\treturn result;\r\n\t\t}\r\n");
             
-            #line 58 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 65 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
@@ -264,14 +258,14 @@ namespace ModelGenerator.Core.Template
             this.Write("        public void Dispose()\r\n        {\r\n            Connector?.Dispose();\r\n    " +
                     "    }\r\n\t}\r\n");
             
-            #line 64 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 71 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("}\r\n");
             
-            #line 66 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+            #line 73 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
  } 
             
             #line default
@@ -279,7 +273,7 @@ namespace ModelGenerator.Core.Template
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 67 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
+        #line 74 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Service_CSharp.tt"
 
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);

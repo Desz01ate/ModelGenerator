@@ -112,30 +112,31 @@ if(!IsPartial) {
             
             #line default
             #line hidden
-            this.Write("\t\tpublic ");
+            this.Write("\t\tprivate readonly Service Service;\r\n\t\tpublic ");
             
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 31 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(RepositoryName));
             
             #line default
             #line hidden
-            this.Write("(IDatabaseConnector connector) : base(connector)\r\n\t\t{\r\n\t\t}\r\n");
+            this.Write("(Service service) : base(service.Connector)\r\n\t\t{\r\n\t\t\tthis.Service = service;\r\n\t\t}" +
+                    "\r\n");
             
-            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t}\r\n");
             
-            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("}\r\n");
             
-            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+            #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
  } 
             
             #line default
@@ -144,7 +145,7 @@ if(!IsPartial) {
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
+        #line 41 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Repository_CSharp.tt"
 
 	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);

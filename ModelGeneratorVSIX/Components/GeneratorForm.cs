@@ -72,11 +72,11 @@ namespace ModelGenerator
                                 SupportLanguage.VisualBasic => VisualBasicModelProvider.Context,
                                 _ => throw new NotSupportedException()
                             };
-                            var modelGenerator = new ModelBuilder(Directory, Namespace, databaseDefinition);
+                            var modelGenerator = new ModelBuilder(Directory + "\\Models", Namespace, databaseDefinition);
                             modelGenerator.OnFileGenerated += (f) => Log($"Generated {f}");
                             modelGenerator.Generate(provider);
                             break;
-                        case SupportMode.Service:
+                        case SupportMode.BackendService:
                             var serviceProvider = language switch
                             {
                                 SupportLanguage.CSharp => CSharpServiceProvider.Context,
@@ -88,14 +88,25 @@ namespace ModelGenerator
                             serviceGenerator.Generate(serviceProvider);
                             //GeneratorFactory.PerformRepositoryGenerate(targetLanguage, targetDatabaseConnector, txt_connectionString.Text, outputDir, txt_namespace.Text);
                             break;
+                        case SupportMode.FrontendService:
+                            var consumerServiceProvider = language switch
+                            {
+                                SupportLanguage.CSharp => CSharpConsumerServiceProvider.Context,
+                                _ => throw new NotSupportedException()
+                            };
+                            var consumerGenerator = new ServiceBuilder(Directory, Namespace, databaseDefinition);
+                            consumerGenerator.OnFileGenerated += (f) => Log($"Geenrated {f}");
+                            consumerGenerator.Generate(consumerServiceProvider);
+                            break;
                     }
                     Log($"All tasks are done.");
+                    this.Close();
                 }
                 catch (Exception ex)
                 {
                     Log($"Error with message : {ex.Message}");
                 }
-                this.Dispose();
+
             });
 
         }
@@ -133,7 +144,7 @@ namespace ModelGenerator
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportLanguage>();
+                var supportedLanguages = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportLanguage>();
 
                 switch (selectedIndex)
                 {
@@ -141,13 +152,16 @@ namespace ModelGenerator
                         mode = SupportMode.Model;
                         break;
                     case 1: //unit of work generator
-                        mode = SupportMode.Service;
+                        mode = SupportMode.BackendService;
                         supportedLanguages = supportedLanguages.Where(x => x.IsModelGenerator);
                         break;
                     case 2: //controller generator
-                        throw new NotImplementedException();
-                        //generatorType = TargetGeneratorType.Controller;
+                            //throw new NotImplementedException();
+                            //generatorType = TargetGeneratorType.Controller;
                         supportedLanguages = supportedLanguages.Where(x => x.IsControllerGenerator);
+                        break;
+                    case 3:
+                        supportedLanguages = supportedLanguages.Where(x => x.IsConsumerServiceGenerator);
                         break;
                 }
                 foreach (var language in supportedLanguages)
@@ -178,6 +192,9 @@ namespace ModelGenerator
                     break;
                 case SupportDatabase.PostgreSQL:
                     txt_ConnectionString.Text = "Server=myServerAddress;Port=5432;Database=myDataBase;User Id=myUsername;Password = myPassword;";
+                    break;
+                case SupportDatabase.SQLite:
+                    txt_ConnectionString.Text = "Data Source=c:\\mydb.db;Version=3;";
                     break;
             }
         }

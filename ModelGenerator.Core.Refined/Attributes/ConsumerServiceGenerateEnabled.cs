@@ -5,9 +5,9 @@ using System.Text;
 namespace ModelGenerator.Core.Attributes
 {
     [AttributeUsage(AttributeTargets.All)]
-    public class BackendServiceGenerateEnabledAttribute : Attribute
+    public class FrontendServiceGenerateEnabledAttribute : Attribute
     {
-        public BackendServiceGenerateEnabledAttribute()
+        public FrontendServiceGenerateEnabledAttribute()
         {
         }
     }

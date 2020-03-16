@@ -5,6 +5,7 @@
     <LangVersion>8.0</LangVersion>
     <Nullable>enable</Nullable>
     <AssemblyName>ModelGenerator.Core</AssemblyName>
+    <Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
@@ -37,6 +38,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Template\ConsumerServiceBased_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ConsumerServiceBased_CSharp.cs</LastGenOutput>
+    </None>
+    <None Update="Template\ConsumerServiceComponent_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ConsumerServiceComponent_CSharp.cs</LastGenOutput>
+    </None>
+    <None Update="Template\ConsumerService_CSharp.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ConsumerService_CSharp.cs</LastGenOutput>
+    </None>
     <None Update="Template\Controller_CSharp.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>Controller_CSharp.cs</LastGenOutput>
@@ -84,6 +97,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Template\ConsumerServiceBased_CSharp.cs">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>ConsumerServiceBased_CSharp.cs</LastGenOutput>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ConsumerServiceBased_CSharp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\ConsumerServiceComponent_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ConsumerServiceComponent_CSharp.tt</DependentUpon>
+    </Compile>
+    <Compile Update="Template\ConsumerService_CSharp.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ConsumerService_CSharp.tt</DependentUpon>
+    </Compile>
     <Compile Update="Template\Controller_CSharp.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

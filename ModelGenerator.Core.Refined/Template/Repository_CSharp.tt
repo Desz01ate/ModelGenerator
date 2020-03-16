@@ -27,8 +27,10 @@ namespace <#= Namespace #>.Repositories
 	public partial class <#= RepositoryName #> : Repository<<#= TableName #>>
 	{
 <# if(!IsPartial) { #>
-		public <#= RepositoryName #>(IDatabaseConnector connector) : base(connector)
+		private readonly Service Service;
+		public <#= RepositoryName #>(Service service) : base(service.Connector)
 		{
+			this.Service = service;
 		}
 <# } #>
 	}

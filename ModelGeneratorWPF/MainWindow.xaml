@@ -6,12 +6,9 @@
         xmlns:local="clr-namespace:ModelGeneratorWPF"
         mc:Ignorable="d"
         ResizeMode="NoResize"
-        Title="Model Generator" Height="550" Width="576">
-    <Grid>
+        Title="Model Generator" Height="550" Width="1025">
+    <Grid HorizontalAlignment="Left" Width="576">
         <ComboBox x:Name="cb_GeneratorMode" HorizontalAlignment="Left" Margin="170,12,0,0" VerticalAlignment="Top" Width="347" SelectionChanged="ComboBox_SelectionChanged" SelectedIndex="0">
-            <ComboBoxItem Content="Model"/>
-            <ComboBoxItem Content="Service"/>
-            <ComboBoxItem Content="Controller"/>
         </ComboBox>
         <ComboBox x:Name="cb_TargetLang" HorizontalAlignment="Left" Margin="170,51,0,0" VerticalAlignment="Top" Width="347" SelectionChanged="Cb_TargetLang_SelectionChanged" SelectedIndex="0">
         </ComboBox>
@@ -27,7 +24,14 @@
         <Label Content="Output Directory:" HorizontalAlignment="Left" Margin="10,209,0,0" VerticalAlignment="Top" Width="117"/>
         <TextBox x:Name="txt_namespace" HorizontalAlignment="Left" Margin="170,244,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="347"/>
         <Label Content="Namespace (optional) :" HorizontalAlignment="Left" Margin="10,240,0,0" VerticalAlignment="Top" Width="143"/>
-        <Button x:Name="btn_Generate" Content="Generate" HorizontalAlignment="Center" Margin="0,289,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.025,0.002" Width="556" Height="32" Click="Button_Click"/>
-        <RichTextBox x:Name="txt_richProgress" Margin="10,330,10,10" IsReadOnly="True" FontSize="10" Block.LineHeight="1" />
+        <Button x:Name="btn_Generate" Content="Generate" HorizontalAlignment="Left" Margin="10,284,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.025,0.002" Width="507" Height="32" Click="Button_Click"/>
+        <RichTextBox x:Name="txt_richProgress" IsDocumentEnabled="True" Margin="10,330,59,10" IsReadOnly="True" FontSize="10" Block.LineHeight="1" />
+        <GroupBox Header="Templates" Margin="537,10,-411,10">
+            <Grid>
+                <Button x:Name="Template1" Content="C# ASP.NET Core Web API with custom service and controllers" HorizontalAlignment="Left" Margin="10,20,0,0" VerticalAlignment="Top" Height="38" Width="422" IsEnabled="True" Click="Template1_Click"/>
+                <Button x:Name="Template2" Content="C# ASP.NET Core Web MVC with custom service" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Height="38" Width="422" IsEnabled="True" Click="Template2_Click"/>
+                <Button x:Name="Template3" Content="C# ASP.NET Core Web API with entity framework" HorizontalAlignment="Left" Margin="10,140,0,0" VerticalAlignment="Top" Height="38" Width="422" IsEnabled="True" Click="Template3_Click"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>

@@ -6,6 +6,9 @@
     <LangVersion>8.0</LangVersion>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
+    <Description>Model and Unit of Work generator boilerplate, designed to work on top of Deszolate.Utilities/Deszolate.Utilities.Lite library.</Description>
+    <Copyright>© Chanvut Booneid, 2020</Copyright>
+    <PackageReleaseNotes>First release version, compatible with Utilities.Lite version 1.0.0.</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

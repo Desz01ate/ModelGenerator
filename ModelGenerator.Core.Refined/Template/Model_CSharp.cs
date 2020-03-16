@@ -70,84 +70,104 @@ if(!IsPartial) {
             
             #line default
             #line hidden
+            
+            #line 22 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+ if(!IsPartial) { 
+            
+            #line default
+            #line hidden
             this.Write("\t//You can get Utilities package via nuget : Install-Package Deszolate.Utilities." +
                     "Lite\r\n\t//[Utilities.Attributes.SQL.Table(\"");
             
-            #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 24 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
             
             #line default
             #line hidden
-            this.Write("\")]\r\n\tpublic partial class ");
+            this.Write("\")]\r\n");
             
-            #line 24 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 25 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+ } 
+            
+            #line default
+            #line hidden
+            this.Write("\tpublic partial class ");
+            
+            #line 26 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(TableNameTransformer(ClassName)));
             
             #line default
             #line hidden
             this.Write("\r\n\t{\r\n");
             
-            #line 26 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 28 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  if(!IsPartial) { 
             
             #line default
             #line hidden
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  foreach(var column in Columns) { 
             
             #line default
             #line hidden
             
-            #line 28 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  if(!string.IsNullOrWhiteSpace(PrimaryKey) && column.ColumnName == PrimaryKey) { 
             
             #line default
             #line hidden
-            this.Write("\t\t//[Utilities.Attributes.SQL.PrimaryKey]\r\n");
-            
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
- } 
-            
-            #line default
-            #line hidden
-            this.Write("\t\tpublic ");
+            this.Write("\t\t//[Utilities.Attributes.SQL.PrimaryKey(");
             
             #line 31 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(DataTypeMap(column)));
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.IsAutoIncrement.ToString().ToLower()));
             
             #line default
             #line hidden
-            this.Write(" ");
-            
-            #line 31 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
-            
-            #line default
-            #line hidden
-            this.Write(" { get; set; }\r\n");
+            this.Write(")]\r\n");
             
             #line 32 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
             #line hidden
+            this.Write("\t\tpublic ");
             
             #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(DataTypeMap(column)));
+            
+            #line default
+            #line hidden
+            this.Write(" ");
+            
+            #line 33 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(column.ColumnName));
+            
+            #line default
+            #line hidden
+            this.Write(" { get; set; }\r\n");
+            
+            #line 34 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+ } 
+            
+            #line default
+            #line hidden
+            
+            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\t}\r\n");
             
-            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  if(IsNamespaceProvided) { 
             
             #line default
             #line hidden
             this.Write("}\r\n");
             
-            #line 37 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+            #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
  } 
             
             #line default
@@ -156,7 +176,7 @@ if(!IsPartial) {
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
+        #line 41 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Model_CSharp.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 	public string PrimaryKey {get;set;} = null;
@@ -427,7 +447,7 @@ if(!IsPartial) {
                 }
                 else
                 {
-                    return ((string)(method?.Invoke(objectToConvert, new object[] {
+                    return ((string)(method.Invoke(objectToConvert, new object[] {
                                 this.formatProviderField })));
                 }
             }
