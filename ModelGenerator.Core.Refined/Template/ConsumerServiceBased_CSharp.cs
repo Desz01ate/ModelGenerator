@@ -18,9 +18,9 @@ namespace ModelGenerator.Core.Template
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
+    #line 1 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\ConsumerServiceBased_CSharp.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class RepositoryBased_CSharp : RepositoryBased_CSharpBase
+    public partial class ConsumerServiceBased_CSharp : ConsumerServiceBased_CSharpBase
     {
 #line hidden
         /// <summary>
@@ -36,119 +36,64 @@ namespace ModelGenerator.Core.Template
 //     the code is regenerated.
 // </auto-generated>
 // ------------------------------------------------------------------------------
+using Newtonsoft.Json;
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq.Expressions;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
-using System.Transactions;
-using Utilities.Interfaces;
-using Utilities.SQL.Extension;
 
 namespace ");
             
-            #line 24 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
+            #line 20 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\ConsumerServiceBased_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write(".Repositories.Based\r\n{\r\n    /// <summary>\r\n    /// Repository class designed for " +
-                    "IDatabaseConnector.\r\n    /// </summary>\r\n    /// <typeparam name=\"T\"></typeparam" +
-                    ">\r\n    /// <typeparam name=\"TDatabase\"></typeparam>\r\n    /// <typeparam name=\"TP" +
-                    "arameter\"></typeparam>\r\n    public partial class Repository<T> : IEnumerable<T>\r" +
-                    "\n        where T : class, new()\r\n    {\r\n        /// <summary>\r\n        /// Insta" +
-                    "nce of database connector.\r\n        /// </summary>\r\n        protected readonly I" +
-                    "DatabaseConnector Connector;\r\n        /// <summary>\r\n        /// Constructor.\r\n " +
-                    "       /// </summary>\r\n        /// <param name=\"databaseConnector\">Instance of D" +
-                    "atabaseConnector.</param>\r\n        public Repository(IDatabaseConnector database" +
-                    "Connector)\r\n        {\r\n            Connector = databaseConnector;\r\n        }\r\n\r\n" +
-                    "        /// <summary>\r\n        /// Delete data from repository.\r\n        /// </s" +
-                    "ummary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n        public " +
-                    "virtual void Delete(T data)\r\n        {\r\n            Connector.Delete(data);\r\n   " +
-                    "     }\r\n\r\n        /// <summary>\r\n        /// Delete data from repository.\r\n     " +
-                    "   /// </summary>\r\n        /// <param name=\"key\">Primary key of target object.</" +
-                    "param>\r\n        public virtual void Delete(object key)\r\n        {\r\n            C" +
-                    "onnector.Delete<T>(key);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Delete" +
-                    " data from repository in an asynchronous manner.\r\n        /// </summary>\r\n      " +
-                    "  /// <param name=\"data\">Generic object.</param>\r\n        public virtual async T" +
-                    "ask DeleteAsync(T data)\r\n        {\r\n            await Connector.DeleteAsync(data" +
-                    ").ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Delete" +
-                    " data from repository in an asynchronous manner.\r\n        /// </summary>\r\n      " +
-                    "  /// <param name=\"key\">Primary key of target object.</param>\r\n        public vi" +
-                    "rtual async Task DeleteAsync(object key)\r\n        {\r\n            await Connector" +
-                    ".DeleteAsync<T>(key).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r" +
-                    "\n        /// Insert data into repository.\r\n        /// </summary>\r\n        /// <" +
-                    "param name=\"data\">Generic object.</param>\r\n        public virtual void Insert(T " +
-                    "data)\r\n        {\r\n            Connector.Insert(data);\r\n        }\r\n\r\n        /// " +
-                    "<summary>\r\n        /// Insert data into repository in an asynchronous manner.\r\n " +
-                    "       /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n " +
-                    "       public virtual async Task InsertManyAsync(IEnumerable<T> data)\r\n        {" +
-                    "\r\n            await Connector.InsertManyAsync(data).ConfigureAwait(false);\r\n    " +
-                    "    }\r\n\r\n        /// <summary>\r\n        /// Insert data into repository.\r\n      " +
-                    "  /// </summary>\r\n        /// <param name=\"data\">Generic object.</param>\r\n      " +
-                    "  public virtual void InsertMany(IEnumerable<T> data)\r\n        {\r\n            Co" +
-                    "nnector.InsertMany(data);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Inser" +
-                    "t data into repository in an asynchronous manner.\r\n        /// </summary>\r\n     " +
-                    "   /// <param name=\"data\">Generic object.</param>\r\n        public virtual async " +
-                    "Task InsertAsync(T data)\r\n        {\r\n            await Connector.InsertAsync(dat" +
-                    "a).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n        /// Get a" +
-                    "ll data from repository.\r\n        /// </summary>\r\n        /// <returns></returns" +
-                    ">\r\n        public virtual IEnumerable<T> Query()\r\n        {\r\n            return " +
-                    "Connector.Query<T>();\r\n        }\r\n\r\n        /// <summary>\r\n        /// Get data " +
-                    "by specific condition from repository.\r\n        /// </summary>\r\n        /// <par" +
-                    "am name=\"predicate\">Predicate condition.</param>\r\n        /// <returns></returns" +
-                    ">\r\n        public virtual IEnumerable<T> Query(Expression<Func<T, bool>> predica" +
-                    "te)\r\n        {\r\n            return Connector.Query<T>(predicate);\r\n        }\r\n\r\n" +
-                    "        /// <summary>\r\n        /// Get data from repository.\r\n        /// </summ" +
-                    "ary>\r\n        /// <param name=\"key\">Primary key of target object.</param>\r\n     " +
-                    "   /// <returns></returns>\r\n        public virtual T Query(object key)\r\n        " +
-                    "{\r\n            return Connector.Query<T>(key);\r\n        }\r\n\r\n        /// <summar" +
-                    "y>\r\n        /// Get all data from repository in an asynchronous manner.\r\n       " +
-                    " /// </summary>\r\n        /// <returns></returns>\r\n        public virtual async T" +
-                    "ask<IEnumerable<T>> QueryAsync()\r\n        {\r\n            return await Connector." +
-                    "QueryAsync<T>().ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n    " +
-                    "    /// Get data by specific condition from repository in an asynchronous manner" +
-                    ".\r\n        /// </summary>\r\n        /// <param name=\"predicate\">Predicate conditi" +
-                    "on.</param>\r\n        /// <returns></returns>\r\n        public virtual async Task<" +
-                    "IEnumerable<T>> QueryAsync(Expression<Func<T, bool>> predicate)\r\n        {\r\n    " +
-                    "        return await Connector.QueryAsync<T>(predicate).ConfigureAwait(false);\r\n" +
-                    "        }\r\n\r\n        /// <summary>\r\n        /// Get data from repository.\r\n     " +
-                    "   /// </summary>\r\n        /// <param name=\"key\">Primary key of target object.</" +
-                    "param>\r\n        /// <returns></returns>\r\n        public virtual async Task<T> Qu" +
-                    "eryAsync(object key)\r\n        {\r\n            return await Connector.QueryAsync<T" +
-                    ">(key).ConfigureAwait(false);\r\n        }\r\n\r\n        /// <summary>\r\n        /// U" +
-                    "pdate data in repository.\r\n        /// </summary>\r\n        /// <param name=\"data" +
-                    "\">Generic object.</param>\r\n        public virtual void Update(T data)\r\n        {" +
-                    "\r\n            Connector.Update(data);\r\n        }\r\n\r\n        /// <summary>\r\n     " +
-                    "   /// Update data in repository in an asynchronous manner.\r\n        /// </summa" +
-                    "ry>\r\n        /// <param name=\"data\">Generic object.</param>\r\n        public virt" +
-                    "ual async Task UpdateAsync(T data)\r\n        {\r\n            await Connector.Updat" +
-                    "eAsync(data).ConfigureAwait(false);\r\n        }\r\n        /// <summary>\r\n        /" +
-                    "// Returns rows count from repository.\r\n        /// </summary>\r\n        /// <ret" +
-                    "urns></returns>\r\n        public int Count()\r\n        {\r\n            return this." +
-                    "Connector.Count<T>();\r\n        }\r\n\t\t/// <summary>\r\n        /// Returns rows coun" +
-                    "t that is satisfied specific condition from repository.\r\n        /// </summary>\r" +
-                    "\n        /// <returns></returns>\r\n        public int Count(Expression<Func<T,boo" +
-                    "l>> predicate)\r\n        {\r\n            return this.Connector.Count<T>(predicate)" +
-                    ";\r\n        }\r\n        /// <summary>\r\n        /// Filters a sequence of values ba" +
-                    "sed on a predicate.\r\n        /// </summary>\r\n        /// <param name=\"predicate\"" +
-                    "></param>\r\n        /// <returns></returns>\r\n        public IEnumerable<T> Where(" +
-                    "Expression<Func<T, bool>> predicate)\r\n        {\r\n            return Query(predic" +
-                    "ate);\r\n        }\r\n        /// <summary>\r\n        /// Returns a specified number " +
-                    "of contiguous elements from the start of a sequence.\r\n        /// </summary>\r\n  " +
-                    "      /// <param name=\"count\"></param>\r\n        /// <returns></returns>\r\n       " +
-                    " public IEnumerable<T> Take(int count)\r\n        {\r\n            return Connector." +
-                    "Query<T>(top: count);\r\n        }\r\n        /// <summary>\r\n        /// Get enumera" +
-                    "tor of data repository.\r\n        /// </summary>\r\n        /// <returns></returns>" +
-                    "\r\n        public IEnumerator<T> GetEnumerator()\r\n        {\r\n            foreach " +
-                    "(var data in Query())\r\n            {\r\n                yield return data;\r\n      " +
-                    "      }\r\n        }\r\n\r\n        IEnumerator IEnumerable.GetEnumerator()\r\n        {" +
-                    "\r\n            return GetEnumerator();\r\n        }\r\n    }\r\n}\r\n\r\n");
+            this.Write(".Repositories.Based\r\n{\r\n\tpublic class Response<T>\r\n\t{\r\n\t\tpublic bool Success { ge" +
+                    "t; set; }\r\n\t\tpublic string Message { get; set; }\r\n\t\tpublic T Data { get; set; }\r" +
+                    "\n\t}\r\n    /// <summary>\r\n    /// Consumer service designed for HTTP request servi" +
+                    "ces.\r\n    /// </summary>\r\n    /// <typeparam name=\"T\"></typeparam>\r\n    /// <typ" +
+                    "eparam name=\"TDatabase\"></typeparam>\r\n    /// <typeparam name=\"TParameter\"></typ" +
+                    "eparam>\r\n    public abstract partial class ConsumerService<T>\r\n        where T :" +
+                    " class, new()\r\n    {\r\n\t\tprivate const string URL_PATH = \"https://www.someserver." +
+                    "com\";\r\n        /// <summary>\r\n        /// Constructor.\r\n        /// </summary>\r\n" +
+                    "        public ConsumerService()\r\n        {\r\n\r\n        }\r\n\t\tprotected abstract s" +
+                    "tring ControllerName { get; }\r\n\t\tpublic async Task<Response<T>> GetAsync()\r\n\t\t{\r" +
+                    "\n\t\t\tvar url = $\"{URL_PATH}/api/{ControllerName}\";\r\n\t\t\tusing (var httpClient = ne" +
+                    "w HttpClient())\r\n            {\r\n                var request = await httpClient.G" +
+                    "etAsync(url);\r\n                var json = await request.Content.ReadAsStringAsyn" +
+                    "c();\r\n                var response = JsonConvert.DeserializeObject<Response<T>>(" +
+                    "json);\r\n                return response;\r\n            }\r\n\t\t}\r\n\t\tpublic async Tas" +
+                    "k<Response<T>> GetAsync(string id)\r\n\t\t{\r\n\t\t\tvar url = $\"{URL_PATH}/api/{Controll" +
+                    "erName}/{id}\";\r\n\t\t\tusing (var httpClient = new HttpClient())\r\n            {\r\n   " +
+                    "             var request = await httpClient.GetAsync(url);\r\n                var " +
+                    "json = await request.Content.ReadAsStringAsync();\r\n                var response " +
+                    "= JsonConvert.DeserializeObject<Response<T>>(json);\r\n                return resp" +
+                    "onse;\r\n            }\r\n\t\t}\r\n\t\tpublic async Task<Response<T>> PostAsync(T body)\r\n\t" +
+                    "\t{\r\n\t\t\tvar url = $\"{URL_PATH}/api/{ControllerName}\";\r\n\t\t\tusing (var httpClient =" +
+                    " new HttpClient())\r\n            {\r\n                var content = new StringConte" +
+                    "nt(JsonConvert.SerializeObject(body), Encoding.UTF8, \"application/json\");\r\n     " +
+                    "           var request = await httpClient.PostAsync(url, content);\r\n            " +
+                    "    var json = await request.Content.ReadAsStringAsync();\r\n                var r" +
+                    "esponse = JsonConvert.DeserializeObject<Response<T>>(json);\r\n                ret" +
+                    "urn response;\r\n            }\r\n\t\t}\r\n\t\tpublic async Task<Response<T>> PatchAsync(s" +
+                    "tring id,T body)\r\n\t\t{\r\n\t\t\tvar url = $\"{URL_PATH}/api/{ControllerName}/{id}\";\r\n  " +
+                    "          using (var httpClient = new HttpClient())\r\n            {\r\n            " +
+                    "    var content = new StringContent(JsonConvert.SerializeObject(body), Encoding." +
+                    "UTF8, \"application/json\");\r\n                var request = await httpClient.Patch" +
+                    "Async(url, content);\r\n                var json = await request.Content.ReadAsStr" +
+                    "ingAsync();\r\n                var response = JsonConvert.DeserializeObject<Respon" +
+                    "se<T>>(json);\r\n                return response;\r\n            }\r\n\t\t}\r\n\t\tpublic as" +
+                    "ync Task<Response<T>> DeleteAsync(string id)\r\n\t\t{\r\n\t\t\tvar url = $\"{URL_PATH}/api" +
+                    "/{ControllerName}/{id}\";\r\n            using (var httpClient = new HttpClient())\r" +
+                    "\n            {\r\n                var request = await httpClient.DeleteAsync(url);" +
+                    "\r\n                var json = await request.Content.ReadAsStringAsync();\r\n       " +
+                    "         var response = JsonConvert.DeserializeObject<Response<T>>(json);\r\n     " +
+                    "           return response;\r\n            }\r\n\t\t}\r\n    }\r\n}\r\n\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 248 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\RepositoryBased_CSharp.tt"
+        #line 106 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\ConsumerServiceBased_CSharp.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 
@@ -164,7 +109,7 @@ namespace ");
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class RepositoryBased_CSharpBase
+    public class ConsumerServiceBased_CSharpBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

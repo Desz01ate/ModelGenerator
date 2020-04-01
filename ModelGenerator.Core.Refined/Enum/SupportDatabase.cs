@@ -11,6 +11,7 @@ namespace ModelGenerator.Core.Enum
         SQLServer,
         Oracle,
         MySQL,
-        PostgreSQL
+        PostgreSQL,
+        SQLite
     }
 }

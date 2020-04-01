@@ -19,29 +19,28 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using System.Transactions;
 using Utilities.Interfaces;
+using Utilities.SQL.Extension;
 
 namespace <#= Namespace #>.Repositories.Based
 {
     /// <summary>
-    /// Repository class designed for IDatabaseConnectorExtension.
+    /// Repository class designed for IDatabaseConnector.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <typeparam name="TDatabase"></typeparam>
     /// <typeparam name="TParameter"></typeparam>
-    public partial class Repository<T, TDatabase, TParameter> : IEnumerable<T>
+    public partial class Repository<T> : IEnumerable<T>
         where T : class, new()
-        where TDatabase : DbConnection, new()
-        where TParameter : DbParameter, new()
     {
         /// <summary>
         /// Instance of database connector.
         /// </summary>
-        protected readonly IDatabaseConnectorExtension<TDatabase, TParameter> Connector;
+        protected readonly IDatabaseConnector Connector;
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="databaseConnector">Instance of DatabaseConnector.</param>
-        public Repository(IDatabaseConnectorExtension<TDatabase, TParameter> databaseConnector)
+        public Repository(IDatabaseConnector databaseConnector)
         {
             Connector = databaseConnector;
         }
@@ -200,6 +199,14 @@ namespace <#= Namespace #>.Repositories.Based
         public int Count()
         {
             return this.Connector.Count<T>();
+        }
+		/// <summary>
+        /// Returns rows count that is satisfied specific condition from repository.
+        /// </summary>
+        /// <returns></returns>
+        public int Count(Expression<Func<T,bool>> predicate)
+        {
+            return this.Connector.Count<T>(predicate);
         }
         /// <summary>
         /// Filters a sequence of values based on a predicate.

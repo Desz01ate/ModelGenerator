@@ -14,24 +14,22 @@
 // </auto-generated>
 // ------------------------------------------------------------------------------
 <# } #>
-using System;
 <# if(IsNamespaceProvided) { #>
-namespace <#= Namespace #>
+using <#= Namespace #>.Repositories.Based;
+using <#= Namespace #>.Models;
+namespace <#= Namespace #>.Repositories
 {
 <# } #>
-<# if(!IsPartial) { #>
-	//You can get Utilities package via nuget : Install-Package Deszolate.Utilities.Lite
-	//[Utilities.Attributes.SQL.Table("<#= ClassName #>")]
-<# } #>
-	public partial class <#= TableNameTransformer(ClassName) #>
+	///<summary>
+	/// Data consumer service for <#= TableName #>
+	///</summary>
+	public partial class <#= ConsumerServiceName #> : ConsumerService<<#= TableName #>>
 	{
 <# if(!IsPartial) { #>
-<# foreach(var column in Columns) { #>
-<# if(!string.IsNullOrWhiteSpace(PrimaryKey) && column.ColumnName == PrimaryKey) { #>
-		//[Utilities.Attributes.SQL.PrimaryKey(<#= column.IsAutoIncrement.ToString().ToLower() #>)]
-<# } #>
-		public <#= DataTypeMap(column) #> <#= column.ColumnName #> { get; set; }
-<# } #>
+		public <#= ConsumerServiceName #>() : base()
+		{
+		}
+		protected override string ControllerName => "<#= TableName #>";
 <# } #>
 	}
 <# if(IsNamespaceProvided) { #>
@@ -39,12 +37,12 @@ namespace <#= Namespace #>
 <# } #>
 
 <#+
-	public string Namespace {get; set;} = "YourNamespace";
-	public string PrimaryKey {get;set;} = null;
+	public string Namespace {get; set;}
 	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
-	public string ClassName {get; set;}
-	public System.Collections.Generic.IEnumerable<Utilities.Classes.TableSchema> Columns {get;set;}
+	public ModelGenerator.Core.Entity.Table Table { get; set; }
 	public bool IsPartial {get;set;}
+	public string TableName => TableNameTransformer(Table.Name);
+	public string ConsumerServiceName => $"{TableName}ConsumerService";
 	public Func<Utilities.Classes.TableSchema,string> DataTypeMap { get; set; }
 	public Func<string,string> TableNameTransformer {get;set;}
 #>

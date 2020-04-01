@@ -1,5 +1,6 @@
 ﻿using ModelGenerator.Core.Entity;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
@@ -37,36 +38,50 @@ namespace ModelGenerator.Core.Helper
             result.ConnectionString = connectionString;
             result.DatabaseProvider = typeof(TDatabase);
             result.DatabaseProviderParameterType = typeof(TParameter);
-            result.StoredProcedures = connection.GetStoredProcedures().ToList();
+            try
+            {
+                result.StoredProcedures = connection.GetStoredProcedures().ToList();
+            }
+            catch
+            {
+                result.StoredProcedures = Enumerable.Empty<StoredProcedureSchema>().ToList();
+            }
             using var tables = connection.GetSchema(SchemaRestriction.Tables);
             foreach (DataRow row in tables.Rows)
             {
-                var database = row[0].ToString();
-                var schema = row[1].ToString();
-                var tableName = row[2].ToString();
-                var type = row[3].ToString();
+                try
+                {
+                    var database = row[0].ToString();
+                    var schema = row[1].ToString();
+                    var tableName = row[2].ToString();
+                    var type = row[3].ToString();
 
-                var schemaSearchName = string.Empty;
-                if (tableNameTransformer != null) schemaSearchName = tableNameTransformer(tableName);
-                var columns = connection.GetTableSchema(schemaSearchName);
-                string? primaryKey = null;
-                using var indexes = connection.GetSchema("IndexColumns", new[] { null, null, tableName });
-                if (indexes != null)
-                {
-                    foreach (DataRow rowInfo in indexes.Rows)
+                    var schemaSearchName = tableNameTransformer != null ? tableNameTransformer(tableName) : tableName;
+
+                    var columns = connection.GetTableSchema(schemaSearchName);
+                    string? primaryKey = null;
+                    using var indexes = connection.GetSchema("IndexColumns", new[] { null, null, tableName });
+                    if (indexes != null)
                     {
-                        primaryKey = rowInfo["column_name"].ToString();
+                        foreach (DataRow rowInfo in indexes.Rows)
+                        {
+                            primaryKey = rowInfo["column_name"].ToString();
+                        }
                     }
+                    var table = new Table()
+                    {
+                        Name = tableName,
+                        Columns = columns,
+                        PrimaryKey = primaryKey,
+                        ConnectionProvider = typeof(TDatabase).FullName,
+                        ConnectionProviderParameterType = typeof(TParameter).FullName
+                    };
+                    result.Tables.Add(table);
                 }
-                var table = new Table()
+                catch
                 {
-                    Name = tableName,
-                    Columns = columns,
-                    PrimaryKey = primaryKey,
-                    ConnectionProvider = typeof(TDatabase).FullName,
-                    ConnectionProviderParameterType = typeof(TParameter).FullName
-                };
-                result.Tables.Add(table);
+                    //continue;
+                }
             }
             return result;
         }

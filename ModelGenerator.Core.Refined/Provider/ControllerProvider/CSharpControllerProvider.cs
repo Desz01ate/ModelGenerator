@@ -21,7 +21,7 @@ namespace ModelGenerator.Core.Provider.ControllerProvider
             template.PrimaryKey = table.PrimaryKey;
             template.Columns = table.Columns;
             template.DataTypeMap = DataTypeMapper;
-            template.TableNameTransformer = (x) => this.TableNameTransformer(Utilities.String.ToLeadingUpper(x));
+            template.TableNameTransformer = (x) => this.TableNameTransformer(x);
             return template.TransformText();
         }
     }

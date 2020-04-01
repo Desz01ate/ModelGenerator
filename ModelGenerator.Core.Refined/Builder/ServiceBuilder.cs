@@ -64,7 +64,7 @@ namespace ModelGenerator.Core.Builder
                     }
                 }
 
-                var repositoryName = $"{table.Name[0].ToString().ToUpper()}{table.Name[1..].ToLower()}Repository";
+                var repositoryName = $"{table.Name}Repository";
                 var repositoryCode = provider.GenerateRepositoryFile(this._namespace, table);
                 var repositoryFileName = $"{repositoryName}.{provider.FileExtension}";
                 if (!string.IsNullOrWhiteSpace(repositoryCode))

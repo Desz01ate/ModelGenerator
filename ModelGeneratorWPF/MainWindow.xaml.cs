@@ -13,6 +13,7 @@ using Npgsql;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,14 @@ namespace ModelGeneratorWPF
         {
             InitializeComponent();
             Log("Components initializing...");
+            Log("Checking .NET Core SDK version...");
+            var netCoreVersion = Helper.SystemValidator.GetNetCoreVersion();
+            var isNetCoreInstalled = !string.IsNullOrWhiteSpace(netCoreVersion);
+            if (isNetCoreInstalled)
+            {
+                Log($"Found .NET Core {netCoreVersion}.");
+                Template1.IsEnabled = true;
+            }
             #region initializer
             cb_GeneratorMode.SelectedIndex = 1;
             cb_GeneratorMode.SelectedIndex = 0;
@@ -43,30 +52,35 @@ namespace ModelGeneratorWPF
             {
                 cb_TargetDatabase.Items.Add(database.Name);
             }
+            var supportedMode = EnumHelper.Expand<SupportMode>();
+            foreach (var mode in supportedMode)
+            {
+                cb_GeneratorMode.Items.Add(mode.Name);
+            }
             #endregion
             Log("Initiailized.");
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedIndex = cb_GeneratorMode.SelectedIndex;
+            var selectedIndex = (SupportMode)cb_GeneratorMode.SelectedIndex;
             if (cb_TargetLang != null)
             {
                 cb_TargetLang.Items.Clear();
-                IEnumerable<(int Index, string Name, bool IsModelGenerator, bool IsControllerGenerator)> supportedLanguages = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportLanguage>();
-
+                var supportedLanguages = ModelGenerator.Core.Helper.EnumHelper.Expand<SupportLanguage>();
+                mode = selectedIndex;
                 switch (selectedIndex)
                 {
-                    case 0: //model generator
-                        mode = SupportMode.Model;
+                    case SupportMode.Model: //model generator
                         break;
-                    case 1: //unit of work generator
-                        mode = SupportMode.Service;
+                    case SupportMode.BackendService: //unit of work generator
                         supportedLanguages = supportedLanguages.Where(x => x.IsModelGenerator);
                         break;
-                    case 2: //controller generator
-                        mode = SupportMode.Controller;
+                    case SupportMode.Controller: //controller generator
                         supportedLanguages = supportedLanguages.Where(x => x.IsControllerGenerator);
+                        break;
+                    case SupportMode.FrontendService:
+                        supportedLanguages = supportedLanguages.Where(x => x.IsConsumerServiceGenerator);
                         break;
                 }
                 foreach (var language in supportedLanguages)
@@ -138,11 +152,21 @@ namespace ModelGeneratorWPF
                             modelGenerator.Generate(provider);
 
                             break;
-                        case SupportMode.Service:
+                        case SupportMode.FrontendService:
+                            var consumerServiceProvider = language switch
+                            {
+                                SupportLanguage.CSharp => CSharpConsumerServiceProvider.Context,
+                                SupportLanguage.TypeScript => TypescriptServiceProvider.Context,
+                                _ => throw new NotSupportedException()
+                            };
+                            var consumerGenerator = new ServiceBuilder(outputDir, @namespace, databaseDefinition);
+                            consumerGenerator.OnFileGenerated += (f) => Log($"Geenrated {f}");
+                            consumerGenerator.Generate(consumerServiceProvider);
+                            break;
+                        case SupportMode.BackendService:
                             IServiceBuilderProvider serviceProvider = language switch
                             {
                                 SupportLanguage.CSharp => CSharpServiceProvider.Context,
-                                SupportLanguage.TypeScript => TypescriptServiceProvider.Context,
                                 _ => throw new NotSupportedException()
                             };
                             var serviceGenerator = new ServiceBuilder(outputDir, @namespace, databaseDefinition);
@@ -189,6 +213,7 @@ namespace ModelGeneratorWPF
                     SupportDatabase.MySQL => SqlDefinition.GetDatabaseDefinition<MySqlConnection, MySqlParameter>(connectionString),
                     SupportDatabase.Oracle => SqlDefinition.GetDatabaseDefinition<OracleConnection, OracleParameter>(connectionString),
                     SupportDatabase.PostgreSQL => SqlDefinition.GetDatabaseDefinition<NpgsqlConnection, NpgsqlParameter>(connectionString),
+                    SupportDatabase.SQLite => SqlDefinition.GetDatabaseDefinition<SQLiteConnection, SQLiteParameter>(connectionString),
                     _ => null,
                 };
             }
@@ -218,6 +243,78 @@ namespace ModelGeneratorWPF
                 var predictedNamespace = dialog.FileName.Split(@"\").Last();
                 txt_namespace.Text = predictedNamespace;
             }
+        }
+
+        private void Template1_Click(object sender, RoutedEventArgs e)
+        {
+            var outputDir = txt_outputDir.Content.ToString();
+            if (!Directory.Exists(outputDir))
+            {
+                MessageBox.Show("You must select an output directory before trying to generate!");
+                return;
+            }
+            var @namespace = txt_namespace.Text;
+            var connectionString = txt_connectionString.Text;
+            Task.Run(() =>
+            {
+                try
+                {
+                    Helper.TemplateGenerator.AspNetCoreAPIWithServiceAndControllers(outputDir, @namespace, connectionString, Log);
+                    Process.Start("explorer.exe", outputDir);
+                }
+                catch (Exception ex)
+                {
+                    Log(ex.Message);
+                }
+            });
+        }
+
+        private void Template2_Click(object sender, RoutedEventArgs e)
+        {
+            var outputDir = txt_outputDir.Content.ToString();
+            if (!Directory.Exists(outputDir))
+            {
+                MessageBox.Show("You must select an output directory before trying to generate!");
+                return;
+            }
+            var @namespace = txt_namespace.Text;
+            var connectionString = txt_connectionString.Text;
+            Task.Run(() =>
+            {
+                try
+                {
+                    Helper.TemplateGenerator.AspNetCoreMVCWithService(outputDir, @namespace, connectionString, Log);
+                    Process.Start("explorer.exe", outputDir);
+                }
+                catch (Exception ex)
+                {
+                    Log(ex.Message);
+                }
+            });
+        }
+
+        private void Template3_Click(object sender, RoutedEventArgs e)
+        {
+            var outputDir = txt_outputDir.Content.ToString();
+            if (!Directory.Exists(outputDir))
+            {
+                MessageBox.Show("You must select an output directory before trying to generate!");
+                return;
+            }
+            var @namespace = txt_namespace.Text;
+            var connectionString = txt_connectionString.Text;
+            Task.Run(() =>
+            {
+                try
+                {
+                    Helper.TemplateGenerator.AspNetCoreAPIWithEFCore(outputDir, connectionString, Log);
+                    Process.Start("explorer.exe", outputDir);
+                }
+                catch (Exception ex)
+                {
+                    Log(ex.Message);
+                }
+            });
         }
     }
 }

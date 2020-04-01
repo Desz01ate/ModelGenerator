@@ -24,11 +24,13 @@ namespace <#= Namespace #>.Repositories
 	///<summary>
 	/// Data contractor for <#= TableName #>
 	///</summary>
-	public partial class <#= RepositoryName #> : Repository<<#= TableName #>,<#= Table.ConnectionProvider #>,<#= Table.ConnectionProviderParameterType #>>
+	public partial class <#= RepositoryName #> : Repository<<#= TableName #>>
 	{
 <# if(!IsPartial) { #>
-		public <#= RepositoryName #>(IDatabaseConnectorExtension<<#= Table.ConnectionProvider #>,<#= Table.ConnectionProviderParameterType #>> connector) : base(connector)
+		private readonly Service Service;
+		public <#= RepositoryName #>(Service service) : base(service.Connector)
 		{
+			this.Service = service;
 		}
 <# } #>
 	}
@@ -42,7 +44,7 @@ namespace <#= Namespace #>.Repositories
 	public ModelGenerator.Core.Entity.Table Table { get; set; }
 	public bool IsPartial {get;set;}
 	public string TableName => TableNameTransformer(Table.Name);
-	public string RepositoryName => $"{TableName.ToString().ToUpper()}{TableName[1..].ToLower()}Repository";
+	public string RepositoryName => $"{TableName}Repository";
 	public Func<Utilities.Classes.TableSchema,string> DataTypeMap { get; set; }
 	public Func<string,string> TableNameTransformer {get;set;}
 #>

@@ -57,62 +57,73 @@ if(!IsPartial) {
             
             #line default
             #line hidden
-            this.Write(".Models;\r\n\r\nnamespace ");
+            this.Write(".Models;\r\n");
+            
+            #line 22 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+ var modelName = TableNameTransformer(ClassName); 
+            
+            #line default
+            #line hidden
+            this.Write("namespace ");
             
             #line 23 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Namespace));
             
             #line default
             #line hidden
-            this.Write(".Controllers\r\n{\r\n\t[Route(\"api/[controller]\")]\r\n\t[ApiController]\r\n\tpublic class ");
+            this.Write(".Controllers\r\n{\r\n\t[ApiController]\r\n\tpublic class ");
             
-            #line 27 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TableNameTransformer(ClassName)));
+            #line 26 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(modelName));
             
             #line default
             #line hidden
             this.Write("Controller : ControllerBase\r\n\t{\r\n\t\tprivate readonly Service _service;\r\n\t\tpublic ");
             
-            #line 30 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(TableNameTransformer(ClassName)));
+            #line 29 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(modelName));
             
             #line default
             #line hidden
-            this.Write("Controller(Service service)\r\n\t\t{\r\n\t\t\tthis._service = service;\r\n\t\t}\r\n\t\t[HttpGet]\r\n" +
-                    "\t\tpublic IEnumerable<");
+            this.Write("Controller(Service service)\r\n\t\t{\r\n\t\t\tthis._service = service;\r\n\t\t}\r\n\t\t[HttpGet(\"a" +
+                    "pi/[controller]\")]\r\n\t\tpublic ActionResult<IEnumerable<");
             
-            #line 35 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(ClassName));
+            #line 34 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(modelName));
             
             #line default
             #line hidden
-            this.Write(@"> Get()
-		{
-			throw new NotImplementedException();
-		}
-		[HttpPost]
-		public void Post([FromBody] object data)
-		{
-			throw new NotImplementedException();
-		}
-		[HttpPatch]
-		public void Patch([FromBody] object data)
-		{
-			throw new NotImplementedException();
-		}
-		[HttpDelete]
-		public void Delete([FromBody] object data)
-		{
-			throw new NotImplementedException();
-		}
-	}
-}
-
-");
+            this.Write(">> Get()\r\n\t\t{\r\n\t\t\tthrow new NotImplementedException();\r\n\t\t}\r\n\t\t[HttpGet(\"api/[con" +
+                    "troller]/{id}\")]\r\n\t\tpublic ActionResult<IEnumerable<");
+            
+            #line 39 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(modelName));
+            
+            #line default
+            #line hidden
+            this.Write(">> Get(string id)\r\n\t\t{\r\n\t\t\tthrow new NotImplementedException();\r\n\t\t}\r\n\t\t[HttpPost" +
+                    "(\"api/[controller]\")]\r\n\t\tpublic ActionResult Post([FromBody] ");
+            
+            #line 44 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(modelName));
+            
+            #line default
+            #line hidden
+            this.Write(" data)\r\n\t\t{\r\n\t\t\tthrow new NotImplementedException();\r\n\t\t}\r\n\t\t[HttpPatch(\"api/[con" +
+                    "troller]/{id}\")]\r\n\t\tpublic ActionResult Patch(string id,[FromBody] ");
+            
+            #line 49 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(modelName));
+            
+            #line default
+            #line hidden
+            this.Write(" data)\r\n\t\t{\r\n\t\t\tthrow new NotImplementedException();\r\n\t\t}\r\n\t\t[HttpDelete(\"api/[co" +
+                    "ntroller]/{id}\")]\r\n\t\tpublic ActionResult Delete(string id)\r\n\t\t{\r\n\t\t\tthrow new No" +
+                    "tImplementedException();\r\n\t\t}\r\n\t}\r\n}\r\n\r\n");
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 57 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
+        #line 61 "C:\Users\kunvu\source\repos\ModelGenerator\ModelGenerator.Core.Refined\Template\Controller_CSharp.tt"
 
 	public string Namespace {get; set;} = "YourNamespace";
 	public string PrimaryKey {get;set;} = null;

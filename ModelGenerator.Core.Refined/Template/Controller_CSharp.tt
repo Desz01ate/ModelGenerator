@@ -19,35 +19,39 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using <#= Namespace #>.Models;
-
+<# var modelName = TableNameTransformer(ClassName); #>
 namespace <#= Namespace #>.Controllers
 {
-	[Route("api/[controller]")]
 	[ApiController]
-	public class <#= TableNameTransformer(ClassName) #>Controller : ControllerBase
+	public class <#= modelName #>Controller : ControllerBase
 	{
 		private readonly Service _service;
-		public <#= TableNameTransformer(ClassName) #>Controller(Service service)
+		public <#= modelName #>Controller(Service service)
 		{
 			this._service = service;
 		}
-		[HttpGet]
-		public IEnumerable<<#= ClassName #>> Get()
+		[HttpGet("api/[controller]")]
+		public ActionResult<IEnumerable<<#= modelName #>>> Get()
 		{
 			throw new NotImplementedException();
 		}
-		[HttpPost]
-		public void Post([FromBody] object data)
+		[HttpGet("api/[controller]/{id}")]
+		public ActionResult<IEnumerable<<#= modelName #>>> Get(string id)
 		{
 			throw new NotImplementedException();
 		}
-		[HttpPatch]
-		public void Patch([FromBody] object data)
+		[HttpPost("api/[controller]")]
+		public ActionResult Post([FromBody] <#= modelName #> data)
 		{
 			throw new NotImplementedException();
 		}
-		[HttpDelete]
-		public void Delete([FromBody] object data)
+		[HttpPatch("api/[controller]/{id}")]
+		public ActionResult Patch(string id,[FromBody] <#= modelName #> data)
+		{
+			throw new NotImplementedException();
+		}
+		[HttpDelete("api/[controller]/{id}")]
+		public ActionResult Delete(string id)
 		{
 			throw new NotImplementedException();
 		}

@@ -10,12 +10,17 @@ namespace ModelGenerator.Core.Helper
     {
         public static bool IsModelGeneratorEnabled(MemberInfo member)
         {
-            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.ServiceGenerateEnabledAttribute)) != null;
+            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.BackendServiceGenerateEnabledAttribute)) != null;
             return isAssigned;
         }
         public static bool IsControllerGeneratorEnabled(MemberInfo member)
         {
             var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.ControllerGenerateEnabledAttribute)) != null;
+            return isAssigned;
+        }
+        public static bool IsConsumerServiceGeneratorEnabled(MemberInfo member)
+        {
+            var isAssigned = member.GetCustomAttribute(typeof(ModelGenerator.Core.Attributes.FrontendServiceGenerateEnabledAttribute)) != null;
             return isAssigned;
         }
         public static string Description(MemberInfo member)

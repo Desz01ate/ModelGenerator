@@ -8,11 +8,12 @@ namespace ModelGenerator.Core.Enum
 {
     public enum SupportLanguage
     {
-        [ServiceGenerateEnabled]
         [ControllerGenerateEnabled]
+        [FrontendServiceGenerateEnabled]
+        [BackendServiceGenerateEnabled]
         [Description("C#")]
         CSharp,
-        [ServiceGenerateEnabled]
+        [FrontendServiceGenerateEnabled]
         TypeScript,
         [Description("Visual Basic")]
         VisualBasic

@@ -1,0 +1,52 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".txt" #>
+using System;
+<# if(IsNamespaceProvided) { #>
+using <#= Namespace #>.Repositories;
+namespace <#= Namespace #>
+{
+<# } #>
+	public sealed class Service : IDisposable
+	{
+		public Service()
+		{
+
+		}
+<# foreach(var table in Tables) { #>
+<# var tableName = TableNameTransformer(table.Name); #>
+<# var serviceComponentName= $"{tableName}ConsumerService"; #>
+		private <#= serviceComponentName #> _<#= tableName #> { get; set; }
+		public <#= serviceComponentName #> <#= tableName #>
+		{
+			get
+			{
+				if(_<#= tableName #> == null)
+				{
+					_<#= tableName #> = new <#= serviceComponentName #>();
+				}
+				return _<#= tableName #>;
+			}
+		}
+<# } #>
+        public void Dispose()
+        {
+
+        }
+	}
+<# if(IsNamespaceProvided) { #>
+}
+<# } #>
+<#+
+	public string Namespace {get; set;}
+	public bool IsNamespaceProvided => !string.IsNullOrWhiteSpace(Namespace);
+	public System.Collections.Generic.IEnumerable<ModelGenerator.Core.Entity.Table> Tables { get; set; }
+	public System.Collections.Generic.IEnumerable<Utilities.Classes.StoredProcedureSchema> StoredProcedures {get;set;}
+	public string DatabaseType { get; set; }
+	public string DatabaseParamType { get; set ;}
+	public Func<string,string> DataTypeMap { get; set; }
+	public Func<string,string> TableNameTransformer {get;set;}
+#>

@@ -10,18 +10,25 @@ using Utilities.Interfaces;
 using System.Data;
 using System.Data.Common;
 using System.Collections.Generic;
+using Microsoft.Extensions.Configuration;
 <# if(IsNamespaceProvided) { #>
 using <#= Namespace #>.Repositories;
+
 namespace <#= Namespace #>
 {
 <# } #>
-	public sealed class Service : IDisposable
+	public partial class Service : IDisposable
 	{
-		private readonly IDatabaseConnectorExtension<<#= DatabaseType #>,<#= DatabaseParamType #>> Connector;
+		internal protected readonly IDatabaseConnector Connector;
 		public Service(string connectionString)
 		{
-			Connector = new DatabaseConnector<<#= DatabaseType #>,<#= DatabaseParamType #>>(connectionString);
+			Connector = new DatabaseConnector(typeof(<#= DatabaseType #>),connectionString);
 		}
+		public Service(IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("connectionStringName");
+            Connector = new DatabaseConnector(typeof(Microsoft.Data.SqlClient.SqlConnection), connectionString);
+        }
 <# foreach(var table in Tables) { #>
 <# var tableName = TableNameTransformer(table.Name); #>
 <# var repositoryName = $"{tableName}Repository"; #>
@@ -32,7 +39,7 @@ namespace <#= Namespace #>
 			{
 				if(_<#= tableName #> == null)
 				{
-					_<#= tableName #> = new <#= repositoryName #>(Connector);
+					_<#= tableName #> = new <#= repositoryName #>(this);
 				}
 				return _<#= tableName #>;
 			}
@@ -48,9 +55,9 @@ namespace <#= Namespace #>
 		public dynamic <#= sp.SPECIFIC_NAME #>(<#= string.Join(",",paramArgs) #>)
 		{
 			var command = "<#= sp.SPECIFIC_NAME #>";
-			var parameters = new List<<#= DatabaseParamType #>>();
+			var parameters = new List<Utilities.Classes.DatabaseParameter>();
 <# foreach(var param in sp.Parameters) { #>
-			parameters.Add(new <#= DatabaseParamType #>("<#= param.PARAMETER_NAME #>",<#= param.PARAMETER_NAME #>));
+			parameters.Add(new Utilities.Classes.DatabaseParameter("<#= param.PARAMETER_NAME #>",<#= param.PARAMETER_NAME #>));
 <# } #>
 			var result = Connector.ExecuteReader(command,parameters,commandType : System.Data.CommandType.StoredProcedure);
 			return result;
